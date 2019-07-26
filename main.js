@@ -63,15 +63,16 @@ function buildCard(cardHeader, imageUrl, alt, sectionsArr)
  * 
  * @param       {String} sectionHeader 
  * @param       {Array} widgetsArr 
+ * @param       
  * @returns     {Section}
  */
-function buildSection(sectionHeader, widgetsArr)
+function buildSection(sectionHeader, widgetsArr, collapsible)
 {
         var section,i;
         
         section = CardService.newCardSection()
                 .setHeader(sectionHeader)
-                .setCollapsible(true);
+                .setCollapsible(collapsible);
 
         for (i = 0; i < widgetsArr.length; i++)
                 section.addWidget(widgetsArr[i]);

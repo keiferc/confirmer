@@ -54,7 +54,7 @@ function getTimeSettingsSection()
         
         widgetsArr.push(hourOfDay);
 
-        return buildSection(header, widgetsArr);
+        return buildSection(header, widgetsArr, false);
 }
 
 function getContactsSettingsSection()
@@ -89,7 +89,7 @@ function getContactsSettingsSection()
         widgetsArr.push(nameColLabel);
         widgetsArr.push(emailColLabel);
 
-        return buildSection(header, widgetsArr);
+        return buildSection(header, widgetsArr, true);
 }
 
 function getScheduleSettingsSection()
@@ -100,7 +100,7 @@ function getScheduleSettingsSection()
         widgetsArr = [];
 
         url = CardService.newTextInput()
-                .setField("url")
+                .setFieldName("url")
                 .setTitle("Google Sheet URL - Clinic Schedule")
                 .setHint("e.g. https://docs.google.com/spreadsheets/d/...");
                 // .setValue(value)
@@ -116,7 +116,7 @@ function getScheduleSettingsSection()
         widgetsArr.push(url);
         widgetsArr.push(dateColLabel);
 
-        return buildSection(header, widgetsArr);
+        return buildSection(header, widgetsArr, true);
 }
 
 function getEmailContentSettingsSection()
@@ -126,7 +126,7 @@ function getEmailContentSettingsSection()
         header = "<font color='#0294c9'><b>Email Content</b></font>";
         widgetsArr = [];
 
-        return buildSection(header, widgetsArr);
+        return buildSection(header, widgetsArr, true);
 }
 
 function getOtherSettingsSection()
@@ -136,7 +136,7 @@ function getOtherSettingsSection()
         header = "<font color='#0294c9'><b>Other/b></font>";
         widgetsArr = [];
 
-        return buildSection(header, widgetsArr);
+        return buildSection(header, widgetsArr, false);
 }
 
 //============== Widgets ================//

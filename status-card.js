@@ -37,7 +37,7 @@ function getStatusSectionsArr()
 
 function getStatusSection()
 {
-        return buildSection("Status Section", getStatusWidgetsArr());
+        return buildSection("Status Section", getStatusWidgetsArr(), false);
 }
 
 //============== Widgets ================//

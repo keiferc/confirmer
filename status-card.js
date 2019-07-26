@@ -10,17 +10,17 @@
  * 
  * @param       {Object} config 
  */
-function buildStatusCard(config)
+function buildStatusCard()
 {
         var card = CardService.newCardBuilder();
         var section = CardService.newCardSection();
 
         section.addWidget(CardService.newTextParagraph()
-                .setText(config));
+                .setText('Hello'));
 
         card.addSection(section);
         card.setHeader(CardService.newCardHeader()
-                .setTitle('Settings'));
+                .setTitle('Status'));
                 
         return card.build();
 }

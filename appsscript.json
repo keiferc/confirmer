@@ -1,0 +1,33 @@
+{
+        "timeZone": "America/New_York",
+        "dependencies": {
+                "enabledAdvancedServices": [
+                        {
+                                "userSymbol": "Gmail",
+                                "serviceId": "gmail",
+                                "version": "v1"
+                        }
+                ]
+        },
+        "exceptionLogging": "STACKDRIVER",
+        "gmail": {
+                "name": "Immigration Clinic Schedule Confirmer",
+                "logoUrl": "https://cdn2.iconfinder.com/data/icons/social-media-8/512/reload.png",
+                "primaryColor": "#0294c9",
+                "secondaryColor": "#5d00ca",
+                "contextualTriggers": [
+                        {
+                                "unconditional": {},
+                                "onTriggerFunction": "main"
+                        }
+                ]
+        },
+        "oauthScopes": [
+                "https://www.googleapis.com/auth/script.send_mail",
+                "https://www.googleapis.com/auth/spreadsheets",
+                "https://www.googleapis.com/auth/gmail.readonly",
+                "https://www.googleapis.com/auth/gmail.addons.execute",
+                "https://www.googleapis.com/auth/script.scriptapp",
+                "https://www.googleapis.com/auth/userinfo.email"
+        ]
+}

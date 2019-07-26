@@ -11,7 +11,7 @@
         },
         "exceptionLogging": "STACKDRIVER",
         "gmail": {
-                "name": "Immigration Clinic Schedule Confirmer",
+                "name": "Attorney Schedule Confirmer",
                 "logoUrl": "https://cdn2.iconfinder.com/data/icons/social-media-8/512/reload.png",
                 "primaryColor": "#0294c9",
                 "secondaryColor": "#5d00ca",

@@ -12,24 +12,56 @@
  */
 function buildStatusCard()
 {
-        var card = CardService.newCardBuilder();
-        var section = CardService.newCardSection();
+        var card, icon, sectionsArr;
 
-        section.addWidget(CardService.newTextParagraph()
-                .setText('Hello'));
+        icon = "https://www.maxpixel.net/static/photo/2x/" + 
+               "E-Mail-Icon-At-News-At-Sign-Email-1083508.png";
 
-        card.addSection(section);
-        card.setHeader(CardService.newCardHeader()
-                .setTitle('Status'));
-                
-        return card.build();
+        sectionsArr = getStatusSectionsArr();
+        card = buildCard("Status", icon,
+                         "Emailer Icon", sectionsArr);
+
+        return card;
+}
+
+//============== Sections ===============//
+// TODO: Build Sections
+function getStatusSectionsArr()
+{
+        var sectionsArr = [];
+
+        sectionsArr.push(getStatusSection());
+
+        return sectionsArr;
+}
+
+function getStatusSection()
+{
+        return buildSection("Status Section", getStatusWidgetsArr());
 }
 
 //============== Widgets ================//
 // TODO: Build widgets
+function getStatusWidgetsArr()
+{
+        var widgetsArr = [];
 
-//============== Sections ===============//
-// TODO: Build Sections
+        widgetsArr.push(printStatusWidget());
+
+        return widgetsArr;
+}
+
+function printStatusWidget()
+{
+        var widget, status;
+
+        widget = CardService.newTextParagraph();
+        status = "Hello, World!";
+
+        widget.setText(status);
+
+        return widget;
+}
 
 //////////////////////////////////////////
 // TODO: Helpers                        //

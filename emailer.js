@@ -10,8 +10,7 @@
  */
 function email() 
 {
-        var date, contactsList, recipients,
-            subject, message;
+        var date, contactsList, recipients, subject, message;
 
         // Calculate date
         try {

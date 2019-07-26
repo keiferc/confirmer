@@ -8,40 +8,163 @@
 // TODO: Finish settings card
 /**
  * 
- * @param       {Object} config 
  */
-function buildSettingsCard(config)
+function buildSettingsCard()
 {
-        var card = CardService.newCardBuilder();
-        var section = CardService.newCardSection();
+        var card, icon, sectionsArr;
 
-        section.addWidget(CardService.newTextParagraph()
-                .setText(config));
+        icon = "https://cdn.pixabay.com/photo/" + 
+               "2015/12/04/22/20/gear-1077550_960_720.png";
 
-        card.addSection(section);
-        card.setHeader(CardService.newCardHeader()
-                .setTitle('Settings'));
-                
-        return card.build();
+        sectionsArr = getSettingsSectionsArr();
+        card = buildCard("Settings", icon, 
+                         "Settings Cog", sectionsArr);
+
+        return card;
 }
-
-//============== Widgets ================//
-// TODO: Build widgets
 
 //============== Sections ===============//
 // TODO: Build Sections
+function getSettingsSectionsArr()
+{
+        var sectionsArr = [];
+
+        sectionsArr.push(getTimeSettingsSection());
+        sectionsArr.push(getContactsSettingsSection());
+        sectionsArr.push(getScheduleSettingsSection());
+        // sectionsArr.push(getEmailContentSettingsSection());
+        // sectionsArr.push(getOtherSettingsSection());
+
+        return sectionsArr;
+}
+
+function getTimeSettingsSection()
+{
+        var header, widgetsArr, hourOfDay;
+        
+        header = "<font color='#0294c9'><b>Time</b></font>";
+        widgetsArr = [];
+
+        hourOfDay = CardService.newTextInput()
+                .setFieldName("hourOfDay")
+                .setTitle("Email Delivery Time")
+                .setHint("e.g. 09:00 am")
+                // .setValue("09:00 am"); // TODO : Get config value
+                // .setOnChangeAction(action) // TODO
+        
+        widgetsArr.push(hourOfDay);
+
+        return buildSection(header, widgetsArr);
+}
+
+function getContactsSettingsSection()
+{
+        var header, widgetsArr, url, nameColLabel, emailColLabel;
+
+        header = "<font color='#0294c9'><b>Contacts</b></font>";
+        widgetsArr = [];
+
+        url = CardService.newTextInput()
+                .setFieldName("url")
+                .setTitle("Google Sheet URL - Contacts List" )
+                .setHint("e.g. https://docs.google.com/spreadsheets/d/...");
+                // .setValue(value) // TODO: Get config value
+                // .setOnChangeAction(action) // TODO
+
+        nameColLabel = CardService.newTextInput()
+                .setFieldName("nameColLabel")
+                .setTitle("Column Label - Names")
+                .setHint("e.g. Names");
+                // .setValue(value) // TODO: Get config value
+                // .setOnChangeAction(action) // TODO
+        
+        emailColLabel = CardService.newTextInput()
+                .setFieldName("emailColLabel")
+                .setTitle("Column Label - Emails")
+                .setHint("e.g. Emails");
+                // .setValue(value) // TODO: Get config value
+                // .setOnChangeAction(action) // TODO
+        
+        widgetsArr.push(url);
+        widgetsArr.push(nameColLabel);
+        widgetsArr.push(emailColLabel);
+
+        return buildSection(header, widgetsArr);
+}
+
+function getScheduleSettingsSection()
+{
+        var header, widgetsArr, url, dateColLabel;
+
+        header = "<font color='#0294c9'><b>Clinic Schedule</b></font>";
+        widgetsArr = [];
+
+        url = CardService.newTextInput()
+                .setField("url")
+                .setTitle("Google Sheet URL - Clinic Schedule")
+                .setHint("e.g. https://docs.google.com/spreadsheets/d/...");
+                // .setValue(value)
+                // .setOnChangeAction(action)
+
+        dateColLabel = CardService.newTextInput()
+                .setFieldName("dateColLabel")
+                .setTitle("Column Label - Date")
+                .setHint("e.g. Date");
+                // .setValue(value)
+                // .setOnChangeAction(action);
+        
+        widgetsArr.push(url);
+        widgetsArr.push(dateColLabel);
+
+        return buildSection(header, widgetsArr);
+}
+
+function getEmailContentSettingsSection()
+{
+        var header, widgetsArr;
+
+        header = "<font color='#0294c9'><b>Email Content</b></font>";
+        widgetsArr = [];
+
+        return buildSection(header, widgetsArr);
+}
+
+function getOtherSettingsSection()
+{
+        var header, widgetsArr;
+
+        header = "<font color='#0294c9'><b>Other/b></font>";
+        widgetsArr = [];
+
+        return buildSection(header, widgetsArr);
+}
+
+//============== Widgets ================//
+function getSettingsWidgetsArr()
+{
+        var widgetsArr = [];
+
+        widgetsArr.push(printSettingsWidget());
+
+        return widgetsArr;
+}
+
+function printSettingsWidget()
+{
+        var widget, settings;
+
+        widget = CardService.newTextParagraph();
+        settings = PropertiesService.getScriptProperties();
+
+        widget.setText(JSON.stringify(settings));
+
+        return widget;
+}
+
 
 //////////////////////////////////////////
 // Settings Management                  //
 //////////////////////////////////////////
-function getConfig()
-{
-        var settings = PropertiesService.getScriptProperties();
-        var str_settings = JSON.stringify(settings);
-        Logger.log(str_settings);
-        return str_settings;
-}
-
 /**
  * 
  * @param       {Object} timeSettings 
@@ -49,25 +172,27 @@ function getConfig()
  * @param       {Object} scheduleSettings 
  * @param       {Object} emailContentSettings 
  * @param       {Object} otherSettings 
- * @returns     {Object}
  */
 function setConfig(timeSettings, contactSettings, scheduleSettings,
                     emailContentSettings, otherSettings)
 {
-        return {
+        var settings;
+
+        settings = PropertiesService.getScriptProperties();
+        settings.setProperties({
                 header: "Add-On Settings",
                 time: timeSettings,
                 contacts: contactSettings,
                 schedule: scheduleSettings,
                 emailContent: emailContentSettings,
                 other: otherSettings
-        }
+        });
 }
 
 /**
  * 
- * @param       {int} hourOfDay 
- * @param       {int} everyXDays 
+ * @param       {Integer} hourOfDay 
+ * @param       {Integer} everyXDays 
  * @param       {Object}
  */
 function setTimeSettings(hourOfDay, everyXDays)
@@ -110,6 +235,7 @@ function setScheduleSettings(url, dateColLabel)
                 dateColLabel: dateColLabel
         }
 }
+
 /**
  *
  * @param       {String} url
@@ -129,7 +255,7 @@ function setEmailContentSettings(url, subjectColLabel, bodyColLabel)
 
 /**
  * 
- * @param       {bool} sendToSelf
+ * @param       {Boolean} sendToSelf
  * @returns     {Object} 
  */
 function setOtherSettings(sendToSelf)

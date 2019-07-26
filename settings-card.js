@@ -37,9 +37,9 @@ function buildSettingsCard(config)
 function getConfig()
 {
         var settings = PropertiesService.getScriptProperties();
-        var str_props = JSON.stringify(props);
-        Logger.log(str_props);
-        return str_props;
+        var str_settings = JSON.stringify(settings);
+        Logger.log(str_settings);
+        return str_settings;
 }
 
 /**

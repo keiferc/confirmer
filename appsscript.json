@@ -11,10 +11,10 @@
         },
         "exceptionLogging": "STACKDRIVER",
         "gmail": {
-                "name": "Attorney Schedule Confirmer",
+                "name": "Schedule Confirmer",
                 "logoUrl": "https://cdn2.iconfinder.com/data/icons/social-media-8/512/reload.png",
-                "primaryColor": "#0294c9",
-                "secondaryColor": "#5d00ca",
+                "primaryColor": "#1c8adb",
+                "secondaryColor": "#1c8adb",
                 "contextualTriggers": [
                         {
                                 "unconditional": {},

@@ -33,7 +33,7 @@ function getSettingsSectionsArr()
         sectionsArr.push(getContactsSettingsSection());
         sectionsArr.push(getScheduleSettingsSection());
         sectionsArr.push(getEmailContentSettingsSection());
-        // sectionsArr.push(getOtherSettingsSection());
+        sectionsArr.push(submitSettingsSection());
 
         return sectionsArr;
 }
@@ -59,7 +59,8 @@ function getContactsSettingsSection()
 {
         var header, widgetsArr, url, nameColLabel, emailColLabel;
 
-        header = "<font color='#0294c9'><b>Contacts</b></font>";
+        header = "<font color='" + PRIMARY_COLOR + "'>" + 
+                 "<b>Contacts</b></font>";
         widgetsArr = [];
 
         url = buildTextInputWidget("url", "Google Sheet URL - Contacts List",
@@ -80,10 +81,11 @@ function getScheduleSettingsSection()
 {
         var header, widgetsArr, url, dateColLabel;
 
-        header = "<font color='#0294c9'><b>Clinic Schedule</b></font>";
+        header = "<font color='" + PRIMARY_COLOR + "'>" + 
+                 "<b>Schedule</b></font>";
         widgetsArr = [];
 
-        url = buildTextInputWidget("url", "Google Sheet URL - Clinic Schedule",
+        url = buildTextInputWidget("url", "Google Sheet URL - Schedule",
                 null, null, null);
         dateColLabel = buildTextInputWidget("dateColLabel", 
                 "Column Label - Date", null, null, null);
@@ -98,7 +100,8 @@ function getEmailContentSettingsSection()
 {
         var header, widgetsArr, url, subjectColLabel, bodyColLabel;
 
-        header = "<font color='#0294c9'><b>Email Content</b></font>";
+        header = "<font color='" + PRIMARY_COLOR + "'>" + 
+                 "<b>Email Content</b></font>";
         widgetsArr = [];
 
         url = buildTextInputWidget("url", "Google Sheet URL - Email Content",
@@ -115,14 +118,30 @@ function getEmailContentSettingsSection()
         return buildSection(header, widgetsArr, true);
 }
 
-function getOtherSettingsSection()
+
+//hacky temp function for testing
+function tempAction()
 {
-        var header, widgetsArr;
+        return CardService.newActionResponseBuilder()
+                .setStateChanged(true)
+                .build();
+}
 
-        header = "<font color='#0294c9'><b>Other/b></font>";
-        widgetsArr = [];
+function submitSettingsSection()
+{
+        // Temp hacky action for testing
+        var action = CardService.newAction().
+                setFunctionName("tempAction");
 
-        return buildSection(header, widgetsArr, false);
+        return buildSection(null, 
+                [CardService.newTextButton()
+                        .setText("Save Settings")
+                        .setTextButtonStyle(
+                                CardService.TextButtonStyle.FILLED
+                        )
+                        .setOnClickAction(action) // TODO
+                ],
+                false);
 }
 
 //============== Widgets ================//
@@ -200,14 +219,15 @@ function setConfig(timeSettings, contactSettings, scheduleSettings,
  * 
  * @param       {Integer} hourOfDay 
  * @param       {Integer} everyXDays 
+ * @param       {Boolean} sendToSelf
  * @param       {Object}
  */
-function setTimeSettings(hourOfDay, everyXDays)
+function setMainSettings(hourOfDay, everyXDays, sendToSelf)
 {
         return {
-                header: "Time Settings",
                 hourOfDay: hourOfDay,
-                everyXDays: everyXDays
+                everyXDays: everyXDays, // pull times for check
+                sendToSelf: sendToSelf
         }
 }
 
@@ -257,18 +277,5 @@ function setEmailContentSettings(url, subjectColLabel, bodyColLabel)
                 url: url,
                 subjectColLabel: subjectColLabel,
                 bodyColLabel: bodyColLabel
-        }
-}
-
-/**
- * 
- * @param       {Boolean} sendToSelf
- * @returns     {Object} 
- */
-function setOtherSettings(sendToSelf)
-{
-        return {
-                header: "Other Settings",
-                sendToSelf: sentToSelf
         }
 }

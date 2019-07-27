@@ -6,6 +6,7 @@
 // TODO: Abstract program to not use clinic-specific language (schedule confirmer?)
 // TODO: Documentation
 // TODO: Change icon CDN host: https://postimages.org/
+// TODO: Expand to create multiple confirmer cards based on needs?
 
 /*
  * TODO: Module Documentation
@@ -14,6 +15,9 @@
 //////////////////////////////////////////
 // Main                                 //
 //////////////////////////////////////////
+var PRIMARY_COLOR = "#1c8adb";
+var SECONDARY_COLOR = "#1c8adb";
+
 function main()
 {
         return buildDeck();

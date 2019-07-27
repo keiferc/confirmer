@@ -29,7 +29,7 @@ function getSettingsSectionsArr()
 {
         var sectionsArr = [];
 
-        sectionsArr.push(getTimeSettingsSection());
+        sectionsArr.push(getMainSettingsSection());
         sectionsArr.push(getContactsSettingsSection());
         sectionsArr.push(getScheduleSettingsSection());
         sectionsArr.push(getEmailContentSettingsSection());
@@ -38,19 +38,21 @@ function getSettingsSectionsArr()
         return sectionsArr;
 }
 
-function getTimeSettingsSection()
+function getMainSettingsSection()
 {
-        var header, widgetsArr, hourOfDay;
+        var widgetsArr, sendToSelf, hourOfDay;
         
-        header = "<font color='#0294c9'><b>Time</b></font>";
         widgetsArr = [];
         
-        hourOfDay = buildTextInputWidget("hourOfDay", "Email Delivery Time",
-                "e.g. 09:00 am", null, null);
+        sendToSelf = buildSwitchWidget("Send a copy of email to self?",
+                "sendToSelf", null, null);
+        hourOfDay = buildDropdownWidget("hourOfDay", "Email Delivery Time", 
+                getDeliveryTimes(), null);
         
+        widgetsArr.push(sendToSelf);
         widgetsArr.push(hourOfDay);
 
-        return buildSection(header, widgetsArr, false);
+        return buildSection(null, widgetsArr, false);
 }
 
 function getContactsSettingsSection()
@@ -124,27 +126,48 @@ function getOtherSettingsSection()
 }
 
 //============== Widgets ================//
-function getSettingsWidgetsArr()
-{
-        var widgetsArr = [];
+// For some reason, GAS doesn't like classes,
+// so have to use object constructor functions
+/**
+ * @param       {Integer} hour 
+ * @param       {Boolean} isAM 
+ * @returns     {Object}
+ */
+function DeliveryTime(hour, isAM) {
+        var time_period, opt;
 
-        widgetsArr.push(printSettingsWidget());
+        if (hour < 10)
+                opt = "0";
+        else
+                opt = "";
+        
+        if (isAM && hour != 12)
+                time_period = "am";
+        else
+                time_period = "pm";
 
-        return widgetsArr;
+        this.label = opt + hour.toString() + ":00 " + time_period;
+        this.key = hour.toString() + time_period;
+        this.selected = false;
 }
 
-function printSettingsWidget()
+function getDeliveryTimes()
 {
-        var widget, settings;
+        var times, amArr, pmArr;
 
-        widget = CardService.newTextParagraph();
-        settings = PropertiesService.getScriptProperties();
+        times = [];
+        amArr = [];
+        pmArr = [];
 
-        widget.setText(JSON.stringify(settings));
+        for (i = 0; i < 12; i++) {
+                amArr.push(new DeliveryTime((i + 1), true));
+                pmArr.push(new DeliveryTime((i + 1), false));
+        }
 
-        return widget;
+        times = amArr.concat(pmArr);
+
+        return times;
 }
-
 
 //////////////////////////////////////////
 // Settings Management                  //

@@ -42,8 +42,10 @@ function buildSection(sectionHeader, widgetsArr, collapsible)
         var section,i;
         
         section = CardService.newCardSection()
-                .setHeader(sectionHeader)
                 .setCollapsible(collapsible);
+
+        if (sectionHeader != null)
+                section.setHeader(sectionHeader)
 
         for (i = 0; i < widgetsArr.length; i++)
                 section.addWidget(widgetsArr[i]);
@@ -72,6 +74,44 @@ function buildTextInputWidget(key, title, hint, value, callback)
                 widget.setValue(value);
         if (callback != null)
                 widget.setOnChangeAction(callback);
+        
+        return widget;
+}
+
+function buildSwitchWidget(label, switchKey, switchValue, callback)
+{
+        var widget, switcher;
+
+        switcher = CardService.newSwitch()
+                .setFieldName(switchKey);
+        
+        if (switchValue != null)
+                switcher.setValue(switchValue);
+        if (callback != null)
+                switcher.setOnChangeAction(callback);
+        
+        widget = CardService.newKeyValue()
+                .setContent(label)
+                .setSwitch(switcher);
+        
+        return widget;
+}
+
+function buildDropdownWidget(key, label, optionsArr, callback)
+{
+        var widget, i;
+
+        widget = CardService.newSelectionInput()
+                .setType(CardService.SelectionInputType.DROPDOWN)
+                .setFieldName(key)
+                .addItem("Choose", null, false);
+        
+        if (label != null)
+                widget.setTitle(label);
+        
+        for (i = 0; i < optionsArr.length; i++)
+                widget.addItem(optionsArr[i].label, optionsArr[i].key,
+                        optionsArr[i].selected);
         
         return widget;
 }

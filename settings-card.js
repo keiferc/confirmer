@@ -59,8 +59,7 @@ function getContactsSettingsSection()
 {
         var header, widgetsArr, url, nameColLabel, emailColLabel;
 
-        header = "<font color='" + PRIMARY_COLOR + "'>" + 
-                 "<b>Contacts</b></font>";
+        header = formatSectionHeader("Contacts", PRIMARY_COLOR);
         widgetsArr = [];
 
         url = buildTextInputWidget("url", "Google Sheet URL - Contacts List",
@@ -81,8 +80,7 @@ function getScheduleSettingsSection()
 {
         var header, widgetsArr, url, dateColLabel;
 
-        header = "<font color='" + PRIMARY_COLOR + "'>" + 
-                 "<b>Schedule</b></font>";
+        header = formatSectionHeader("Schedule", PRIMARY_COLOR);
         widgetsArr = [];
 
         url = buildTextInputWidget("url", "Google Sheet URL - Schedule",
@@ -100,8 +98,7 @@ function getEmailContentSettingsSection()
 {
         var header, widgetsArr, url, subjectColLabel, bodyColLabel;
 
-        header = "<font color='" + PRIMARY_COLOR + "'>" + 
-                 "<b>Email Content</b></font>";
+        header = formatSectionHeader("Email Content", PRIMARY_COLOR);
         widgetsArr = [];
 
         url = buildTextInputWidget("url", "Google Sheet URL - Email Content",

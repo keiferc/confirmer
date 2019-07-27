@@ -55,6 +55,18 @@ function buildSection(sectionHeader, widgetsArr, collapsible)
 
 /**
  * 
+ * @param       {String} header 
+ * @param       {String} color
+ * @returns     {String} 
+ */
+function formatSectionHeader(header, color)
+{
+        return "<font color='" + color + "'>" + 
+               "<b>" + header + "</b></font>";
+}
+
+/**
+ * 
  * @param       {String} key 
  * @param       {String} title 
  * @param       {String} hint 
@@ -78,6 +90,14 @@ function buildTextInputWidget(key, title, hint, value, callback)
         return widget;
 }
 
+/**
+ * 
+ * @param       {String} label 
+ * @param       {String} switchKey 
+ * @param       {String} switchValue 
+ * @param       {Function} callback 
+ * @returns     {Object}
+ */
 function buildSwitchWidget(label, switchKey, switchValue, callback)
 {
         var widget, switcher;
@@ -97,6 +117,14 @@ function buildSwitchWidget(label, switchKey, switchValue, callback)
         return widget;
 }
 
+/**
+ * 
+ * @param       {String} key 
+ * @param       {String} label 
+ * @param       {Array} optionsArr 
+ * @param       {Function} callback 
+ * @returns     {Object}
+ */
 function buildDropdownWidget(key, label, optionsArr, callback)
 {
         var widget, i;
@@ -112,6 +140,28 @@ function buildDropdownWidget(key, label, optionsArr, callback)
         for (i = 0; i < optionsArr.length; i++)
                 widget.addItem(optionsArr[i].label, optionsArr[i].key,
                         optionsArr[i].selected);
+        
+        return widget;
+}
+
+/**
+ * 
+ * @param       {String} topLabel 
+ * @param       {String} bottomLabel 
+ * @param       {String} content 
+ * @param       {Boolean} multiline 
+ * @returns     {Object}
+ */
+function buildTextKeyValWidget(topLabel, bottomLabel, content, multiline)
+{
+        var widget = CardService.newKeyValue()
+                .setContent(content)
+                .setMultiline(multiline);
+        
+        if (topLabel != null)
+                widget.setTopLabel(topLabel);
+        if (bottomLabel != null)
+                widget.setBottomLabel(Label);
         
         return widget;
 }

@@ -30,38 +30,31 @@ function getStatusSectionsArr()
 {
         var sectionsArr = [];
 
-        sectionsArr.push(getStatusSection());
+        sectionsArr.push(getScheduleStatusSection());
 
         return sectionsArr;
 }
 
-function getStatusSection()
+function getScheduleStatusSection()
 {
-        return buildSection("Status Section", getStatusWidgetsArr(), false);
+        var header, widgetsArr, nextEventDate, sendingDate;
+
+        header = formatSectionHeader("Schedule", PRIMARY_COLOR);
+        widgetsArr = [];
+
+        nextEventDate = buildTextKeyValWidget("Next Event Date", null, 
+                "asdf", false);
+        sendingDate = buildTextKeyValWidget("Reminder Email Sending Date", null,
+                "input here", false);
+        
+        widgetsArr.push(nextEventDate);
+        widgetsArr.push(sendingDate);
+
+        return buildSection(header, widgetsArr, false);
 }
 
 //============== Widgets ================//
 // TODO: Build widgets
-function getStatusWidgetsArr()
-{
-        var widgetsArr = [];
-
-        widgetsArr.push(printStatusWidget());
-
-        return widgetsArr;
-}
-
-function printStatusWidget()
-{
-        var widget, status;
-
-        widget = CardService.newTextParagraph();
-        status = "Hello, World!";
-
-        widget.setText(status);
-
-        return widget;
-}
 
 //////////////////////////////////////////
 // TODO: Helpers                        //

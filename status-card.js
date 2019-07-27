@@ -31,6 +31,7 @@ function getStatusSectionsArr()
         var sectionsArr = [];
 
         sectionsArr.push(getScheduleStatusSection());
+        sectionsArr.push(getEmailStatusSection());
 
         return sectionsArr;
 }
@@ -49,6 +50,29 @@ function getScheduleStatusSection()
         
         widgetsArr.push(nextEventDate);
         widgetsArr.push(sendingDate);
+
+        return buildSection(header, widgetsArr, false);
+}
+
+function getEmailStatusSection()
+{
+        var header, widgetsArr, sender, bcc, subject, body;
+
+        header = formatSectionHeader("Email", PRIMARY_COLOR);
+        widgetsArr = [];
+
+        sender = buildTextKeyValWidget("Sender", null, 
+                "Sender email here", false);
+        bcc = buildTextKeyValWidget("BCC", null, 
+                "bcc1<br>bcc2<br>bcc3", true);
+        subject = buildTextKeyValWidget("Subject", null, 
+                "Subject Line Here", false);
+        body = buildTextParagraphWidget("here is the email body");
+
+        widgetsArr.push(sender);
+        widgetsArr.push(bcc);
+        widgetsArr.push(subject);
+        widgetsArr.push(body);
 
         return buildSection(header, widgetsArr, false);
 }

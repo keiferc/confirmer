@@ -165,4 +165,14 @@ function buildTextKeyValWidget(topLabel, bottomLabel, content, multiline)
         
         return widget;
 }
+
+/**
+ * 
+ * @param       {String} text 
+ * @returns     {Object}
+ */
+function buildTextParagraphWidget(text)
+{
+        return CardService.newTextParagraph().setText(text);
+}
  

@@ -32,7 +32,7 @@ function getSettingsSectionsArr()
         sectionsArr.push(getTimeSettingsSection());
         sectionsArr.push(getContactsSettingsSection());
         sectionsArr.push(getScheduleSettingsSection());
-        // sectionsArr.push(getEmailContentSettingsSection());
+        sectionsArr.push(getEmailContentSettingsSection());
         // sectionsArr.push(getOtherSettingsSection());
 
         return sectionsArr;
@@ -44,13 +44,9 @@ function getTimeSettingsSection()
         
         header = "<font color='#0294c9'><b>Time</b></font>";
         widgetsArr = [];
-
-        hourOfDay = CardService.newTextInput()
-                .setFieldName("hourOfDay")
-                .setTitle("Email Delivery Time")
-                .setHint("e.g. 09:00 am")
-                // .setValue("09:00 am"); // TODO : Get config value
-                // .setOnChangeAction(action) // TODO
+        
+        hourOfDay = buildTextInputWidget("hourOfDay", "Email Delivery Time",
+                "e.g. 09:00 am", null, null);
         
         widgetsArr.push(hourOfDay);
 
@@ -64,26 +60,12 @@ function getContactsSettingsSection()
         header = "<font color='#0294c9'><b>Contacts</b></font>";
         widgetsArr = [];
 
-        url = CardService.newTextInput()
-                .setFieldName("url")
-                .setTitle("Google Sheet URL - Contacts List" )
-                .setHint("e.g. https://docs.google.com/spreadsheets/d/...");
-                // .setValue(value) // TODO: Get config value
-                // .setOnChangeAction(action) // TODO
-
-        nameColLabel = CardService.newTextInput()
-                .setFieldName("nameColLabel")
-                .setTitle("Column Label - Names")
-                .setHint("e.g. Names");
-                // .setValue(value) // TODO: Get config value
-                // .setOnChangeAction(action) // TODO
-        
-        emailColLabel = CardService.newTextInput()
-                .setFieldName("emailColLabel")
-                .setTitle("Column Label - Emails")
-                .setHint("e.g. Emails");
-                // .setValue(value) // TODO: Get config value
-                // .setOnChangeAction(action) // TODO
+        url = buildTextInputWidget("url", "Google Sheet URL - Contacts List",
+                null, null, null);
+        nameColLabel = buildTextInputWidget("nameColLabel", 
+                "Column Label - Names", null, null, null);
+        emailColLabel = buildTextInputWidget("emailColLabel",
+                "Column Label - Emails", null, null, null);
         
         widgetsArr.push(url);
         widgetsArr.push(nameColLabel);
@@ -99,19 +81,10 @@ function getScheduleSettingsSection()
         header = "<font color='#0294c9'><b>Clinic Schedule</b></font>";
         widgetsArr = [];
 
-        url = CardService.newTextInput()
-                .setFieldName("url")
-                .setTitle("Google Sheet URL - Clinic Schedule")
-                .setHint("e.g. https://docs.google.com/spreadsheets/d/...");
-                // .setValue(value)
-                // .setOnChangeAction(action)
-
-        dateColLabel = CardService.newTextInput()
-                .setFieldName("dateColLabel")
-                .setTitle("Column Label - Date")
-                .setHint("e.g. Date");
-                // .setValue(value)
-                // .setOnChangeAction(action);
+        url = buildTextInputWidget("url", "Google Sheet URL - Clinic Schedule",
+                null, null, null);
+        dateColLabel = buildTextInputWidget("dateColLabel", 
+                "Column Label - Date", null, null, null);
         
         widgetsArr.push(url);
         widgetsArr.push(dateColLabel);
@@ -121,10 +94,21 @@ function getScheduleSettingsSection()
 
 function getEmailContentSettingsSection()
 {
-        var header, widgetsArr;
+        var header, widgetsArr, url, subjectColLabel, bodyColLabel;
 
         header = "<font color='#0294c9'><b>Email Content</b></font>";
         widgetsArr = [];
+
+        url = buildTextInputWidget("url", "Google Sheet URL - Email Content",
+                null, null, null);
+        subjectColLabel = buildTextInputWidget("subjectColLabel",
+                "Column Label - Email Subject", null, null, null);
+        bodyColLabel = buildTextInputWidget("bodyColLabel", 
+                "Column Label - Email Body", null, null, null);
+        
+        widgetsArr.push(url);
+        widgetsArr.push(subjectColLabel);
+        widgetsArr.push(bodyColLabel);
 
         return buildSection(header, widgetsArr, true);
 }

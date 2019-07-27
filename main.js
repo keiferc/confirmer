@@ -5,6 +5,7 @@
 //       - Cannot retrieve date of next clinic
 // TODO: Abstract program to not use clinic-specific language (schedule confirmer?)
 // TODO: Documentation
+// TODO: Change icon CDN host: https://postimages.org/
 
 /*
  * TODO: Module Documentation
@@ -29,53 +30,4 @@ function buildDeck()
         cardDeck.push(buildSettingsCard());
         
         return cardDeck;
-}
-
-//////////////////////////////////////////
-// Card Component Builders              //
-//////////////////////////////////////////
-/**
- * 
- * @param       {String} cardHeader
- * @param       {String} imageUrl
- * @param       {String} alt
- * @param       {Array} sectionsArr 
- * @returns     {Card}
- */
-function buildCard(cardHeader, imageUrl, alt, sectionsArr)
-{
-        var card, i;
-        
-        card = CardService.newCardBuilder();
-        card.setHeader(CardService.newCardHeader()
-                .setTitle(cardHeader)
-                .setImageUrl(imageUrl)
-                .setImageAltText(alt)
-        );
-
-        for (i = 0; i < sectionsArr.length; i++)
-                card.addSection(sectionsArr[i]);
-
-        return card.build();
-}
-
- /**
- * 
- * @param       {String} sectionHeader 
- * @param       {Array} widgetsArr 
- * @param       
- * @returns     {Section}
- */
-function buildSection(sectionHeader, widgetsArr, collapsible)
-{
-        var section,i;
-        
-        section = CardService.newCardSection()
-                .setHeader(sectionHeader)
-                .setCollapsible(collapsible);
-
-        for (i = 0; i < widgetsArr.length; i++)
-                section.addWidget(widgetsArr[i]);
-
-        return section;
 }

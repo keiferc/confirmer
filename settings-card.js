@@ -9,7 +9,7 @@
 /**
  * 
  */
-function buildSettingsCard()
+function buildSettingsCard(settings)
 {
         var card, icon, sectionsArr;
 
@@ -183,96 +183,4 @@ function getDeliveryTimes()
         times = amArr.concat(pmArr);
 
         return times;
-}
-
-//////////////////////////////////////////
-// Settings Management                  //
-//////////////////////////////////////////
-/**
- * 
- * @param       {Object} timeSettings 
- * @param       {Object} contactSettings 
- * @param       {Object} scheduleSettings 
- * @param       {Object} emailContentSettings 
- * @param       {Object} otherSettings 
- */
-function setConfig(timeSettings, contactSettings, scheduleSettings,
-                    emailContentSettings, otherSettings)
-{
-        var settings;
-
-        settings = PropertiesService.getScriptProperties();
-        settings.setProperties({
-                header: "Add-On Settings",
-                time: timeSettings,
-                contacts: contactSettings,
-                schedule: scheduleSettings,
-                emailContent: emailContentSettings,
-                other: otherSettings
-        });
-}
-
-/**
- * 
- * @param       {Integer} hourOfDay 
- * @param       {Integer} everyXDays 
- * @param       {Boolean} sendToSelf
- * @param       {Object}
- */
-function setMainSettings(hourOfDay, everyXDays, sendToSelf)
-{
-        return {
-                hourOfDay: hourOfDay,
-                everyXDays: everyXDays, // pull times for check
-                sendToSelf: sendToSelf
-        }
-}
-
-/**
- * 
- * @param       {String} url 
- * @param       {String} nameColLabel 
- * @param       {String} emailColLabel 
- * @returns     {Object}
- */
-function setContactsSettings(url, nameColLabel, emailColLabel)
-{
-        return {
-                header: "Contacts Settings",
-                url: url,
-                nameColLabel: nameColLabel,
-                emailColLabel: emailColLabel
-        }
-}
-
-/**
- * 
- * @param       {String} url 
- * @param       {String} dateColLabel 
- * @returns     {Object}
- */
-function setScheduleSettings(url, dateColLabel)
-{
-        return {
-                header: "Schedule Settings",
-                url: url,
-                dateColLabel: dateColLabel
-        }
-}
-
-/**
- *
- * @param       {String} url
- * @param       {String} subjectColLabel
- * @param       {String} bodyColLabel
- * @returns     {Object} 
- */
-function setEmailContentSettings(url, subjectColLabel, bodyColLabel)
-{
-        return {
-                header: "Email Content Settings",
-                url: url,
-                subjectColLabel: subjectColLabel,
-                bodyColLabel: bodyColLabel
-        }
 }

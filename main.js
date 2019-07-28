@@ -20,18 +20,24 @@ var SECONDARY_COLOR = "#1c8adb";
 
 function main()
 {
-        return buildDeck();
+        var settings = PropertiesService.getScriptProperties().
+                getProperties();
+
+        if (JSON.stringify(settings) == "{}")
+                setDefaultSettings();
+
+        return buildDeck(settings);
 }
 
 //////////////////////////////////////////
 // Deck Builder                         //
 //////////////////////////////////////////
-function buildDeck()
+function buildDeck(settings)
 {
         var cardDeck = [];
 
-        cardDeck.push(buildStatusCard());
-        cardDeck.push(buildSettingsCard());
+        cardDeck.push(buildStatusCard(settings));
+        cardDeck.push(buildSettingsCard(settings));
         
         return cardDeck;
 }

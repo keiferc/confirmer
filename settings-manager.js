@@ -5,10 +5,14 @@
 //////////////////////////////////////////
 // Settings Getters                     //
 //////////////////////////////////////////
+function getSettingsObj()
+{
+        return PropertiesService.getScriptProperties();
+}
+
 function getAllSettings()
 {
-        return PropertiesService.getScriptProperties()
-                .getProperties();
+        return getSettingsObj().getProperties();
 }
 
 function getMainSettings()
@@ -70,6 +74,33 @@ function setAllSettings(mainSettings, contactsSettings,
                 schedule: scheduleSettings,
                 emailContent: emailContentSettings,
         });
+}
+
+function setMainSettings(hourOfDay, everyXDays, sendToSelf)
+{
+        getSettingsObj().setProperty("main", 
+                new MainSettings(hourOfDay, everyXDays, sendToSelf));
+}
+
+function setContactsSettings(formattedHeader, url, nameColLabel, emailColLabel)
+{
+        getSettingsObj().setProperty("contacts",
+                new ContactsSettings(formattedHeader, url, 
+                                     nameColLabel, emailColLabel));
+}
+
+function setScheduleSettings(formattedHeader, url, dateColLabel)
+{
+        getSettingsObj().setProperty("schedule", 
+                new ScheduleSettings(formattedHeader, url, dateColLabel));
+}
+
+function setEmailContentSettings(formattedSectionHeader, url, 
+                                 subjectColLabel, bodyColLabel)
+{
+        getSettingsObj().setProperty("emailContent",
+                new EmailContentSettings(formattedSectionHeader, url,
+                                         subjectColLabel, bodyColLabel));
 }
 
 //////////////////////////////////////////

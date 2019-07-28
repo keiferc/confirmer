@@ -20,8 +20,8 @@ var SECONDARY_COLOR = "#1c8adb";
 
 function main()
 {
-        var settings = PropertiesService.getScriptProperties().
-                getProperties();
+        var settings = PropertiesService.getScriptProperties()
+                .getProperties();
 
         if (JSON.stringify(settings) == "{}") 
                 setDefaultSettings();

@@ -40,9 +40,10 @@ function getSettingsSectionsArr()
 
 function getMainSettingsSection()
 {
-        var widgetsArr, sendToSelf, hourOfDay;
+        var widgetsArr, keys, sendToSelf, hourOfDay;
         
         widgetsArr = [];
+        keys = ["hourOfDay", "sendToSelf"]; // TODO
         
         sendToSelf = buildSwitchWidget("Send a copy of email to self?",
                 "sendToSelf", null, null);

@@ -7,6 +7,7 @@
 // TODO: Documentation
 // TODO: Change icon CDN host: https://postimages.org/
 // TODO: Expand to create multiple confirmer cards based on needs?
+// TODO: Add direct links to edit sheets?
 
 /*
  * TODO: Module Documentation
@@ -25,6 +26,9 @@ function main()
 
         if (JSON.stringify(settings) == "{}") 
                 setDefaultSettings();
+        
+        // debug
+        Logger.log(getMainSettings());
 
         return buildDeck(settings);
 }

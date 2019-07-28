@@ -3,7 +3,26 @@
  */
 
 //////////////////////////////////////////
-// Settings Management                  //
+// Settings Getters                     //
+//////////////////////////////////////////
+function getAllSettings()
+{
+        return PropertiesService.getScriptProperties()
+                .getProperties();
+}
+
+function getMainSettings()
+{
+        return getAllSettings()["main"];
+}
+
+function getContactsSettings()
+{
+        return getAllSettings("contacts");
+}
+
+//////////////////////////////////////////
+// Settings Setters                     //
 //////////////////////////////////////////
 function setDefaultSettings()
 {
@@ -23,9 +42,6 @@ function setDefaultSettings()
         setAllSettings(main, contacts, schedule, emailContent);
 }
 
-//////////////////////////////////////////
-// Settings Management                  //
-//////////////////////////////////////////
 /**
  * 
  * @param       {Object} mainSettings
@@ -46,6 +62,9 @@ function setAllSettings(mainSettings, contactsSettings,
         });
 }
 
+//////////////////////////////////////////
+// Settings Constructors                //
+//////////////////////////////////////////
 /**
  * 
  * @param       {String} hourOfDay

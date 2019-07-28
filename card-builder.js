@@ -95,18 +95,20 @@ function buildTextInputWidget(key, title, hint, value, callback)
  * @param       {String} label 
  * @param       {String} switchKey 
  * @param       {String} switchValue 
+ * @param       {Boolean} selected
  * @param       {Function} callback 
  * @returns     {Object}
  */
-function buildSwitchWidget(label, switchKey, switchValue, callback)
+function buildSwitchWidget(label, switchKey, switchValue, 
+                           selected, callback)
 {
         var widget, switcher;
 
         switcher = CardService.newSwitch()
-                .setFieldName(switchKey);
-        
-        if (switchValue != null)
-                switcher.setValue(switchValue);
+                .setFieldName(switchKey)
+                .setValue(switchValue)
+                .setSelected(selected);
+                
         if (callback != null)
                 switcher.setOnChangeAction(callback);
         

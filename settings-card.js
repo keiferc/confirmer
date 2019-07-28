@@ -2,13 +2,6 @@
  * TODO: Module Documentation
  */
 
-//////////////////////////////////////////
-// Settings Card Builders               //
-//////////////////////////////////////////
-// TODO: Finish settings card
-/**
- * 
- */
 function buildSettingsCard(settings)
 {
         var card, icon, sectionsArr;
@@ -16,37 +9,40 @@ function buildSettingsCard(settings)
         icon = "https://cdn.pixabay.com/photo/" + 
                "2015/12/04/22/20/gear-1077550_960_720.png";
 
-        sectionsArr = getSettingsSectionsArr();
+        sectionsArr = getSettingsSectionsArr(settings);
         card = buildCard("Settings", icon, 
                          "Settings Cog", sectionsArr);
 
         return card;
 }
 
-//============== Sections ===============//
-// TODO: Build Sections
-function getSettingsSectionsArr()
+//////////////////////////////////////////
+// Settings Section Builders            //
+//////////////////////////////////////////
+function getSettingsSectionsArr(settings)
 {
         var sectionsArr = [];
 
-        sectionsArr.push(getMainSettingsSection());
-        sectionsArr.push(getContactsSettingsSection());
-        sectionsArr.push(getScheduleSettingsSection());
-        sectionsArr.push(getEmailContentSettingsSection());
-        sectionsArr.push(submitSettingsSection());
+        sectionsArr.push(getMainSettingsSection(settings));
+        sectionsArr.push(getContactsSettingsSection(settings));
+        sectionsArr.push(getScheduleSettingsSection(settings));
+        sectionsArr.push(getEmailContentSettingsSection(settings));
+        sectionsArr.push(submitSettingsSection(settings));
 
         return sectionsArr;
 }
 
-function getMainSettingsSection()
+function getMainSettingsSection(settings)
 {
-        var widgetsArr, keys, sendToSelf, hourOfDay;
+        var widgetsArr, sendToSelf, hourOfDay;
         
         widgetsArr = [];
-        keys = ["hourOfDay", "sendToSelf"]; // TODO
         
         sendToSelf = buildSwitchWidget("Send a copy of email to self?",
-                "sendToSelf", null, null);
+                "sendToSelf", "switchValue", true, null);
+
+//buildSendToSelf(settings);
+
         hourOfDay = buildDropdownWidget("hourOfDay", "Email Delivery Time", 
                 getDeliveryTimes(), null);
         
@@ -56,7 +52,7 @@ function getMainSettingsSection()
         return buildSection(null, widgetsArr, false);
 }
 
-function getContactsSettingsSection()
+function getContactsSettingsSection(settings)
 {
         var header, widgetsArr, url, nameColLabel, emailColLabel;
 
@@ -77,7 +73,7 @@ function getContactsSettingsSection()
         return buildSection(header, widgetsArr, true);
 }
 
-function getScheduleSettingsSection()
+function getScheduleSettingsSection(settings)
 {
         var header, widgetsArr, url, dateColLabel;
 
@@ -95,7 +91,7 @@ function getScheduleSettingsSection()
         return buildSection(header, widgetsArr, true);
 }
 
-function getEmailContentSettingsSection()
+function getEmailContentSettingsSection(settings)
 {
         var header, widgetsArr, url, subjectColLabel, bodyColLabel;
 
@@ -142,7 +138,30 @@ function submitSettingsSection()
                 false);
 }
 
-//============== Widgets ================//
+//////////////////////////////////////////
+// Settings Widget Builders             //
+//////////////////////////////////////////
+function buildSendToSelf(settings)
+{
+        var label, switchKey, switchValue, 
+            selected, callback;
+
+        label = "Send a copy of email to self?";
+        switchKey = "sendToSelf";
+        switchValue = "switchValue";
+        selected = settings["main"][switchKey];
+        callback = null;
+
+        Logger.log(selected);
+
+        return buildSwitchWidget(label, switchKey, switchValue,
+                                 selected, callback);
+}
+
+
+//////////////////////////////////////////
+// Settings Widget Helpers              //
+//////////////////////////////////////////
 // For some reason, GAS doesn't like classes,
 // so have to use object constructor functions
 /**

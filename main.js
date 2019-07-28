@@ -21,13 +21,19 @@ var SECONDARY_COLOR = "#1c8adb";
 
 function main()
 {
-        var settings = PropertiesService.getScriptProperties()
-                .getProperties();
+        var settings = getAllSettings();
+
+        //debug - reset
+        if (JSON.stringify(settings) != "{}") {
+                getSettingsObj().deleteAllProperties();
+                settings = getAllSettings();
+        }
 
         if (JSON.stringify(settings) == "{}") 
                 setDefaultSettings();
         
         // debug
+        Logger.log(typeof(getMainSettings()));
         Logger.log(getMainSettings());
         Logger.log(getContactsSettings());
         Logger.log(getScheduleSettings());

@@ -7,17 +7,23 @@
 //////////////////////////////////////////
 function getSettingsObj()
 {
-        return PropertiesService.getScriptProperties();
+        return PropertiesService.getUserProperties();
 }
 
 function getAllSettings()
 {
+        //debug
+        Logger.log(typeof(getSettingsObj().getProperties().main));
+        // TODO : string parser to convert back to JSON object
+
         return getSettingsObj().getProperties();
 }
 
 function getMainSettings()
 {
-        return getAllSettings()["main"];
+        // return JSON.parse(
+        //         getAllSettings()["main"]).replace(/=/g, ":");
+        return getAllSettings().main;
 }
 
 function getContactsSettings()
@@ -66,7 +72,7 @@ function setDefaultSettings()
 function setAllSettings(mainSettings, contactsSettings, 
                         scheduleSettings, emailContentSettings)
 {
-        var settings = PropertiesService.getScriptProperties()
+        var settings = getSettingsObj();
 
         settings.setProperties({
                 main: mainSettings,

@@ -7,6 +7,20 @@
 //////////////////////////////////////////
 function setDefaultSettings()
 {
+        var main, contacts, schedule, emailContent;
+
+        main = new MainSettings("9am", 1, true);
+        contacts = new ContactsSettings(
+                formatSectionHeader("Contacts", PRIMARY_COLOR),
+                null, "Contact Names", "Emails");
+        schedule = new ScheduleSettings(
+                formatSectionHeader("Schedule", PRIMARY_COLOR),
+                null, "Event Date");
+        emailContent = new EmailContentSettings(
+                formatSectionHeader("Email Content", PRIMARY_COLOR),
+                null, "Subject Line", "Email Body");
+        
+        setAllSettings(main, contacts, schedule, emailContent);
 }
 
 //////////////////////////////////////////
@@ -15,20 +29,18 @@ function setDefaultSettings()
 /**
  * 
  * @param       {Object} mainSettings
- * @param       {Object} timeSettings 
- * @param       {Object} contactSettings 
+ * @param       {Object} contactsSettings 
  * @param       {Object} scheduleSettings 
  * @param       {Object} emailContentSettings 
  */
-function setConfig(mainSettings, timeSettings, contactSettings, 
-                   scheduleSettings, emailContentSettings)
+function setAllSettings(mainSettings, contactsSettings, 
+                        scheduleSettings, emailContentSettings)
 {
         var settings = PropertiesService.getScriptProperties()
 
         settings.setProperties({
                 main: mainSettings,
-                time: timeSettings,
-                contacts: contactSettings,
+                contacts: contactsSettings,
                 schedule: scheduleSettings,
                 emailContent: emailContentSettings,
         });
@@ -37,7 +49,7 @@ function setConfig(mainSettings, timeSettings, contactSettings,
 /**
  * 
  * @param       {String} hourOfDay
- * @param       {Integer} everyXDays
+ * @param       {Number} everyXDays
  * @param       {Boolean} sendToSelf
  * @param       {Object}
  */

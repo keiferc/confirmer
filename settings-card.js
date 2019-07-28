@@ -145,7 +145,7 @@ function submitSettingsSection()
 // For some reason, GAS doesn't like classes,
 // so have to use object constructor functions
 /**
- * @param       {Integer} hour 
+ * @param       {Number} hour 
  * @param       {Boolean} isAM 
  * @returns     {Object}
  */

@@ -23,7 +23,7 @@ function main()
         var settings = PropertiesService.getScriptProperties().
                 getProperties();
 
-        if (JSON.stringify(settings) == "{}")
+        if (JSON.stringify(settings) == "{}") 
                 setDefaultSettings();
 
         return buildDeck(settings);

@@ -29,6 +29,9 @@ function main()
         
         // debug
         Logger.log(getMainSettings());
+        Logger.log(getContactsSettings());
+        Logger.log(getScheduleSettings());
+        Logger.log(getEmailContentSettings());
 
         return buildDeck(settings);
 }

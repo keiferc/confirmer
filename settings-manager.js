@@ -18,7 +18,17 @@ function getMainSettings()
 
 function getContactsSettings()
 {
-        return getAllSettings("contacts");
+        return getAllSettings()["contacts"];
+}
+
+function getScheduleSettings()
+{
+        return getAllSettings()["schedule"];
+}
+
+function getEmailContentSettings()
+{
+        return getAllSettings()["emailContent"];
 }
 
 //////////////////////////////////////////

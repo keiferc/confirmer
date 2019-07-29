@@ -21,23 +21,25 @@ var SECONDARY_COLOR = "#1c8adb";
 
 function main()
 {
-        var settings = getAllSettings();
+        var manager, settings;
+        manager = new SettingsManager();
+        settings = manager.getAll();
 
         //debug - reset
         if (JSON.stringify(settings) != "{}") {
-                getSettingsObj().deleteAllProperties();
-                settings = getAllSettings();
+                manager.getGASO().deleteAllProperties();
+                settings = manager.getAll();
         }
 
         if (JSON.stringify(settings) == "{}") 
-                setDefaultSettings();
+                manager.setDefault();
         
         // debug
-        Logger.log(typeof(getMainSettings()));
-        Logger.log(getMainSettings());
-        Logger.log(getContactsSettings());
-        Logger.log(getScheduleSettings());
-        Logger.log(getEmailContentSettings());
+        Logger.log(typeof(manager.getMain()));
+        Logger.log(manager.getMain());
+        Logger.log(manager.getContacts());
+        Logger.log(manager.getSchedule());
+        Logger.log(manager.getEmailContent());
 
         return buildDeck(settings);
 }

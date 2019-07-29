@@ -20,11 +20,17 @@ function SettingsManager()
 //////////////////////////////////////////
 // Getters                              //
 //////////////////////////////////////////
+/**
+ * getGASO
+ */
 SettingsManager.prototype.getGASO = function ()
 {
         return PropertiesService.getUserProperties();
 }
 
+/**
+ * getAll
+ */
 SettingsManager.prototype.getAll = function ()
 {
         //debug
@@ -33,6 +39,9 @@ SettingsManager.prototype.getAll = function ()
         return this.getGASO().getProperties();
 }
 
+/**
+ * getMain
+ */
 SettingsManager.prototype.getMain = function ()
 {
         // return JSON.parse(
@@ -40,16 +49,25 @@ SettingsManager.prototype.getMain = function ()
         return this.getAll().main;
 }
 
+/**
+ * getContacts
+ */
 SettingsManager.prototype.getContacts = function ()
 {
         return this.getAll().contacts;
 }
 
+/**
+ * getSchedule
+ */
 SettingsManager.prototype.getSchedule = function ()
 {
         return this.getAll().schedule;
 }
 
+/**
+ * getEmailContent
+ */
 SettingsManager.prototype.getEmailContent = function ()
 {
         return this.getAll().emailContent;
@@ -58,6 +76,9 @@ SettingsManager.prototype.getEmailContent = function ()
 //////////////////////////////////////////
 // Setters                              //
 //////////////////////////////////////////
+/**
+ * setDefault
+ */
 SettingsManager.prototype.setDefault = function ()
 {
 
@@ -72,7 +93,8 @@ SettingsManager.prototype.setDefault = function ()
 }
 
 /**
- * 
+ * setAll 
+ *
  * @param       {Object} main
  * @param       {Object} contacts
  * @param       {Object} schedule
@@ -89,6 +111,9 @@ SettingsManager.prototype.setAll = function
         });
 }
 
+/**
+ * setMain
+ */
 SettingsManager.prototype.setMain = function
 (hourOfDay, everyXDays, sendToSelf)
 {
@@ -96,6 +121,9 @@ SettingsManager.prototype.setMain = function
                 new this.Main(hourOfDay, everyXDays, sendToSelf));
 }
 
+/**
+ * setContacts
+ */
 SettingsManager.prototype.setContacts = function
 (formattedHeader, url, nameColLabel, emailColLabel)
 {
@@ -104,6 +132,9 @@ SettingsManager.prototype.setContacts = function
                                   nameColLabel, emailColLabel));
 }
 
+/**
+ * setSchedule
+ */
 SettingsManager.prototype.setSchedule = function
 (formattedHeader, url, dateColLabel)
 {
@@ -111,6 +142,14 @@ SettingsManager.prototype.setSchedule = function
                 new this.Schedule(formattedHeader, url, dateColLabel));
 }
 
+/**
+ * setEmailContent
+ *
+ * @param       {String} formattedSectionHeader
+ * @param       {String} url
+ * @param       {String} subjectColLabel
+ * @param       {String} bodyColLabel
+ */
 SettingsManager.prototype.setEmailContent = function
 (formattedSectionHeader, url, subjectColLabel, bodyColLabel)
 {
@@ -123,6 +162,7 @@ SettingsManager.prototype.setEmailContent = function
 // Nested Object Constructors           //
 //////////////////////////////////////////
 /**
+ * Main
  * 
  * @param       {String} hourOfDay
  * @param       {Number} everyXDays
@@ -132,14 +172,15 @@ SettingsManager.prototype.setEmailContent = function
 SettingsManager.prototype.Main = function
 (hourOfDay, everyXDays, sendToSelf)
 {
-        this.hourOfDay = hourOfDay; // Format: Xxx, e.g. 9am, 12pm
+        this.hourOfDay = hourOfDay; // [1-12][am|pm] e.g. 9am, 12pm
         this.everyXDays = everyXDays; // delivery time check
         this.sendToSelf = sendToSelf;
 }
 
 /**
- * 
- * @param       {Stinrg} formattedHeader
+ * Contacts
+ *
+ * @param       {String} formattedHeader
  * @param       {String} url 
  * @param       {String} nameColLabel 
  * @param       {String} emailColLabel 
@@ -155,7 +196,8 @@ SettingsManager.prototype.Contacts = function
 }
 
 /**
- * 
+ * Schedule
+ *
  * @param       {String} formattedHeader
  * @param       {String} url 
  * @param       {String} dateColLabel 
@@ -170,6 +212,7 @@ SettingsManager.prototype.Schedule = function
 }
 
 /**
+ * EmailContent
  *
  * @param       {String} formattedHeader
  * @param       {String} url

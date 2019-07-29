@@ -1,45 +1,93 @@
 /*
- * TODO : Module documentation
- * //Prototype this?
+ *      filename:       settings-manager.js
+ *      author:         @KeiferC
+ *      version:        0.0.1
+ *      date:           29 July 2019
+ *      description:    This module contains an object that manages
+ *                      the settings of the Confirmer GMail add-on
+ *
+ *      note:           This module is to be in a Google Script
+ *                      and thus uses function object constructors
+ *                      instead of Classes (due to GAS' lack of class
+ *                      compatibility)
  */
 
-//////////////////////////////////////////
-// Settings Getters                     //
-//////////////////////////////////////////
-function getSettingsObj()
+function SettingsManager()
 {
-        return PropertiesService.getUserProperties();
-}
+        //////////////////////////////////////////
+        // Methods                              //
+        //////////////////////////////////////////
+        //================ Getters ================//
+        this.getGASO = function()
+        {
+                return PropertiesService.getUserProperties();
+        }
 
-function getAllSettings()
-{
-        //debug
-        Logger.log(typeof(getSettingsObj().getProperties().main));
-        // TODO : string parser to convert back to JSON object
+        this.getAll = function()
+        {
+                //debug
+                Logger.log(typeof(this.getGASO().getProperties()));
 
-        return getSettingsObj().getProperties();
-}
+                return this.getGASOj().getProperties();
+        }
 
-function getMainSettings()
-{
-        // return JSON.parse(
-        //         getAllSettings()["main"]).replace(/=/g, ":");
-        return getAllSettings().main;
-}
+        this.getMain = function()
+        {
+                // return JSON.parse(
+                //         this.getAll()["main"]).replace(/=/g, ":");
+                return this.getAll().main;
+        }
 
-function getContactsSettings()
-{
-        return getAllSettings()["contacts"];
-}
+        this.getContacts = function()
+        {
+                return this.getAll().contacts;
+        }
 
-function getScheduleSettings()
-{
-        return getAllSettings()["schedule"];
-}
+        this.getSchedule = function()
+        {
+                return this.getAll().schedule;
+        }
 
-function getEmailContentSettings()
-{
-        return getAllSettings()["emailContent"];
+        this.getEmailContent = function()
+        {
+                return this.getAll().emailContent;
+        }
+
+        //================ Setters ================//
+        /**
+         * 
+         * @param       {Object} main
+         * @param       {Object} contacts
+         * @param       {Object} schedule
+         * @param       {Object} emailContent
+         */
+        this.setAll() = function(main, contacts, schedule, emailContent)
+        {
+                this.getGaso().setProperties({
+                        main: main,
+                        contacts: contacts,
+                        schedule: schedule,
+                        emailContent: emailContent,
+                });
+        }
+
+        this.setDefault() = function()
+        {
+                var main, contacts, schedule, emailContent;
+
+                main = new Main("9am", 1, true);
+                contacts = new Contacts(
+                        formatSectionHeader("Contacts", PRIMARY_COLOR),
+                        null, "Contact Names", "Emails");
+                schedule = new Schedule(
+                        formatSectionHeader("Schedule", PRIMARY_COLOR),
+                        null, "Event Date");
+                emailContent = new EmailContent(
+                        formatSectionHeader("Email Content", PRIMARY_COLOR),
+                        null, "Subject Line", "Email Body");
+                
+                this.setAll(main, contacts, schedule, emailContent);
+        }
 }
 
 //////////////////////////////////////////
@@ -47,40 +95,14 @@ function getEmailContentSettings()
 //////////////////////////////////////////
 function setDefaultSettings()
 {
-        var main, contacts, schedule, emailContent;
 
-        main = new MainSettings("9am", 1, true);
-        contacts = new ContactsSettings(
-                formatSectionHeader("Contacts", PRIMARY_COLOR),
-                null, "Contact Names", "Emails");
-        schedule = new ScheduleSettings(
-                formatSectionHeader("Schedule", PRIMARY_COLOR),
-                null, "Event Date");
-        emailContent = new EmailContentSettings(
-                formatSectionHeader("Email Content", PRIMARY_COLOR),
-                null, "Subject Line", "Email Body");
-        
-        setAllSettings(main, contacts, schedule, emailContent);
 }
 
-/**
- * 
- * @param       {Object} mainSettings
- * @param       {Object} contactsSettings 
- * @param       {Object} scheduleSettings 
- * @param       {Object} emailContentSettings 
- */
+
 function setAllSettings(mainSettings, contactsSettings, 
                         scheduleSettings, emailContentSettings)
 {
-        var settings = getSettingsObj();
 
-        settings.setProperties({
-                main: mainSettings,
-                contacts: contactsSettings,
-                schedule: scheduleSettings,
-                emailContent: emailContentSettings,
-        });
 }
 
 function setMainSettings(hourOfDay, everyXDays, sendToSelf)

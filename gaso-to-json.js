@@ -3,7 +3,7 @@
  *      author:         @KeiferC
  *      version:        0.0.1
  *      date:           29 July 2019
- *      description:    This module contains an object tha
+ *      description:    This module contains an object that
  *                      parses a Google Apps Script object
  *                      and converts it into a valid JSON
  *                      object.
@@ -16,16 +16,18 @@
 
 function GasoParser()
 {
-        // Methods
-        /**
-         *
-         * @param       {Object} gaso
-         * @returns     {JSON}
-         */
-        this.toJSON = function (gaso)
-        {
+        // TODO
+}
 
-        }
-
-        // Helper functions
+//////////////////////////////////////////
+// Methods                              //
+//////////////////////////////////////////
+/**
+ *
+ * @param       {Object} gaso
+ * @returns     {JSON}
+ */
+GasoParser.prototype.toJSON = function(gaso)
+{
+        //TODO
 }

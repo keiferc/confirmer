@@ -83,15 +83,11 @@ SettingsManager.prototype.getEmailContent = function ()
  */
 SettingsManager.prototype.setDefault = function ()
 {
-
         this.setMain("9am", 1, true);
-        this.setContacts(formatSectionHeader("Contacts", PRIMARY_COLOR),
-                null, "Contact Names", "Emails");
-        this.setSchedule(formatSectionHeader("Schedule", PRIMARY_COLOR),
-                null, "Event Date");
-        this.setEmailContent(
-                formatSectionHeader("EmailContent", PRIMARY_COLOR),
-                null, "Subject Line", "Email Body");
+        this.setContacts("Contacts", null, "Contact Names", "Emails");
+        this.setSchedule("Schedule", null, "Event Date");
+        this.setEmailContent("Email Content",null, "Subject Line", 
+                             "Email Body");
 }
 
 /**
@@ -127,10 +123,10 @@ SettingsManager.prototype.setMain = function
  * setContacts
  */
 SettingsManager.prototype.setContacts = function
-(formattedHeader, url, nameColLabel, emailColLabel)
+(header, url, nameColLabel, emailColLabel)
 {
         this.getGASO().setProperty("contacts",
-                new this.Contacts(formattedHeader, url, 
+                new this.Contacts(header, url, 
                                   nameColLabel, emailColLabel));
 }
 
@@ -138,25 +134,25 @@ SettingsManager.prototype.setContacts = function
  * setSchedule
  */
 SettingsManager.prototype.setSchedule = function
-(formattedHeader, url, dateColLabel)
+(header, url, dateColLabel)
 {
         this.getGASO().setProperty("schedule", 
-                new this.Schedule(formattedHeader, url, dateColLabel));
+                new this.Schedule(header, url, dateColLabel));
 }
 
 /**
  * setEmailContent
  *
- * @param       {String} formattedSectionHeader
+ * @param       {String} header
  * @param       {String} url
  * @param       {String} subjectColLabel
  * @param       {String} bodyColLabel
  */
 SettingsManager.prototype.setEmailContent = function
-(formattedSectionHeader, url, subjectColLabel, bodyColLabel)
+(header, url, subjectColLabel, bodyColLabel)
 {
         this.getGASO().setProperty("emailContent",
-                new this.EmailContent(formattedSectionHeader, url,
+                new this.EmailContent(header, url,
                                       subjectColLabel, bodyColLabel));
 }
 
@@ -182,16 +178,16 @@ SettingsManager.prototype.Main = function
 /**
  * Contacts
  *
- * @param       {String} formattedHeader
+ * @param       {String} header
  * @param       {String} url 
  * @param       {String} nameColLabel 
  * @param       {String} emailColLabel 
  * @returns     {Object}
  */
 SettingsManager.prototype.Contacts = function
-(formattedHeader, url, nameColLabel, emailColLabel)
+(header, url, nameColLabel, emailColLabel)
 {
-        this.header = formattedHeader;
+        this.header = header;
         this.url = url;
         this.nameColLabel = nameColLabel;
         this.emailColLabel = emailColLabel;
@@ -200,15 +196,15 @@ SettingsManager.prototype.Contacts = function
 /**
  * Schedule
  *
- * @param       {String} formattedHeader
+ * @param       {String} header
  * @param       {String} url 
  * @param       {String} dateColLabel 
  * @returns     {Object}
  */
 SettingsManager.prototype.Schedule = function
-(formattedHeader, url, dateColLabel)
+(header, url, dateColLabel)
 {
-        this.header = formattedHeader;
+        this.header = header;
         this.url = url;
         this.dateColLabel = dateColLabel;
 }
@@ -216,16 +212,16 @@ SettingsManager.prototype.Schedule = function
 /**
  * EmailContent
  *
- * @param       {String} formattedHeader
+ * @param       {String} header
  * @param       {String} url
  * @param       {String} subjectColLabel
  * @param       {String} bodyColLabel
  * @returns     {Object} 
  */
 SettingsManager.prototype.EmailContent = function
-(formattedHeader, url, subjectColLabel, bodyColLabel)
+(header, url, subjectColLabel, bodyColLabel)
 {
-        this.header = formattedHeader;
+        this.header = header;
         this.url = url;
         this.subjectColLabel = subjectColLabel;
         this.bodyColLabel = bodyColLabel;

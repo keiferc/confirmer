@@ -78,7 +78,7 @@ Card.prototype.buildSection = function
                 .setCollapsible(collapsible);
 
         if (header != null)
-                section.setHeader(sectionHeader)
+                section.setHeader(header)
 
         for (i = 0; i < widgets.length; i++)
                 section.addWidget(widgets[i]);

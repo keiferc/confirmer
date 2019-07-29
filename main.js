@@ -29,13 +29,29 @@ function main()
         //debug - reset
         if (JSON.stringify(settings) != "{}") {
                 manager.getGASO().deleteAllProperties();
+
+                //debug
+                Logger.log("here1");
+
                 settings = manager.getAll();
+
+                //debug
+                Logger.log("here2");
         }
 
-        if (JSON.stringify(settings) == "{}") 
+        if (JSON.stringify(settings) == "{}") {
+                //debug
+                Logger.log("here3");
+
                 manager.setDefault();
+
+                //debug
+                Logger.log("here4");
+        }
         
         // debug
+        Logger.log("gaso: ");
+        Logger.log(settings);
         Logger.log(typeof(manager.getMain()));
         Logger.log(manager.getMain());
         Logger.log(manager.getContacts());
@@ -52,8 +68,8 @@ function buildDeck()
 {
         var cardDeck = [];
 
-        cardDeck.push(buildStatusCard());
-        cardDeck.push(new SettingsCard());
+        //cardDeck.push(buildStatusCard());
+        cardDeck.push(new SettingsCard().gCard);
         
         return cardDeck;
 }

@@ -10,7 +10,7 @@
  * 
  * @param       {Object} config 
  */
-function buildStatusCard(settings)
+function buildStatusCard()
 {
         var card, icon, sectionsArr;
 

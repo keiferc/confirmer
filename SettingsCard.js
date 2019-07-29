@@ -26,6 +26,10 @@ function SettingsCard()
                   "gear-1077550_960_720.png";
         iconAltText = "Setting Cog Icon";
 
+        // debug
+        Logger.log("init settings: ");
+        Logger.log(this.getSections());
+
         Card.call(this, header, iconUrl, iconAltText, this.getSections());
 }
 
@@ -46,6 +50,9 @@ SettingsCard.prototype.getSections = function ()
         sections.push(this.getScheduleSection());
         sections.push(this.getEmailContentSection());
         sections.push(this.getSubmitSection());
+
+        //debug
+        Logger.log(sections);
 
         return sections;
 }

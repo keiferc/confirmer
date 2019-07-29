@@ -65,7 +65,7 @@ SettingsCard.prototype.getMainSection = function ()
         //buildSendToSelf(settings);
 
         hourOfDay = this.buildDropdownWidget("hourOfDay", 
-                "Email Delivery Time", this.getDeliveryTimes(), null);
+                "Email Delivery Time", this.getTimes(), null);
         
         widgets.push(sendToSelf);
         widgets.push(hourOfDay);
@@ -204,7 +204,9 @@ SettingsCard.prototype.buildSendToSelf = function ()
  * @param       {Boolean} isAM 
  * @returns     {Object}
  */
-function DeliveryTime(hour, isAM) {
+SettingsCard.prototype.DeliveryTime = function 
+(hour, isAM) 
+{
         var time_period, opt;
 
         if (hour < 10)
@@ -222,7 +224,7 @@ function DeliveryTime(hour, isAM) {
         this.selected = false;
 }
 
-function getDeliveryTimes()
+SettingsCard.prototype.getTimes = function()
 {
         var times, amArr, pmArr;
 
@@ -231,8 +233,8 @@ function getDeliveryTimes()
         pmArr = [];
 
         for (i = 0; i < 12; i++) {
-                amArr.push(new DeliveryTime((i + 1), true));
-                pmArr.push(new DeliveryTime((i + 1), false));
+                amArr.push(new this.DeliveryTime((i + 1), true));
+                pmArr.push(new this.DeliveryTime((i + 1), false));
         }
 
         times = amArr.concat(pmArr);

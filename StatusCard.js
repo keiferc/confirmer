@@ -1,84 +1,106 @@
 /*
- * TODO: Module Documentation
+ *      filename:       StatusCard.js
+ *      author:         @KeiferC
+ *      version:        0.0.1
+ *      date:           29 July 2019
+ *      description:    This module contains a Google Card to be used for
+ *                      displaying the status of the Confirmer GMail add-on
+ *
+ *      note:           This module is to be in a Google Script
+ *                      and thus uses constructor functions
+ *                      instead of Classes (due to GAS' lack of class
+ *                      compatibility)
  */
 
 //////////////////////////////////////////
 // Status Card Builders                 //
 //////////////////////////////////////////
-// TODO: Finish status card
 /**
- * 
- * @param       {Object} config 
+ * StatusCard
+ *
+ * @returns     {Object}
  */
-function buildStatusCard()
+function StatusCard()
 {
-        var card, icon, sectionsArr;
+        var header, iconUrl, iconAltText;
 
-        icon = "https://www.maxpixel.net/static/photo/2x/" + 
-               "E-Mail-Icon-At-News-At-Sign-Email-1083508.png";
+        header = "Status";
+        iconUrl = "https://www.maxpixel.net/static/photo/2x/" + 
+                  "E-Mail-Icon-At-News-At-Sign-Email-1083508.png";
+        iconAltText = "Status Card Icon";
 
-        sectionsArr = getStatusSectionsArr();
-        card = buildCard("Status", icon,
-                         "Emailer Icon", sectionsArr);
-
-        return card;
+        Card.call(this, header, iconUrl, iconAltText, this.getSections());
 }
 
-//============== Sections ===============//
-// TODO: Build Sections
-function getStatusSectionsArr()
+StatusCard.prototype = Object.create(Card.prototype);
+
+//////////////////////////////////////////
+// Section Builders                     //
+//////////////////////////////////////////
+/**
+ * getSections
+ */
+StatusCard.prototype.getSections = function ()
 {
-        var sectionsArr = [];
+        var sections = [];
 
-        sectionsArr.push(getScheduleStatusSection());
-        sectionsArr.push(getEmailStatusSection());
+        sections.push(this.getScheduleSection());
+        sections.push(this.getEmailSection());
 
-        return sectionsArr;
+        return sections;
 }
 
-function getScheduleStatusSection()
+/**
+ * getScheduleSection
+ */
+StatusCard.prototype.getScheduleSection = function ()
 {
-        var header, widgetsArr, nextEventDate, sendingDate;
+        var header, widgets, nextEventDate, sendingDate;
 
-        header = formatSectionHeader("Schedule", PRIMARY_COLOR);
-        widgetsArr = [];
+        header = this.formatHeader("Schedule", PRIMARY_COLOR);
+        widgets = [];
 
-        nextEventDate = buildTextKeyValWidget("Next Event Date", null, 
-                "asdf", false);
-        sendingDate = buildTextKeyValWidget("Reminder Email Sending Date", null,
-                "input here", false);
+        nextEventDate = this.buildTextKeyValWidget("Next Event Date", 
+                null, "asdf", false);
+        sendingDate = this.buildTextKeyValWidget("Reminder Email Sending Date", 
+                null, "input here", false);
         
-        widgetsArr.push(nextEventDate);
-        widgetsArr.push(sendingDate);
+        widgets.push(nextEventDate);
+        widgets.push(sendingDate);
 
-        return buildSection(header, widgetsArr, false);
+        return this.buildSection(header, widgets, false);
 }
 
-function getEmailStatusSection()
+/**
+ * getEmailSection
+ */
+StatusCard.prototype.getEmailSection = function ()
 {
-        var header, widgetsArr, sender, bcc, subject, body;
+        var header, widgets, sender, bcc, subject, body;
 
-        header = formatSectionHeader("Email", PRIMARY_COLOR);
-        widgetsArr = [];
+        header = this.formatHeader("Email", PRIMARY_COLOR);
+        widgets = [];
 
-        sender = buildTextKeyValWidget("Sender", null, 
+        sender = this.buildTextKeyValWidget("Sender", null, 
                 "Sender email here", false);
-        bcc = buildTextKeyValWidget("BCC", null, 
+        bcc = this.buildTextKeyValWidget("BCC", null, 
                 "bcc1<br>bcc2<br>bcc3", true);
-        subject = buildTextKeyValWidget("Subject", null, 
+        subject = this.buildTextKeyValWidget("Subject", null, 
                 "Subject Line Here", false);
-        body = buildTextParagraphWidget("here is the email body");
+        body = this.buildTextParagraphWidget("here is the email body");
 
-        widgetsArr.push(sender);
-        widgetsArr.push(bcc);
-        widgetsArr.push(subject);
-        widgetsArr.push(body);
+        widgets.push(sender);
+        widgets.push(bcc);
+        widgets.push(subject);
+        widgets.push(body);
 
-        return buildSection(header, widgetsArr, false);
+        return this.buildSection(header, widgets, false);
 }
 
-//============== Widgets ================//
-// TODO: Build widgets
+//////////////////////////////////////////
+// Widget Builders                      //
+//////////////////////////////////////////
+
 
 //////////////////////////////////////////
 // TODO: Helpers                        //

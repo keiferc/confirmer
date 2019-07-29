@@ -68,7 +68,7 @@ function buildDeck()
 {
         var cardDeck = [];
 
-        //cardDeck.push(buildStatusCard());
+        cardDeck.push(new StatusCard().gCard);
         cardDeck.push(new SettingsCard().gCard);
         
         return cardDeck;

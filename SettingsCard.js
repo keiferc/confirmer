@@ -24,11 +24,7 @@ function SettingsCard()
         header = "Settings";
         iconUrl = "https://cdn.pixabay.com/photo/2015/12/04/22/20/" +
                   "gear-1077550_960_720.png";
-        iconAltText = "Setting Cog Icon";
-
-        // debug
-        Logger.log("init settings: ");
-        Logger.log(this.getSections());
+        iconAltText = "Settings Card Icon";
 
         Card.call(this, header, iconUrl, iconAltText, this.getSections());
 }
@@ -39,7 +35,7 @@ SettingsCard.prototype = Object.create(Card.prototype);
 // Section Builders                     //
 //////////////////////////////////////////
 /**
- * getSection
+ * getSections
  */
 SettingsCard.prototype.getSections = function ()
 {
@@ -176,7 +172,7 @@ SettingsCard.prototype.getSubmitSection = function ()
 }
 
 //////////////////////////////////////////
-// Settings Widget Builders             //
+// Widget Builders                      //
 //////////////////////////////////////////
 /**
  * buildSendToSelf

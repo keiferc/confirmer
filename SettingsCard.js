@@ -3,8 +3,8 @@
  *      author:         @KeiferC
  *      version:        0.0.1
  *      date:           29 July 2019
- *      description:    This module contains an object that manages
- *                      the settings of the Confirmer GMail add-on
+ *      description:    This module contains a Google Card to be used for
+ *                      managing the settings of the Confirmer GMail add-on
  *
  *      note:           This module is to be in a Google Script
  *                      and thus uses constructor functions
@@ -12,132 +12,152 @@
  *                      compatibility)
  */
 
-function buildSettingsCard(settings)
+/**
+ * SettingsCard
+ *
+ * @returns     {Object}
+ */
+function SettingsCard()
 {
-        var card, icon, sectionsArr;
+        var header, iconUrl, iconAltText;
 
-        icon = "https://cdn.pixabay.com/photo/" + 
-               "2015/12/04/22/20/gear-1077550_960_720.png";
+        header = "Settings";
+        iconUrl = "https://cdn.pixabay.com/photo/2015/12/04/22/20/" +
+                  "gear-1077550_960_720.png";
+        iconAltText = "Setting Cog Icon";
 
-        sectionsArr = getSettingsSectionsArr(settings);
-        card = buildCard("Settings", icon, 
-                         "Settings Cog", sectionsArr);
-
-        return card;
+        Card.call(this, header, iconUrl, iconAltText, this.getSections());
 }
 
+SettingsCard.prototype = Object.create(Card.prototype);
+
 //////////////////////////////////////////
-// Settings Section Builders            //
+// Section Builders                     //
 //////////////////////////////////////////
-function getSettingsSectionsArr(settings)
+/**
+ * getSection
+ */
+SettingsCard.prototype.getSections = function ()
 {
-        var sectionsArr = [];
+        var sections = [];
 
-        sectionsArr.push(getMainSettingsSection(settings));
-        sectionsArr.push(getContactsSettingsSection(settings));
-        sectionsArr.push(getScheduleSettingsSection(settings));
-        sectionsArr.push(getEmailContentSettingsSection(settings));
-        sectionsArr.push(submitSettingsSection(settings));
+        sections.push(this.getMainSection());
+        sections.push(this.getContactsSection());
+        sections.push(this.getScheduleSection());
+        sections.push(this.getEmailContentSection());
+        sections.push(this.getSubmitSection());
 
-        return sectionsArr;
+        return sections;
 }
 
-function getMainSettingsSection(settings)
+/**
+ * getMainSection
+ */
+SettingsCard.prototype.getMainSection = function ()
 {
-        var widgetsArr, sendToSelf, hourOfDay;
+        var widgets, sendToSelf, hourOfDay;
         
-        widgetsArr = [];
+        widgets = [];
         
-        sendToSelf = buildSwitchWidget("Send a copy of email to self?",
+        sendToSelf = this.buildSwitchWidget("Send a copy of email to self?",
                 "sendToSelf", "switchValue", true, null);
 
-//buildSendToSelf(settings);
+        //buildSendToSelf(settings);
 
-        hourOfDay = buildDropdownWidget("hourOfDay", "Email Delivery Time", 
-                getDeliveryTimes(), null);
+        hourOfDay = this.buildDropdownWidget("hourOfDay", 
+                "Email Delivery Time", this.getDeliveryTimes(), null);
         
-        widgetsArr.push(sendToSelf);
-        widgetsArr.push(hourOfDay);
+        widgets.push(sendToSelf);
+        widgets.push(hourOfDay);
 
-        return buildSection(null, widgetsArr, false);
+        return this.buildSection(null, widgets, false);
 }
 
-function getContactsSettingsSection(settings)
+/**
+ * getContactsSection
+ */
+SettingsCard.prototype.getContactsSection = function ()
 {
-        var header, widgetsArr, url, nameColLabel, emailColLabel;
+        var header, widgets, url, nameColLabel, emailColLabel;
 
-        header = formatSectionHeader("Contacts", PRIMARY_COLOR);
-        widgetsArr = [];
+        header = this.formatHeader("Contacts", PRIMARY_COLOR);
+        widgets = [];
 
-        url = buildTextInputWidget("url", "Google Sheet URL - Contacts List",
-                null, null, null);
-        nameColLabel = buildTextInputWidget("nameColLabel", 
+        url = this.buildTextInputWidget("url", 
+                "Google Sheet URL - Contacts List", null, null, null);
+        nameColLabel = this.buildTextInputWidget("nameColLabel", 
                 "Column Label - Names", null, null, null);
-        emailColLabel = buildTextInputWidget("emailColLabel",
+        emailColLabel = this.buildTextInputWidget("emailColLabel",
                 "Column Label - Emails", null, null, null);
         
-        widgetsArr.push(url);
-        widgetsArr.push(nameColLabel);
-        widgetsArr.push(emailColLabel);
+        widgets.push(url);
+        widgets.push(nameColLabel);
+        widgets.push(emailColLabel);
 
-        return buildSection(header, widgetsArr, true);
+        return this.buildSection(header, widgets, true);
 }
 
-function getScheduleSettingsSection(settings)
+/**
+ * getScheduleSection
+ */
+SettingsCard.prototype.getScheduleSection = function ()
 {
-        var header, widgetsArr, url, dateColLabel;
+        var header, widgets, url, dateColLabel;
 
-        header = formatSectionHeader("Schedule", PRIMARY_COLOR);
-        widgetsArr = [];
+        header = this.formatHeader("Schedule", PRIMARY_COLOR);
+        widgets = [];
 
-        url = buildTextInputWidget("url", "Google Sheet URL - Schedule",
-                null, null, null);
-        dateColLabel = buildTextInputWidget("dateColLabel", 
+        url = this.buildTextInputWidget("url", 
+                "Google Sheet URL - Schedule", null, null, null);
+        dateColLabel = this.buildTextInputWidget("dateColLabel", 
                 "Column Label - Date", null, null, null);
         
-        widgetsArr.push(url);
-        widgetsArr.push(dateColLabel);
+        widgets.push(url);
+        widgets.push(dateColLabel);
 
-        return buildSection(header, widgetsArr, true);
+        return this.buildSection(header, widgets, true);
 }
 
-function getEmailContentSettingsSection(settings)
+/**
+ * getEmailContentSection
+ */
+SettingsCard.prototype.getEmailContentSection = function ()
 {
-        var header, widgetsArr, url, subjectColLabel, bodyColLabel;
+        var header, widgets, url, subjectColLabel, bodyColLabel;
 
-        header = formatSectionHeader("Email Content", PRIMARY_COLOR);
-        widgetsArr = [];
+        header = this.formatHeader("Email Content", PRIMARY_COLOR);
+        widgets = [];
 
-        url = buildTextInputWidget("url", "Google Sheet URL - Email Content",
-                null, null, null);
-        subjectColLabel = buildTextInputWidget("subjectColLabel",
+        url = this.buildTextInputWidget("url", 
+                "Google Sheet URL - Email Content", null, null, null);
+        subjectColLabel = this.buildTextInputWidget("subjectColLabel",
                 "Column Label - Email Subject", null, null, null);
-        bodyColLabel = buildTextInputWidget("bodyColLabel", 
+        bodyColLabel = this.buildTextInputWidget("bodyColLabel", 
                 "Column Label - Email Body", null, null, null);
         
-        widgetsArr.push(url);
-        widgetsArr.push(subjectColLabel);
-        widgetsArr.push(bodyColLabel);
+        widgets.push(url);
+        widgets.push(subjectColLabel);
+        widgets.push(bodyColLabel);
 
-        return buildSection(header, widgetsArr, true);
+        return this.buildSection(header, widgets, true);
 }
 
-
-//hacky temp function for testing
-function tempAction()
+/**
+ * getSubmitSection
+ */
+SettingsCard.prototype.getSubmitSection = function ()
 {
-        return CardService.newActionResponseBuilder()
-                .setStateChanged(true)
-                .build();
-}
-
-function submitSettingsSection()
-{
-        // Temp hacky action for testing
+        // debug: Temp hacky action for testing
         var action = CardService.newAction().
                 setFunctionName("tempAction");
+        function tempAction()
+        {
+                return CardService.newActionResponseBuilder()
+                        .setStateChanged(true)
+                        .build();
+        }
 
-        return buildSection(null, 
+        return this.buildSection(null, 
                 [CardService.newTextButton()
                         .setText("Save Settings")
                         .setTextButtonStyle(
@@ -151,7 +171,7 @@ function submitSettingsSection()
 //////////////////////////////////////////
 // Settings Widget Builders             //
 //////////////////////////////////////////
-function buildSendToSelf(settings)
+function buildSendToSelf()
 {
         var label, switchKey, switchValue, 
             selected, callback;

@@ -19,6 +19,7 @@
 var PRIMARY_COLOR = "#1c8adb";
 var SECONDARY_COLOR = "#1c8adb";
 
+
 function main()
 {
         var manager, settings;
@@ -41,18 +42,18 @@ function main()
         Logger.log(manager.getSchedule());
         Logger.log(manager.getEmailContent());
 
-        return buildDeck(settings);
+        return buildDeck();
 }
 
 //////////////////////////////////////////
 // Deck Builder                         //
 //////////////////////////////////////////
-function buildDeck(settings)
+function buildDeck()
 {
         var cardDeck = [];
 
-        cardDeck.push(buildStatusCard(settings));
-        cardDeck.push(buildSettingsCard(settings));
+        cardDeck.push(buildStatusCard());
+        cardDeck.push(new SettingsCard());
         
         return cardDeck;
 }

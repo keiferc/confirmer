@@ -171,21 +171,26 @@ SettingsCard.prototype.getSubmitSection = function ()
 //////////////////////////////////////////
 // Settings Widget Builders             //
 //////////////////////////////////////////
-function buildSendToSelf()
+/**
+ * buildSendToSelf
+ */
+SettingsCard.prototype.buildSendToSelf = function ()
 {
-        var label, switchKey, switchValue, 
+        var settings, label, switchKey, switchValue, 
             selected, callback;
 
+        settings = new SettingsManager();
         label = "Send a copy of email to self?";
         switchKey = "sendToSelf";
         switchValue = "switchValue";
-        selected = settings["main"][switchKey];
+        selected = settings.getMain().switchKey; //TODO: Waiting on parser
         callback = null;
 
+        // debug
         Logger.log(selected);
 
-        return buildSwitchWidget(label, switchKey, switchValue,
-                                 selected, callback);
+        return this.buildSwitchWidget(label, switchKey, switchValue,
+                                      selected, callback);
 }
 
 

@@ -12,6 +12,8 @@
  *                      compatibility)
  */
 
+// TODO call parser on every settings getter
+
 function SettingsManager()
 {
         this.module = "SettingsManager";

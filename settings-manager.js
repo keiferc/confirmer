@@ -14,126 +14,113 @@
 
 function SettingsManager()
 {
-        //////////////////////////////////////////
-        // Methods                              //
-        //////////////////////////////////////////
-        //================ Getters ================//
-        this.getGASO = function()
-        {
-                return PropertiesService.getUserProperties();
-        }
-
-        this.getAll = function()
-        {
-                //debug
-                Logger.log(typeof(this.getGASO().getProperties()));
-
-                return this.getGASOj().getProperties();
-        }
-
-        this.getMain = function()
-        {
-                // return JSON.parse(
-                //         this.getAll()["main"]).replace(/=/g, ":");
-                return this.getAll().main;
-        }
-
-        this.getContacts = function()
-        {
-                return this.getAll().contacts;
-        }
-
-        this.getSchedule = function()
-        {
-                return this.getAll().schedule;
-        }
-
-        this.getEmailContent = function()
-        {
-                return this.getAll().emailContent;
-        }
-
-        //================ Setters ================//
-        /**
-         * 
-         * @param       {Object} main
-         * @param       {Object} contacts
-         * @param       {Object} schedule
-         * @param       {Object} emailContent
-         */
-        this.setAll() = function(main, contacts, schedule, emailContent)
-        {
-                this.getGaso().setProperties({
-                        main: main,
-                        contacts: contacts,
-                        schedule: schedule,
-                        emailContent: emailContent,
-                });
-        }
-
-        this.setDefault() = function()
-        {
-                var main, contacts, schedule, emailContent;
-
-                main = new Main("9am", 1, true);
-                contacts = new Contacts(
-                        formatSectionHeader("Contacts", PRIMARY_COLOR),
-                        null, "Contact Names", "Emails");
-                schedule = new Schedule(
-                        formatSectionHeader("Schedule", PRIMARY_COLOR),
-                        null, "Event Date");
-                emailContent = new EmailContent(
-                        formatSectionHeader("Email Content", PRIMARY_COLOR),
-                        null, "Subject Line", "Email Body");
-                
-                this.setAll(main, contacts, schedule, emailContent);
-        }
+        this.module = "SettingsManager";
 }
 
 //////////////////////////////////////////
-// Settings Setters                     //
+// Getters                              //
 //////////////////////////////////////////
-function setDefaultSettings()
+SettingsManager.prototype.getGASO = function ()
 {
-
+        return PropertiesService.getUserProperties();
 }
 
-
-function setAllSettings(mainSettings, contactsSettings, 
-                        scheduleSettings, emailContentSettings)
+SettingsManager.prototype.getAll = function ()
 {
+        //debug
+        Logger.log(typeof(this.getGASO().getProperties()));
 
+        return this.getGASO().getProperties();
 }
 
-function setMainSettings(hourOfDay, everyXDays, sendToSelf)
+SettingsManager.prototype.getMain = function ()
 {
-        getSettingsObj().setProperty("main", 
-                new MainSettings(hourOfDay, everyXDays, sendToSelf));
+        // return JSON.parse(
+        //         this.getAll()["main"]).replace(/=/g, ":");
+        return this.getAll().main;
 }
 
-function setContactsSettings(formattedHeader, url, nameColLabel, emailColLabel)
+SettingsManager.prototype.getContacts = function ()
 {
-        getSettingsObj().setProperty("contacts",
-                new ContactsSettings(formattedHeader, url, 
-                                     nameColLabel, emailColLabel));
+        return this.getAll().contacts;
 }
 
-function setScheduleSettings(formattedHeader, url, dateColLabel)
+SettingsManager.prototype.getSchedule = function ()
 {
-        getSettingsObj().setProperty("schedule", 
-                new ScheduleSettings(formattedHeader, url, dateColLabel));
+        return this.getAll().schedule;
 }
 
-function setEmailContentSettings(formattedSectionHeader, url, 
-                                 subjectColLabel, bodyColLabel)
+SettingsManager.prototype.getEmailContent = function ()
 {
-        getSettingsObj().setProperty("emailContent",
-                new EmailContentSettings(formattedSectionHeader, url,
-                                         subjectColLabel, bodyColLabel));
+        return this.getAll().emailContent;
 }
 
 //////////////////////////////////////////
-// Settings Constructors                //
+// Setters                              //
+//////////////////////////////////////////
+SettingsManager.prototype.setDefault = function ()
+{
+
+        this.setMain("9am", 1, true);
+        this.setContacts(formatSectionHeader("Contacts", PRIMARY_COLOR),
+                null, "Contact Names", "Emails");
+        this.setSchedule(formatSectionHeader("Schedule", PRIMARY_COLOR),
+                null, "Event Date");
+        this.setEmailContent(
+                formatSectionHeader("EmailContent", PRIMARY_COLOR),
+                null, "Subject Line", "Email Body");
+}
+
+/**
+ * 
+ * @param       {Object} main
+ * @param       {Object} contacts
+ * @param       {Object} schedule
+ * @param       {Object} emailContent
+ */
+SettingsManager.prototype.setAll = function
+(main, contacts, schedule, emailContent)
+{
+        this.getGASO().setProperties({
+                main: main,
+                contacts: contacts,
+                schedule: schedule,
+                emailContent: emailContent,
+        });
+}
+
+SettingsManager.prototype.setMain = function
+(hourOfDay, everyXDays, sendToSelf)
+{
+        this.getGASO().setProperty("main", 
+                new this.Main(hourOfDay, everyXDays, sendToSelf));
+}
+
+SettingsManager.prototype.setContacts = function
+(formattedHeader, url, nameColLabel, emailColLabel)
+{
+        this.getGASO().setProperty("contacts",
+                new this.Contacts(formattedHeader, url, 
+                                  nameColLabel, emailColLabel));
+}
+
+SettingsManager.prototype.setSchedule = function
+(formattedHeader, url, dateColLabel)
+{
+        this.getGASO().setProperty("schedule", 
+                new this.Schedule(formattedHeader, url, dateColLabel));
+}
+
+SettingsManager.prototype.setEmailContent = function
+(formattedSectionHeader, url, subjectColLabel, bodyColLabel)
+{
+        this.getGASO().setProperty("emailContent",
+                new this.EmailContent(formattedSectionHeader, url,
+                                      subjectColLabel, bodyColLabel));
+}
+
+//////////////////////////////////////////
+// Nested Object Constructors           //
 //////////////////////////////////////////
 /**
  * 
@@ -142,7 +129,8 @@ function setEmailContentSettings(formattedSectionHeader, url,
  * @param       {Boolean} sendToSelf
  * @param       {Object}
  */
-function MainSettings(hourOfDay, everyXDays, sendToSelf)
+SettingsManager.prototype.Main = function
+(hourOfDay, everyXDays, sendToSelf)
 {
         this.hourOfDay = hourOfDay; // Format: Xxx, e.g. 9am, 12pm
         this.everyXDays = everyXDays; // delivery time check
@@ -157,8 +145,8 @@ function MainSettings(hourOfDay, everyXDays, sendToSelf)
  * @param       {String} emailColLabel 
  * @returns     {Object}
  */
-function ContactsSettings(formattedHeader, url, nameColLabel, 
-                          emailColLabel)
+SettingsManager.prototype.Contacts = function
+(formattedHeader, url, nameColLabel, emailColLabel)
 {
         this.header = formattedHeader;
         this.url = url;
@@ -173,7 +161,8 @@ function ContactsSettings(formattedHeader, url, nameColLabel,
  * @param       {String} dateColLabel 
  * @returns     {Object}
  */
-function ScheduleSettings(formattedHeader, url, dateColLabel)
+SettingsManager.prototype.Schedule = function
+(formattedHeader, url, dateColLabel)
 {
         this.header = formattedHeader;
         this.url = url;
@@ -188,8 +177,8 @@ function ScheduleSettings(formattedHeader, url, dateColLabel)
  * @param       {String} bodyColLabel
  * @returns     {Object} 
  */
-function EmailContentSettings(formattedHeader, url, 
-                              subjectColLabel, bodyColLabel)
+SettingsManager.prototype.EmailContent = function
+(formattedHeader, url, subjectColLabel, bodyColLabel)
 {
         this.header = formattedHeader;
         this.url = url;

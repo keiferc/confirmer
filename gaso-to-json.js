@@ -19,15 +19,13 @@ function GasoParser()
         // TODO
 }
 
-//////////////////////////////////////////
-// Methods                              //
-//////////////////////////////////////////
 /**
  *
  * @param       {Object} gaso
  * @returns     {JSON}
  */
-GasoParser.prototype.toJSON = function(gaso)
+GasoParser.prototype.toJSON = function
+(gaso)
 {
         //TODO
 }

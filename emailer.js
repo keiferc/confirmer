@@ -1,6 +1,22 @@
 /*
- * TODO: Module documentation
+ *      filename:       Emailer.js
+ *      author:         @KeiferC
+ *      version:        0.0.1
+ *      date:           29 July 2019
+ *      description:    This module manages the emailing processes
+ *                      involved with the Confirmer GMail add-on
+ *
+ *      note:           This module is to be in a Google Script
+ *                      and thus uses constructor functions
+ *                      instead of Classes (due to GAS' lack of class
+ *                      compatibility)
  */
+
+function Emailer(contacts, schedule, emailContent) {
+        this.contacts = contacts;
+        this.schedule = schedule;
+        this.emailContent = emailContent;
+}
 
 //////////////////////////////////////////
 // Email Composition                    //
@@ -8,27 +24,31 @@
 /**
  * Calls and manages main processes
  */
-function email() 
+Emailer.prototype.email = function () 
 {
-        var date, contactsList, recipients, subject, message;
+        var calendar, date, contacts, recipients, subject, message;
+
+        calendar = new TimeManager();
 
         // Calculate date
         try {
-                date = getClinicDate();
+                date = calendar.getNextDate();
         } catch(e) {
                 Logger.log(e);
         }
 
         // Retrieve recipient emails
-        contactsList = getContactsList(namesColumnTitle, emailsColumnTitle);
-        recipients = getRecipients(contactsList, getVolunteers(date));
+        contacts = this.getContacts();
+        recipients = this.getRecipients(contacts, 
+                this.getScheduled(date), true); // TODO: get sendToSelf
 
+        //debug
         Logger.log(recipients);
 
         // Compose email
-        date = formatDate(date);
-        subject = generateSubject(date);
-        message = getEmailBody(date);
+        date = calendar.formatDate(date);
+        subject = this.generateSubject(date);
+        message = this.generateEmailBody(date);
 
         // Send email
         // MailApp.sendEmail({
@@ -38,24 +58,49 @@ function email()
         // });
 }
 
-function generateSubject(date) 
+/**
+ * generateSubject
+ *
+ * Formats the subject line from the given spreadsheet,
+ * column label, and formatted date
+ *
+ * @param       {Date} date
+ * @returns     {String}
+ */
+Emailer.prototype.generateSubject = function
+(date)
 {
+        var parser = new GSheetParser(this.emailContent.url);
+
         return  "[" + date + "]: " +
-                getColumn(confirmationEmailSheet, subjectColumnTitle)[0];
+                parser.getColumn(this.emailContent.subjectColLabel)[0];
 }
 
-function getEmailBody(date) 
+/**
+ * generateEmailBody
+ *
+ * Formats the email body from the given spreadsheet,
+ * column label, and formatted date.
+ *
+ * @param       {Date} date
+ * @returns     {String}
+ */
+Emailer.prototype.generateEmailBody = function 
+(date)
 {
-        var signature = Gmail.Users.Settings.SendAs.list("me").sendAs.filter(
+        var parser, body, signature;
+        
+        parser = new GSheetParser(this.emailContent.url);
+        body = parser.getColumn(this.emailContent.bodyColLabel)[0];
+        signature = Gmail.Users.Settings.SendAs.list("me").sendAs.filter(
                 function (account) {
                         if (account.isDefault)
                                 return true
                 })[0].signature;
 
-        return  "<p>Dear Volunteers,</p><p>" + date +
-                " is our next immigration clinic. " +
-                getColumn(confirmationEmailSheet, bodyColumnTitle) +
-                "</p>" + signature;
+        return  "<p>Dear Volunteers,</p>" + 
+                "<p>" + date + " is our next immigration clinic. " + 
+                body +"</p>" + signature;
 }
 
 //////////////////////////////////////////
@@ -64,82 +109,69 @@ function getEmailBody(date)
 /**
  * getRecipients
  * 
- * Given an array of volunteer names and the contacts
- * list, return an array containing volunteer emails
+ * Given an array of scheduled names and the contacts
+ * list, return an array containing emails of the 
+ * scheduled people
  *
- * @param       {Object} contactsList
- * @param       {Array} volunteers
+ * @param       {Object} contacts
+ * @param       {Array} scheduled
+ * @param       {Boolean} sendToSelf
  * @returns     {Array}
  */
-function getRecipients(contactsList, volunteers) 
+Emailer.prototype.getRecipients = function
+(contacts, scheduled, sendToSelf) 
 {
         var emails, i;
 
         emails = "";
 
-        for (i = 0; i < volunteers.length; i++)
-                emails += contactsList[volunteers[i]] + ",";
+        for (i = 0; i < scheduled.length; i++)
+                emails += contacts[scheduled[i]] + ",";
 
-        emails += Session.getEffectiveUser();
+        if (sendToSelf)
+                emails += Session.getEffectiveUser();
+        else
+                emails = emails.replace(/(^\s*,)|(,\s*$)/g, "");
 
         return emails;
 }
 
 /**
- * getContactsList
+ * getContacts
  * 
  * Merges two arrays into a key-value object
  * 
- * @param       {String} namesTitle 
- * @param       {String} emailsTitle 
  * @return      {Object}
  */
-function getContactsList(namesTitle, emailsTitle) 
+Emailer.prototype.getContacts = function () 
 {
-        var namesArray, emailsArray, contactsList, i;
+        var parser, namesArr, emailsArr, contacts, i;
 
-        namesArray = getColumn(contactsSheet, namesTitle);
-        emailsArray = getColumn(contactsSheet, emailsTitle);
-        contactsList = {};
+        parser = new GSheetParser(this.contacts.url);
+        namesArr = parser.getColumn(this.contacts.nameColLabel);
+        emailsArr = parser.getColumn(this.contacts.emailColLabel);
+        contacts = {};
 
-        if (namesArray.length != emailsArray.length)
+        if (namesArr.length != emailsArr.length)
                 Logger.log("Error: asymmetric contact info");
 
-        for (i = 0; i < namesArray.length; i++)
-                contactsList[namesArray[i]] = emailsArray[i];
+        for (i = 0; i < namesArr.length; i++)
+                contacts[namesArr[i]] = emailsArr[i];
 
-        return contactsList;
+        return contacts;
 }
 
 /**
- * function getVolunteers
+ * getScheduled
  *
- * Returns an array of volunteers who signed up for
- * the given clinic_date
+ * Returns an array of scheduled people who signed up for
+ * the given scheduled date
  *
- * @param       {Date} clinicDate
+ * @param       {Date} date
  * @returns     {Array}
  */
-function getVolunteers(clinicDate) 
+Emailer.prototype.getScheduled = function
+(date) 
 {
-        var sheet, range, index, rowIndex, rowValues, values, i, j;
-
-        sheet = getSheet(volunteersSignupSheet);
-        rangeValues = sheet.getSheetValues(1, 1, sheet.getLastRow(),
-                sheet.getLastColumn())
-        values = [];
-
-        for (i = 0; i < sheet.getLastRow(); i++) {
-                if (rangeValues[i][0].valueOf() == clinicDate.valueOf()) {
-                        rowValues = rangeValues[i];
-                        break;
-                }
-        }
-
-        for (j = 1; j < rowValues.length; j++) {
-                if (rowValues[j])
-                        values.push(rowValues[j]);
-        }
-
-        return values;
+        return new GSheetParser(this.schedule.url).getRow(date);
 }

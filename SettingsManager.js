@@ -17,6 +17,10 @@
 function SettingsManager()
 {
         this.module = "SettingsManager";
+        this.main = this.getMain();
+        this.contacts = this.getContacts();
+        this.schedule = this.getSchedule();
+        this.emailContent = this.getEmailContent();
 }
 
 //////////////////////////////////////////

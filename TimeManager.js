@@ -1,29 +1,55 @@
+/*
+ *      filename:       TimeManager.js
+ *      author:         @KeiferC
+ *      version:        0.0.1
+ *      date:           29 July 2019
+ *      description:    This module contains handles all time-related
+ *                      processes involved with the Confirmer GMail
+ *                      add-on
+ *
+ *      note:           This module is to be in a Google Script
+ *                      and thus uses constructor functions
+ *                      instead of Classes (due to GAS' lack of class
+ *                      compatibility)
+ */
+
+function TimeManager() {};
+
 //////////////////////////////////////////
 // Schedule Calculations                //
 //////////////////////////////////////////
 /**
- * getClinicDate
+ * getNextDate
  *
- * Retrieves next clinic date from sheet
+ * Retrieves next scheduled date from sheet
  *
  * @returns     {Date}
  */
-function getClinicDate()
+TimeManager.prototype.getNextDate = function ()
 {
-         var current_date, clinic_dates, i;
+         var parser, next_dates, current_date, i;
          
+         parser = new GSheetParser(volunteersSignupSheet);
+         next_dates = parser.getColumn(dateColumnTitle);
          current_date = new Date();
-         clinic_dates = getColumn(volunteersSignupSheet, dateColumnTitle);
  
-         for (i in clinic_dates) {
-                 if (clinic_dates[i] >= current_date)
-                         return clinic_dates[i]
+         for (i in next_dates) {
+                 if (next_dates[i] >= current_date)
+                         return next_dates[i]
          }
  
-         throw "Unable to retrieve next clinic date.";
+         throw "Unable to retrieve next scheduled date.";
 }
 
-function formatDate(date)
+/**
+ * formatDate
+ *
+ * Returns the given date in the app's format
+ *
+ * @param       {Date} date 
+ */
+TimeManager.prototype.formatDate = function 
+(date)
 {
         var date_format = {
                 weekday: "short",
@@ -39,11 +65,15 @@ function formatDate(date)
 // Time Trigger Management              //
 //////////////////////////////////////////
 /**
- * 
- * @param       {int} frequency 
- * @param       {int} time 
+ * startTimeTrigger 
+ *
+ * Starts the Google Apps Script time trigger
+ *
+ * @param       {Number} frequency 
+ * @param       {Number} time 
  */
-function startTimeTrigger(frequency, time)
+TimManager.prototype.startTimeTrigger = function 
+(frequency, time)
 {
         ScriptApp.newTrigger("main")
                 .timeBased()
@@ -53,7 +83,12 @@ function startTimeTrigger(frequency, time)
                 .create();
 }
 
-function stopTimeTrigger()
+/**
+ * stopTimeTrigger
+ *
+ * Stops the Google Apps Script time trigger
+ */
+TimeManager.prototype.stopTimeTrigger = function ()
 {
         var triggers, i;
 
@@ -61,12 +96,22 @@ function stopTimeTrigger()
 
         for (i = 0; i < triggers.length; i++) {
                 if (triggers[i].getTriggerSource() == 
-                ScriptApp.TriggerSource.CLOCK)
+                    ScriptApp.TriggerSource.CLOCK)
                         ScriptApp.deleteTrigger(triggers[i]);
         }
 }
 
-function editTimeTrigger(frequency, time)
+/**
+ * editTimeTrigger 
+ *
+ * Edits the time trigger with the given frequency and time
+ * values
+ *
+ * @param       {Number} frequency 
+ * @param       {Number} time 
+ */
+TimeManager.prototype.editTimeTrigger = function 
+(frequency, time)
 {
         stopTimeTrigger();
         startTimeTrigger(frequency, time);

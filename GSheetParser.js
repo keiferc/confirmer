@@ -1,44 +1,70 @@
 /*
- * TODO: Module Documentation
+ *      filename:       GSheetParser.js
+ *      author:         @KeiferC
+ *      version:        0.0.1
+ *      date:           29 July 2019
+ *      description:    This module contains an object that parses
+ *                      Google Sheets
+ *
+ *      note:           This module is to be in a Google Script
+ *                      and thus uses constructor functions
+ *                      instead of Classes (due to GAS' lack of class
+ *                      compatibility)
  */
 
 /**
+ * GSheetParser
+ *
+ * @param       {String} ssUrl
+ * @returns     {Object}
+ */
+function GSheetParser(ssUrl)
+{
+        this.ss = SpreadsheetApp.openByUrl(ssUrl)
+}
+
+//////////////////////////////////////////
+// Methods                              //
+//////////////////////////////////////////
+/**
  * getSheet
  *
- * Returns first sheet of a spreadsheet, given
- * the spreadsheet URL
+ * Returns nth sheet in the Google Sheet.
+ * Uses zero-indexing.
  *
- * @param        {String} ssURL
- * @return       {Sheet}
+ * @param       {Number} index
+ * @returns     {Sheet}
  */
-function getSheet(ssURL) 
+GSheetParser.prototype.getSheet = function
+(index) 
 {
-        var ss = SpreadsheetApp.openByUrl(ssURL);
-        ss.setActiveSheet(ss.getSheets()[0]);
+        //this.ss.setActiveSheet(ss.getSheets()[0]);
+        //return this.ss.getActiveSheet()
+        if (nth < 0)
+                throw "Invalid sheet number.";
 
-        return ss.getActiveSheet()
+        return this.ss.getSheets()[index];
 }
 
 /**
  * getColumn
  *
  * Returns an array of values of the given column
- * name of the given spreadsheet
  *
- * @param       {String} ssURL
- * @param       {String} columnTitle
- * @return      {Array}          
+ * @param       {String} columnLabel
+ * @returns      {Array}
  */
-function getColumn(ssURL, columnTitle) 
+GSheetParser.prototype.getColumn = function
+(columnLabel) 
 {
-        var sheet, range, textFinder, index, columnIndex,
-                columnValues, values, i;
+        var sheet, range, textFinder, index, 
+            columnIndex, columnValues, values, i;
 
-        sheet = getSheet(ssURL);
+        sheet = this.getSheet(0);
         range = sheet.getDataRange();
         values = [];
 
-        textFinder = range.createTextFinder(columnTitle);
+        textFinder = range.createTextFinder(columnLabel);
         index = textFinder.findNext();
         columnIndex = index.getColumn();
         columnValues = sheet.getSheetValues(1, columnIndex,
@@ -46,6 +72,41 @@ function getColumn(ssURL, columnTitle)
 
         for (i = 1; i < sheet.getLastRow(); i++)
                 values.push(columnValues[i][0]);
+
+        return values;
+}
+
+/**
+ * getRow
+ *
+ * Returns an array of values of the given row
+ *
+ * @param       {String} rowLabel
+ * @returns     {Array}
+ */
+GSheetParser.prototype.getRow = function
+(rowLabel)
+{
+        var sheet, range, rowValues, values, i, j;
+
+        sheet = this.getSheet(0);
+        range = sheet.getSheetValues(1, 1, sheet.getLastRow(),
+                sheet.getLastColumn())
+        values = [];
+
+        // Get row
+        for (i = 0; i < sheet.getLastRow(); i++) {
+                if (range[i][0].valueOf() == rowLabel.valueOf()) {
+                        rowValues = range[i];
+                        break;
+                }
+        }
+
+        // Get filled values in row
+        for (j = 1; j < rowValues.length; j++) {
+                if (rowValues[j])
+                        values.push(rowValues[j]);
+        }
 
         return values;
 }

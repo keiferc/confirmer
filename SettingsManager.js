@@ -1,5 +1,5 @@
 /*
- *      filename:       settings-manager.js
+ *      filename:       SettingsManager.js
  *      author:         @KeiferC
  *      version:        0.0.1
  *      date:           29 July 2019
@@ -7,7 +7,7 @@
  *                      the settings of the Confirmer GMail add-on
  *
  *      note:           This module is to be in a Google Script
- *                      and thus uses function object constructors
+ *                      and thus uses constructor functions 
  *                      instead of Classes (due to GAS' lack of class
  *                      compatibility)
  */

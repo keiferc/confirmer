@@ -1,5 +1,15 @@
 /*
- * TODO: Module Documentation
+ *      filename:       SettingsCard.js
+ *      author:         @KeiferC
+ *      version:        0.0.1
+ *      date:           29 July 2019
+ *      description:    This module contains an object that manages
+ *                      the settings of the Confirmer GMail add-on
+ *
+ *      note:           This module is to be in a Google Script
+ *                      and thus uses constructor functions
+ *                      instead of Classes (due to GAS' lack of class
+ *                      compatibility)
  */
 
 function buildSettingsCard(settings)

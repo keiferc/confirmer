@@ -14,6 +14,11 @@
 
 // TODO call parser on every settings getter
 
+/**
+ * SettingsManager
+ *
+ * @returns     {Object}
+ */
 function SettingsManager()
 {
         this.module = "SettingsManager";
@@ -39,9 +44,6 @@ SettingsManager.prototype.getGASO = function ()
  */
 SettingsManager.prototype.getAll = function ()
 {
-        //debug
-        Logger.log(typeof(this.getGASO().getProperties()));
-
         return this.getGASO().getProperties();
 }
 
@@ -50,8 +52,11 @@ SettingsManager.prototype.getAll = function ()
  */
 SettingsManager.prototype.getMain = function ()
 {
-        // return JSON.parse(
-        //         this.getAll()["main"]).replace(/=/g, ":");
+        //return eval("(" + this.getAll().main.replace(/=/g, ":") + ")");
+        //debug
+        var gaso = new GasoParser();
+        gaso.toJSON(this.getAll().main);
+
         return this.getAll().main;
 }
 

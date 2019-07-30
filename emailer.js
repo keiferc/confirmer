@@ -12,6 +12,14 @@
  *                      compatibility)
  */
 
+/**
+ * Emailer 
+ *
+ * @param       {Object} contacts 
+ * @param       {Object} schedule 
+ * @param       {Object} emailContent 
+ * @returns     {Object}
+ */
 function Emailer(contacts, schedule, emailContent) {
         this.contacts = contacts;
         this.schedule = schedule;

@@ -47,9 +47,6 @@ SettingsCard.prototype.getSections = function ()
         sections.push(this.getEmailContentSection());
         sections.push(this.getSubmitSection());
 
-        //debug
-        Logger.log(sections);
-
         return sections;
 }
 

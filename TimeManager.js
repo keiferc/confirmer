@@ -13,6 +13,11 @@
  *                      compatibility)
  */
 
+/**
+ * TimeManager
+ *
+ * @returns     {Object}
+ */
 function TimeManager() {};
 
 //////////////////////////////////////////
@@ -72,7 +77,7 @@ TimeManager.prototype.formatDate = function
  * @param       {Number} frequency 
  * @param       {Number} time 
  */
-TimManager.prototype.startTimeTrigger = function 
+TimeManager.prototype.startTimeTrigger = function 
 (frequency, time)
 {
         ScriptApp.newTrigger("main")

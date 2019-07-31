@@ -237,11 +237,6 @@ SettingsCard.prototype.buildColLabelWidget = function
         label = "Column Label - " + columnLabel;
         value = sectionSettings[key];
 
-        //debug
-        Logger.log(value);
-
-        callback = null;
-
         if (value == "null")
                 value = null;
 
@@ -260,15 +255,17 @@ SettingsCard.prototype.buildColLabelWidget = function
  */
 function submitButton(response)
 {
-        var inputs, main, contacts, schedule, emailContent;
+        var input, main, contacts, schedule, emailContent;
 
-        inputs = response.formInputs;
+        input = response.formInputs;
 
-        //main = new SettingsManager().Main(response.hourOfDay, 1, response.sendToSelf);
+        //main = new MainSettings(input.hourOfDay[0], 1,
+        //        input.sendToSelf != undefined);
+        Logger.log(input.sendToSelf != undefined);
 
-        Logger.log(response);
+        Logger.log(input);
         Logger.log("main: ");
-        Logger.log(typeof(inputs.sendToSelf[0]));
+        //Logger.log(main);
 
 }
 

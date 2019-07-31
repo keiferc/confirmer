@@ -25,7 +25,12 @@ var SECONDARY_COLOR = "#1c8adb";
 function main()
 {
         var manager, settings;
+
         manager = new SettingsManager();
+
+        // debug -- force reset
+       // manager.setDefault();
+
         settings = manager.getAll();
 
         //debug - reset
@@ -55,7 +60,7 @@ function buildDeck()
 {
         var cardDeck = [];
 
-        cardDeck.push(new StatusCard().gCard);
+        //cardDeck.push(new StatusCard().gCard);
         cardDeck.push(new SettingsCard().gCard);
         
         return cardDeck;

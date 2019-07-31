@@ -62,6 +62,9 @@ SettingsManager.prototype.getAll = function ()
  */
 SettingsManager.prototype.getMain = function ()
 {
+        if (this.getAll().main == undefined)
+                return null;
+
         return new GasoParser().toJSON(this.getAll().main);
 }
 
@@ -70,6 +73,9 @@ SettingsManager.prototype.getMain = function ()
  */
 SettingsManager.prototype.getContacts = function ()
 {
+        if (this.getAll().contacts == undefined)
+                return null;
+
         return new GasoParser().toJSON(this.getAll().contacts);
 }
 
@@ -78,6 +84,9 @@ SettingsManager.prototype.getContacts = function ()
  */
 SettingsManager.prototype.getSchedule = function ()
 {
+        if (this.getAll().schedule == undefined)
+                return null;
+
         return new GasoParser().toJSON(this.getAll().schedule);
 }
 
@@ -86,6 +95,9 @@ SettingsManager.prototype.getSchedule = function ()
  */
 SettingsManager.prototype.getEmailContent = function ()
 {
+        if (this.getAll().emailContent == undefined)
+                return null;
+                
         return new GasoParser().toJSON(this.getAll().emailContent);
 }
 
@@ -130,7 +142,7 @@ SettingsManager.prototype.setMain = function
 (hourOfDay, everyXDays, sendToSelf)
 {
         this.getGASO().setProperty("main", 
-                new this.Main(hourOfDay, everyXDays, sendToSelf));
+                new MainSettings(hourOfDay, everyXDays, sendToSelf));
 }
 
 /**
@@ -140,8 +152,8 @@ SettingsManager.prototype.setContacts = function
 (header, url, nameColLabel, emailColLabel)
 {
         this.getGASO().setProperty("contacts",
-                new this.Contacts(header, url, 
-                                  nameColLabel, emailColLabel));
+                new ContactsSettings(header, url, nameColLabel, 
+                        emailColLabel));
 }
 
 /**
@@ -151,7 +163,7 @@ SettingsManager.prototype.setSchedule = function
 (header, url, dateColLabel)
 {
         this.getGASO().setProperty("schedule", 
-                new this.Schedule(header, url, dateColLabel));
+                new ScheduleSettings(header, url, dateColLabel));
 }
 
 /**
@@ -166,23 +178,22 @@ SettingsManager.prototype.setEmailContent = function
 (header, url, subjectColLabel, bodyColLabel)
 {
         this.getGASO().setProperty("emailContent",
-                new this.EmailContent(header, url,
-                                      subjectColLabel, bodyColLabel));
+                new EmailContentSettings(header, url, subjectColLabel, 
+                        bodyColLabel));
 }
 
 //////////////////////////////////////////
-// Nested Object Constructors           //
+// Object Constructors                  //
 //////////////////////////////////////////
 /**
- * Main
+ * MainSettings
  * 
  * @param       {String} hourOfDay
  * @param       {Number} everyXDays
  * @param       {Boolean} sendToSelf
  * @param       {Object}
  */
-SettingsManager.prototype.Main = function
-(hourOfDay, everyXDays, sendToSelf)
+function MainSettings(hourOfDay, everyXDays, sendToSelf)
 {
         this.hourOfDay = hourOfDay; // [1-12][am|pm] e.g. 9am, 12pm
         this.everyXDays = everyXDays; // delivery time check
@@ -190,7 +201,7 @@ SettingsManager.prototype.Main = function
 }
 
 /**
- * Contacts
+ * ContactsSettings
  *
  * @param       {String} header
  * @param       {String} url 
@@ -198,8 +209,7 @@ SettingsManager.prototype.Main = function
  * @param       {String} emailColLabel 
  * @returns     {Object}
  */
-SettingsManager.prototype.Contacts = function
-(header, url, nameColLabel, emailColLabel)
+function ContactsSettings(header, url, nameColLabel, emailColLabel)
 {
         this.header = header;
         this.contactsUrl = url;
@@ -208,15 +218,14 @@ SettingsManager.prototype.Contacts = function
 }
 
 /**
- * Schedule
+ * ScheduleSettings
  *
  * @param       {String} header
  * @param       {String} url 
  * @param       {String} dateColLabel 
  * @returns     {Object}
  */
-SettingsManager.prototype.Schedule = function
-(header, url, dateColLabel)
+function ScheduleSettings(header, url, dateColLabel)
 {
         this.header = header;
         this.scheduleUrl = url;
@@ -224,7 +233,7 @@ SettingsManager.prototype.Schedule = function
 }
 
 /**
- * EmailContent
+ * EmailContentSettings
  *
  * @param       {String} header
  * @param       {String} url
@@ -232,8 +241,7 @@ SettingsManager.prototype.Schedule = function
  * @param       {String} bodyColLabel
  * @returns     {Object} 
  */
-SettingsManager.prototype.EmailContent = function
-(header, url, subjectColLabel, bodyColLabel)
+function EmailContentSettings(header, url, subjectColLabel, bodyColLabel)
 {
         this.header = header;
         this.emailContentUrl = url;

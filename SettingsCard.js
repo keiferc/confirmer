@@ -121,7 +121,7 @@ SettingsCard.prototype.getEmailContentSection = function ()
 {
         var settings, header, widgets;
 
-        settings = new SettingsManager().getEmailContent;
+        settings = new SettingsManager().getEmailContent();
         header = this.formatHeader("Email Content", PRIMARY_COLOR);
         widgets = [];
 
@@ -246,9 +246,13 @@ SettingsCard.prototype.buildColLabelWidget = function
 
         label = "Column Label - " + columnLabel;
         value = sectionSettings[key];
+
+        //debug
+        Logger.log(value);
+
         callback = null;
 
-        if (value == "null");
+        if (value == "null")
                 value = null;
 
         return this.buildTextInputWidget(key, label, null, value, callback);

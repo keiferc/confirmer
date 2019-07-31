@@ -14,13 +14,22 @@
  *                      compatibility)
  */
 
-function GasoParser()
-{
-        // TODO
-}
-
-// TOCONTINUE
 /**
+ * GasoParser
+ *
+ * Provides the function toJSON which parses a
+ * Google Apps Script Object
+ *
+ * @returns     {Object}
+ */
+function GasoParser() {}
+
+
+/**
+ * toJSON
+ *
+ * Given a Google Apps Script Object, return
+ * a JSON version of the object
  *
  * @param       {Object} gaso
  * @returns     {JSON}
@@ -28,33 +37,18 @@ function GasoParser()
 GasoParser.prototype.toJSON = function
 (gaso)
 {
-        Logger.log("trimmer");
-
         var json = gaso.replace(/=/g, '":"')
                 .replace(/,\s/g, '","')
                 .replace(/\{/g, '"{"')
                 .replace(/\}/g, '"}"')
                 .replace(/\[/g, '"["')
-                .replace(/\]/g, '"]"');
-
-
-        // var keys = gaso.match(/[{},:]/g);
-        // keys = keys.filter(function(item, index, self) {
-        //         return self.indexOf(item) == index;
-        // })
-
-        // for (var i = 0; i < keys.length; i++) {
-        //         Logger.log(keys[i]);
-        //         gaso = gaso.replace(keys[i], '"' + keys[i] + '"');
-        // }
-
-
-        json = json.replace(/^"\{/g, "{")
+                .replace(/\]/g, '"]"')
+                .replace(/^"\{/g, "{")
                 .replace(/\}"$/g, "}")
                 .replace(/""/g, '"');
 
-        Logger.log("gaso")
-        Logger.log(json);
+        //Logger.log(JSON.stringify(eval('(' + json + ')')));
+        Logger.log(JSON.parse(json));
 
-        //return JSON.stringify(eval('(' + gaso + ')'));
+        //return JSON.stringify(eval('(' + json + ')'));
 }

@@ -67,7 +67,7 @@ Card.prototype.build = function
  * @param       {String} header 
  * @param       {Array} widgets
  * @param       {Boolean} collapsible
- * @returns     {Section}
+ * @returns     {CardSection}
  */
 Card.prototype.buildSection = function
 (header, widgets, collapsible)
@@ -95,7 +95,7 @@ Card.prototype.buildSection = function
  * @param       {String} hint 
  * @param       {any} value 
  * @param       {Function} callback
- * @returns     {Object}
+ * @returns     {Widget}
  */
 Card.prototype.buildTextInputWidget = function
 (key, title, hint, value, callback)
@@ -122,7 +122,7 @@ Card.prototype.buildTextInputWidget = function
  * @param       {String} switchValue 
  * @param       {Boolean} selected
  * @param       {Function} callback 
- * @returns     {Object}
+ * @returns     {Widget}
  */
 Card.prototype.buildSwitchWidget = function 
 (label, switchKey, switchValue, selected, callback)
@@ -151,7 +151,7 @@ Card.prototype.buildSwitchWidget = function
  * @param       {String} label 
  * @param       {Array} options
  * @param       {Function} callback 
- * @returns     {Object}
+ * @returns     {Widget}
  */
 Card.prototype.buildDropdownWidget = function 
 (key, label, options, callback)
@@ -182,7 +182,7 @@ Card.prototype.buildDropdownWidget = function
  * @param       {String} bottomLabel 
  * @param       {String} content 
  * @param       {Boolean} multiline 
- * @returns     {Object}
+ * @returns     {Widget}
  */
 Card.prototype.buildTextKeyValWidget = function
 (topLabel, bottomLabel, content, multiline)
@@ -203,7 +203,7 @@ Card.prototype.buildTextKeyValWidget = function
  * buildTextParagraphWidget 
  *
  * @param       {String} text 
- * @returns     {Object}
+ * @returns     {Widget}
  */
 Card.prototype.buildTextParagraphWidget = function 
 (text)

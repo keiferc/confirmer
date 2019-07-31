@@ -36,6 +36,8 @@ SettingsCard.prototype = Object.create(Card.prototype);
 //////////////////////////////////////////
 /**
  * getSections
+ *
+ * @returns     {Array}
  */
 SettingsCard.prototype.getSections = function ()
 {
@@ -52,101 +54,90 @@ SettingsCard.prototype.getSections = function ()
 
 /**
  * getMainSection
+ *
+ * @returns     {CardSection}
  */
 SettingsCard.prototype.getMainSection = function ()
 {
-        var settings, widgets, hourOfDay;
+        var settings, widgets;
         
         settings = new SettingsManager();
         widgets = [];
-        
-        // sendToSelf = this.buildSwitchWidget("Send a copy of email to self?",
-        //         "sendToSelf", "switchValue", true, null);
 
-
-        hourOfDay = this.buildDropdownWidget("hourOfDay", 
-                "Email Delivery Time", this.getTimes(), null);
-        
         widgets.push(this.buildSendToSelfWidget(settings));
-        widgets.push(hourOfDay);
+        widgets.push(this.buildHourOfDayWidget(settings));
 
         return this.buildSection(null, widgets, false);
 }
 
 /**
  * getContactsSection
+ *
+ * @returns     {CardSection}
  */
 SettingsCard.prototype.getContactsSection = function ()
 {
-        var settings, header, widgets, url, nameColLabel, emailColLabel;
+        var settings, header, widgets;
 
-        settings = new SettingsManager();
+        settings = new SettingsManager().getContacts();
         header = this.formatHeader("Contacts", PRIMARY_COLOR);
         widgets = [];
 
-        url = this.buildTextInputWidget("url", 
-                "Google Sheet URL - Contacts List", null, null, null);
-        nameColLabel = this.buildTextInputWidget("nameColLabel", 
-                "Column Label - Names", null, null, null);
-        emailColLabel = this.buildTextInputWidget("emailColLabel",
-                "Column Label - Emails", null, null, null);
-        
-        widgets.push(url);
-        widgets.push(nameColLabel);
-        widgets.push(emailColLabel);
+        widgets.push(this.buildUrlWidget(settings, "Contacts List"));
+        widgets.push(this.buildColLabelWidget(settings, "nameColLabel", 
+                "Names"));
+        widgets.push(this.buildColLabelWidget(settings, "emailColLabel", 
+                "Emails"));
 
         return this.buildSection(header, widgets, true);
 }
 
 /**
  * getScheduleSection
+ *
+ * @returns     {CardSection}
  */
 SettingsCard.prototype.getScheduleSection = function ()
 {
-        var settings, header, widgets, url, dateColLabel;
+        var settings, header, widgets;
 
-        settings = new SettingsManager();
+        settings = new SettingsManager().getSchedule();
         header = this.formatHeader("Schedule", PRIMARY_COLOR);
         widgets = [];
 
-        url = this.buildTextInputWidget("url", 
-                "Google Sheet URL - Schedule", null, null, null);
-        dateColLabel = this.buildTextInputWidget("dateColLabel", 
-                "Column Label - Date", null, null, null);
-        
-        widgets.push(url);
-        widgets.push(dateColLabel);
+        widgets.push(this.buildUrlWidget(settings, "Schedule"));
+        widgets.push(this.buildColLabelWidget(settings, "dateColLabel", 
+                "Date"));
 
         return this.buildSection(header, widgets, true);
 }
 
 /**
  * getEmailContentSection
+ *
+ * @returns     {CardSection}
  */
 SettingsCard.prototype.getEmailContentSection = function ()
 {
         var settings, header, widgets, url, subjectColLabel, bodyColLabel;
 
-        settings = new SettingsManager();
+        settings = new SettingsManager().getEmailContent;
         header = this.formatHeader("Email Content", PRIMARY_COLOR);
         widgets = [];
 
-        url = this.buildTextInputWidget("url", 
-                "Google Sheet URL - Email Content", null, null, null);
-        subjectColLabel = this.buildTextInputWidget("subjectColLabel",
-                "Column Label - Email Subject", null, null, null);
-        bodyColLabel = this.buildTextInputWidget("bodyColLabel", 
-                "Column Label - Email Body", null, null, null);
-        
-        widgets.push(url);
-        widgets.push(subjectColLabel);
-        widgets.push(bodyColLabel);
+        widgets.push(this.buildUrlWidget(settings, "Email Content"));
+        widgets.push(this.buildColLabelWidget(settings, "subjectColLabel",
+                "Email Subject"));
+        widgets.push(this.buildColLabelWidget(settings, "bodyColLabel",
+                "Email Body"));
 
         return this.buildSection(header, widgets, true);
 }
 
 /**
  * getSubmitSection
+ *
+ * @returns     {CardSection}
  */
 SettingsCard.prototype.getSubmitSection = function ()
 {
@@ -174,17 +165,19 @@ SettingsCard.prototype.getSubmitSection = function ()
 //////////////////////////////////////////
 // Widget Builders                      //
 //////////////////////////////////////////
+//============== Main Section ==============//
 /**
  * buildSendToSelfWidget
  *
  * @param       {SettingsManager} settings
  * @returns     {Widget}
  */
-SettingsCard.prototype.buildSendToSelfWidget = function (settings)
+SettingsCard.prototype.buildSendToSelfWidget = function 
+(settings)
 {
-        var settings, label, switchKey, switchValue, 
+        var label, switchKey, switchValue, 
             selected, callback;
-        settings = new SettingsManager();
+
         label = "Send a copy of email to self?";
         switchKey = "sendToSelf";
         switchValue = "switchValue";
@@ -196,9 +189,70 @@ SettingsCard.prototype.buildSendToSelfWidget = function (settings)
 }
 
 /**
-* bui
-*/
+ * buildHourOfDayWidget
+ *
+ * @param       {SettingsManager} settings
+ * @returns     {Widget}
+ */
+SettingsCard.prototype.buildHourOfDayWidget = function 
+(settings)
+{
+        var key, label, options, callback;
 
+        key = "hourOfDay";
+        label = "Email Delivery Time";
+        options = this.getTimes(), // TODO: figure out selected times
+        callback = null;
+
+        return this.buildDropdownWidget(key, label, options, callback);
+}
+
+//============== Section Agnostic ==============//
+/**
+ * buildUrlWidget
+ *
+ * @param       {Object} sectionSettings - section-specific settings object
+ * @param       {String} sheetTitle - title of sheet
+ * @returns     {Widget}
+ */
+SettingsCard.prototype.buildUrlWidget = function
+(sectionSettings, sheetTitle)
+{
+        var key, value, callback;
+
+        key = "url";
+        label = "Google Sheets URL - " + sheetTitle;
+        value = sectionSettings[key];
+        callback = null;
+
+        if (value == "null")
+                value = null;
+
+        return this.buildTextInputWidget(key, label, null, value, callback);
+}
+
+/**
+ * buildColumnLabelWidget
+ *
+ * @param       {Object} sectionSettings - section-specific settings object
+ * @param       {String} key - key of input value
+ * @param       {String} columnLabel - section-specific column label
+ * @returns     {Widget}
+ */
+SettingsCard.prototype.buildColLabelWidget = function 
+(sectionSettings, key, columnLabel)
+{
+        var label, value, callback;
+
+        label = "Column Label - " + columnLabel;
+        value = sectionSettings[key];
+        callback = null;
+
+        if (value == "null");
+                value = null;
+
+        return this.buildTextInputWidget(key, label, null, value, callback);
+}
 
 //////////////////////////////////////////
 // Settings Widget Helpers              //

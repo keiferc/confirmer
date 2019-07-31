@@ -257,6 +257,9 @@ function submitButton(response)
 {
         var manager, input, main, contacts, schedule, emailContent;
 
+        // debug
+        Logger.log("CLICK!");
+
         manager = new SettingsManager();
         input = response.formInputs;
 

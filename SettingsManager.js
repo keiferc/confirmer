@@ -25,10 +25,10 @@
 function SettingsManager()
 {
         this.module = "SettingsManager";
-        this.main = this.getMain();
-        this.contacts = this.getContacts();
-        this.schedule = this.getSchedule();
-        this.emailContent = this.getEmailContent();
+        // this.main = this.getMain();
+        // this.contacts = this.getContacts();
+        // this.schedule = this.getSchedule();
+        // this.emailContent = this.getEmailContent();
 }
 
 //////////////////////////////////////////
@@ -127,11 +127,14 @@ SettingsManager.prototype.setDefault = function ()
 SettingsManager.prototype.setAll = function
 (main, contacts, schedule, emailContent)
 {
+        // TOFIX: Google saves these differently than
+        // when it saves data individually. figure out fix
+
         this.getGASO().setProperties({
-                main: main,
-                contacts: contacts,
-                schedule: schedule,
-                emailContent: emailContent,
+                main: JSON.stringify(main),
+                contacts: JSON.stringify(contacts),
+                schedule: JSON.stringify(schedule),
+                emailContent: JSON.stringify(emailContent)
         });
 }
 

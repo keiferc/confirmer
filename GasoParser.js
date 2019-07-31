@@ -31,10 +31,10 @@ function GasoParser() {}
 /**
  * toJSON
  *
- * Given a Google Apps Script Object, return
+ * Given a Google Apps Script nested object, return
  * a JSON version of the object
  *
- * @param       {Object} gaso
+ * @param       {String} gaso
  * @returns     {JSON}
  */
 GasoParser.prototype.toJSON = function

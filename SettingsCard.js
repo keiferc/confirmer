@@ -55,19 +55,19 @@ SettingsCard.prototype.getSections = function ()
  */
 SettingsCard.prototype.getMainSection = function ()
 {
-        var widgets, sendToSelf, hourOfDay;
+        var settings, widgets, hourOfDay;
         
+        settings = new SettingsManager();
         widgets = [];
         
-        sendToSelf = this.buildSwitchWidget("Send a copy of email to self?",
-                "sendToSelf", "switchValue", true, null);
+        // sendToSelf = this.buildSwitchWidget("Send a copy of email to self?",
+        //         "sendToSelf", "switchValue", true, null);
 
-        //buildSendToSelf(settings);
 
         hourOfDay = this.buildDropdownWidget("hourOfDay", 
                 "Email Delivery Time", this.getTimes(), null);
         
-        widgets.push(sendToSelf);
+        widgets.push(this.buildSendToSelfWidget(settings));
         widgets.push(hourOfDay);
 
         return this.buildSection(null, widgets, false);
@@ -78,8 +78,9 @@ SettingsCard.prototype.getMainSection = function ()
  */
 SettingsCard.prototype.getContactsSection = function ()
 {
-        var header, widgets, url, nameColLabel, emailColLabel;
+        var settings, header, widgets, url, nameColLabel, emailColLabel;
 
+        settings = new SettingsManager();
         header = this.formatHeader("Contacts", PRIMARY_COLOR);
         widgets = [];
 
@@ -102,8 +103,9 @@ SettingsCard.prototype.getContactsSection = function ()
  */
 SettingsCard.prototype.getScheduleSection = function ()
 {
-        var header, widgets, url, dateColLabel;
+        var settings, header, widgets, url, dateColLabel;
 
+        settings = new SettingsManager();
         header = this.formatHeader("Schedule", PRIMARY_COLOR);
         widgets = [];
 
@@ -123,8 +125,9 @@ SettingsCard.prototype.getScheduleSection = function ()
  */
 SettingsCard.prototype.getEmailContentSection = function ()
 {
-        var header, widgets, url, subjectColLabel, bodyColLabel;
+        var settings, header, widgets, url, subjectColLabel, bodyColLabel;
 
+        settings = new SettingsManager();
         header = this.formatHeader("Email Content", PRIMARY_COLOR);
         widgets = [];
 
@@ -172,26 +175,29 @@ SettingsCard.prototype.getSubmitSection = function ()
 // Widget Builders                      //
 //////////////////////////////////////////
 /**
- * buildSendToSelf
+ * buildSendToSelfWidget
+ *
+ * @param       {SettingsManager} settings
+ * @returns     {Widget}
  */
-SettingsCard.prototype.buildSendToSelf = function ()
+SettingsCard.prototype.buildSendToSelfWidget = function (settings)
 {
         var settings, label, switchKey, switchValue, 
             selected, callback;
-
         settings = new SettingsManager();
         label = "Send a copy of email to self?";
         switchKey = "sendToSelf";
         switchValue = "switchValue";
-        selected = settings.getMain().switchKey; //TODO: Waiting on parser
+        selected = settings.getMain().sendToSelf == "true";
         callback = null;
-
-        // debug
-        Logger.log(selected);
 
         return this.buildSwitchWidget(label, switchKey, switchValue,
                                       selected, callback);
 }
+
+/**
+* bui
+*/
 
 
 //////////////////////////////////////////

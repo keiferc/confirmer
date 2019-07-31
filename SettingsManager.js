@@ -54,8 +54,6 @@ SettingsManager.prototype.getGASO = function ()
  */
 SettingsManager.prototype.getAll = function ()
 {
-        // debug
-        //return new GasoParser().toJSON(this.getGASO().getProperties());
         return this.getGASO().getProperties();
 }
 
@@ -64,12 +62,7 @@ SettingsManager.prototype.getAll = function ()
  */
 SettingsManager.prototype.getMain = function ()
 {
-        //return eval("(" + this.getAll().main.replace(/=/g, ":") + ")");
-        //debug
-        var gaso = new GasoParser();
-        gaso.toJSON(this.getAll().main);
-
-        return this.getAll().main;
+        return new GasoParser().toJSON(this.getAll().main);
 }
 
 /**
@@ -77,7 +70,7 @@ SettingsManager.prototype.getMain = function ()
  */
 SettingsManager.prototype.getContacts = function ()
 {
-        return this.getAll().contacts;
+        return new GasoParser().toJSON(this.getAll().contacts);
 }
 
 /**
@@ -85,7 +78,7 @@ SettingsManager.prototype.getContacts = function ()
  */
 SettingsManager.prototype.getSchedule = function ()
 {
-        return this.getAll().schedule;
+        return new GasoParser().toJSON(this.getAll().schedule);
 }
 
 /**
@@ -93,7 +86,7 @@ SettingsManager.prototype.getSchedule = function ()
  */
 SettingsManager.prototype.getEmailContent = function ()
 {
-        return this.getAll().emailContent;
+        return new GasoParser().toJSON(this.getAll().emailContent);
 }
 
 //////////////////////////////////////////

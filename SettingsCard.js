@@ -61,7 +61,7 @@ SettingsCard.prototype.getMainSection = function ()
 {
         var settings, widgets;
         
-        settings = new SettingsManager();
+        settings = new SettingsManager().getMain();
         widgets = [];
 
         widgets.push(this.buildSendToSelfWidget(settings));
@@ -169,11 +169,11 @@ SettingsCard.prototype.getSubmitSection = function ()
 /**
  * buildSendToSelfWidget
  *
- * @param       {SettingsManager} settings
+ * @param       {Object} sectionSettings - section-specific settings object
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildSendToSelfWidget = function 
-(settings)
+(sectionSettings)
 {
         var label, switchKey, switchValue, 
             selected, callback;
@@ -181,7 +181,7 @@ SettingsCard.prototype.buildSendToSelfWidget = function
         label = "Send a copy of email to self?";
         switchKey = "sendToSelf";
         switchValue = "switchValue";
-        selected = settings.getMain().sendToSelf == "true";
+        selected = sectionSettings.sendToSelf == "true";
         callback = null;
 
         return this.buildSwitchWidget(label, switchKey, switchValue,
@@ -191,17 +191,17 @@ SettingsCard.prototype.buildSendToSelfWidget = function
 /**
  * buildHourOfDayWidget
  *
- * @param       {SettingsManager} settings
+ * @param       {Object} sectionSettings - section-specific settings object
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildHourOfDayWidget = function 
-(settings)
+(sectionSettings)
 {
         var key, label, options, callback;
 
         key = "hourOfDay";
         label = "Email Delivery Time";
-        options = this.getTimes(), // TODO: figure out selected times
+        options = this.getTimes(sectionSettings[key]), 
         callback = null;
 
         return this.buildDropdownWidget(key, label, options, callback);
@@ -264,12 +264,15 @@ SettingsCard.prototype.buildColLabelWidget = function
 // For some reason, GAS doesn't like classes,
 // so have to use object constructor functions
 /**
+ * DeliveryTime
+ *
  * @param       {Number} hour 
  * @param       {Boolean} isAM 
- * @returns     {Object}
+ * @param       {String} selected - key representing selected time
+ * @returns     {DeliveryTime}
  */
 SettingsCard.prototype.DeliveryTime = function 
-(hour, isAM) 
+(hour, isAM, selected) 
 {
         var time_period, opt;
 
@@ -285,10 +288,18 @@ SettingsCard.prototype.DeliveryTime = function
 
         this.label = opt + hour.toString() + ":00 " + time_period;
         this.key = hour.toString() + time_period;
-        this.selected = false;
+
+        if (this.key == selected)
+                this.selected = true;
+        else
+                this.selected = false;
 }
 
-SettingsCard.prototype.getTimes = function()
+/**
+ * @param       {String} selected - key representing the selected time   
+ */
+SettingsCard.prototype.getTimes = function
+(selected)
 {
         var times, amArr, pmArr;
 
@@ -297,8 +308,8 @@ SettingsCard.prototype.getTimes = function()
         pmArr = [];
 
         for (i = 0; i < 12; i++) {
-                amArr.push(new this.DeliveryTime((i + 1), true));
-                pmArr.push(new this.DeliveryTime((i + 1), false));
+                amArr.push(new this.DeliveryTime((i + 1), true, selected));
+                pmArr.push(new this.DeliveryTime((i + 1), false, selected));
         }
 
         times = amArr.concat(pmArr);

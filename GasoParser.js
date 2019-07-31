@@ -17,14 +17,17 @@
 /**
  * GasoParser
  *
- * Provides the function toJSON which parses a
- * Google Apps Script Object
+ * A class that provides the function 
+ * toJSON
  *
  * @returns     {Object}
  */
 function GasoParser() {}
 
 
+//////////////////////////////////////////
+// Methods                              //
+//////////////////////////////////////////
 /**
  * toJSON
  *
@@ -37,18 +40,15 @@ function GasoParser() {}
 GasoParser.prototype.toJSON = function
 (gaso)
 {
-        var json = gaso.replace(/=/g, '":"')
-                .replace(/,\s/g, '","')
-                .replace(/\{/g, '"{"')
-                .replace(/\}/g, '"}"')
-                .replace(/\[/g, '"["')
-                .replace(/\]/g, '"]"')
-                .replace(/^"\{/g, "{")
-                .replace(/\}"$/g, "}")
-                .replace(/""/g, '"');
-
-        //Logger.log(JSON.stringify(eval('(' + json + ')')));
-        Logger.log(JSON.parse(json));
-
-        //return JSON.stringify(eval('(' + json + ')'));
+        return JSON.parse(
+                gaso.replace(/=/g, '":"')
+                        .replace(/,\s/g, '","')
+                        .replace(/\{/g, '"{"')
+                        .replace(/\}/g, '"}"')
+                        .replace(/\[/g, '"["')
+                        .replace(/\]/g, '"]"')
+                        .replace(/^"\{/g, "{")
+                        .replace(/\}"$/g, "}")
+                        .replace(/""/g, '"')
+                );
 }

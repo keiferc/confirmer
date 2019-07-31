@@ -17,6 +17,9 @@
 /**
  * SettingsManager
  *
+ * A class that handles all processes
+ * involving add-on settings
+ *
  * @returns     {Object}
  */
 function SettingsManager()
@@ -33,6 +36,11 @@ function SettingsManager()
 //////////////////////////////////////////
 /**
  * getGASO
+ *
+ * Returns the Google Apps Script Object containing
+ * user settings for the Confirmer add-on
+ *
+ * @returns     {Object}
  */
 SettingsManager.prototype.getGASO = function ()
 {
@@ -41,9 +49,13 @@ SettingsManager.prototype.getGASO = function ()
 
 /**
  * getAll
+ *
+ * Returns a JSON format 
  */
 SettingsManager.prototype.getAll = function ()
 {
+        // debug
+        //return new GasoParser().toJSON(this.getGASO().getProperties());
         return this.getGASO().getProperties();
 }
 

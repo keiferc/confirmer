@@ -83,7 +83,8 @@ SettingsCard.prototype.getContactsSection = function ()
         header = this.formatHeader("Contacts", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildUrlWidget(settings, "Contacts List"));
+        widgets.push(this.buildUrlWidget(settings, "contactsUrl", 
+                "Contacts List"));
         widgets.push(this.buildColLabelWidget(settings, "nameColLabel", 
                 "Names"));
         widgets.push(this.buildColLabelWidget(settings, "emailColLabel", 
@@ -105,7 +106,7 @@ SettingsCard.prototype.getScheduleSection = function ()
         header = this.formatHeader("Schedule", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildUrlWidget(settings, "Schedule"));
+        widgets.push(this.buildUrlWidget(settings, "scheduleUrl", "Schedule"));
         widgets.push(this.buildColLabelWidget(settings, "dateColLabel", 
                 "Date"));
 
@@ -125,7 +126,8 @@ SettingsCard.prototype.getEmailContentSection = function ()
         header = this.formatHeader("Email Content", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildUrlWidget(settings, "Email Content"));
+        widgets.push(this.buildUrlWidget(settings, "emailContentUrl", 
+                "Email Content"));
         widgets.push(this.buildColLabelWidget(settings, "subjectColLabel",
                 "Email Subject"));
         widgets.push(this.buildColLabelWidget(settings, "bodyColLabel",
@@ -141,15 +143,8 @@ SettingsCard.prototype.getEmailContentSection = function ()
  */
 SettingsCard.prototype.getSubmitSection = function ()
 {
-        // debug: Temp hacky action for testing
-        var action = CardService.newAction().
-                setFunctionName("tempAction");
-        function tempAction()
-        {
-                return CardService.newActionResponseBuilder()
-                        .setStateChanged(true)
-                        .build();
-        }
+        var action = CardService.newAction()
+                .setFunctionName("submitButton");
 
         return this.buildSection(null, 
                 [CardService.newTextButton()
@@ -157,7 +152,7 @@ SettingsCard.prototype.getSubmitSection = function ()
                         .setTextButtonStyle(
                                 CardService.TextButtonStyle.FILLED
                         )
-                        .setOnClickAction(action) // TODO
+                        .setOnClickAction(action)
                 ],
                 false);
 }
@@ -175,17 +170,13 @@ SettingsCard.prototype.getSubmitSection = function ()
 SettingsCard.prototype.buildSendToSelfWidget = function 
 (sectionSettings)
 {
-        var label, switchKey, switchValue, 
-            selected, callback;
+        var key, label, selected;
 
+        key = "sendToSelf";
         label = "Send a copy of email to self?";
-        switchKey = "sendToSelf";
-        switchValue = "switchValue";
         selected = sectionSettings.sendToSelf == "true";
-        callback = null;
 
-        return this.buildSwitchWidget(label, switchKey, switchValue,
-                                      selected, callback);
+        return this.buildSwitchWidget(key, label, selected, null);
 }
 
 /**
@@ -197,14 +188,14 @@ SettingsCard.prototype.buildSendToSelfWidget = function
 SettingsCard.prototype.buildHourOfDayWidget = function 
 (sectionSettings)
 {
-        var key, label, options, callback;
+        var key, label, options;
 
         key = "hourOfDay";
         label = "Email Delivery Time";
         options = this.getTimes(sectionSettings[key]), 
         callback = null;
 
-        return this.buildDropdownWidget(key, label, options, callback);
+        return this.buildDropdownWidget(key, label, options, null);
 }
 
 //============== Section Agnostic ==============//
@@ -212,23 +203,22 @@ SettingsCard.prototype.buildHourOfDayWidget = function
  * buildUrlWidget
  *
  * @param       {Object} sectionSettings - section-specific settings object
+ * @param       {String} key - section-specific url key
  * @param       {String} sheetTitle - title of sheet
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildUrlWidget = function
-(sectionSettings, sheetTitle)
+(sectionSettings, key, sheetTitle)
 {
-        var key, value, callback;
+        var label, value;
 
-        key = "url";
         label = "Google Sheets URL - " + sheetTitle;
         value = sectionSettings[key];
-        callback = null;
 
         if (value == "null")
                 value = null;
 
-        return this.buildTextInputWidget(key, label, null, value, callback);
+        return this.buildTextInputWidget(key, label, null, value, null);
 }
 
 /**
@@ -242,7 +232,7 @@ SettingsCard.prototype.buildUrlWidget = function
 SettingsCard.prototype.buildColLabelWidget = function 
 (sectionSettings, key, columnLabel)
 {
-        var label, value, callback;
+        var label, value;
 
         label = "Column Label - " + columnLabel;
         value = sectionSettings[key];
@@ -255,14 +245,34 @@ SettingsCard.prototype.buildColLabelWidget = function
         if (value == "null")
                 value = null;
 
-        return this.buildTextInputWidget(key, label, null, value, callback);
+        return this.buildTextInputWidget(key, label, null, value, null);
 }
 
 //////////////////////////////////////////
 // Settings Widget Helpers              //
 //////////////////////////////////////////
-// For some reason, GAS doesn't like classes,
-// so have to use object constructor functions
+//============== Submit Button ==============//
+/**
+ * submitSettings 
+ *
+ * Callback function from when settings submit
+ * button is activated
+ */
+function submitButton(response)
+{
+        var inputs, main, contacts, schedule, emailContent;
+
+        inputs = response.formInputs;
+
+        //main = new SettingsManager().Main(response.hourOfDay, 1, response.sendToSelf);
+
+        Logger.log(response);
+        Logger.log("main: ");
+        Logger.log(typeof(inputs.sendToSelf[0]));
+
+}
+
+//============== Dropdown Time Generation ==============//
 /**
  * DeliveryTime
  *

@@ -202,7 +202,7 @@ SettingsManager.prototype.Contacts = function
 (header, url, nameColLabel, emailColLabel)
 {
         this.header = header;
-        this.url = url;
+        this.contactsUrl = url;
         this.nameColLabel = nameColLabel;
         this.emailColLabel = emailColLabel;
 }
@@ -219,7 +219,7 @@ SettingsManager.prototype.Schedule = function
 (header, url, dateColLabel)
 {
         this.header = header;
-        this.url = url;
+        this.scheduleUrl = url;
         this.dateColLabel = dateColLabel;
 }
 
@@ -236,7 +236,7 @@ SettingsManager.prototype.EmailContent = function
 (header, url, subjectColLabel, bodyColLabel)
 {
         this.header = header;
-        this.url = url;
+        this.emailContentUrl = url;
         this.subjectColLabel = subjectColLabel;
         this.bodyColLabel = bodyColLabel;
 }

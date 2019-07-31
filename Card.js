@@ -117,21 +117,20 @@ Card.prototype.buildTextInputWidget = function
 /**
  * buildSwitchWidget 
  *
+ * @param       {String} key 
  * @param       {String} label 
- * @param       {String} switchKey 
- * @param       {String} switchValue 
  * @param       {Boolean} selected
  * @param       {Function} callback 
  * @returns     {Widget}
  */
 Card.prototype.buildSwitchWidget = function 
-(label, switchKey, switchValue, selected, callback)
+(key, label, selected, callback)
 {
         var widget, switcher;
 
         switcher = CardService.newSwitch()
-                .setFieldName(switchKey)
-                .setValue(switchValue)
+                .setFieldName(key)
+                .setValue(true)
                 .setSelected(selected);
                 
         if (callback != null)

@@ -97,7 +97,7 @@ SettingsManager.prototype.getEmailContent = function ()
 {
         if (this.getAll().emailContent == undefined)
                 return null;
-                
+
         return new GasoParser().toJSON(this.getAll().emailContent);
 }
 
@@ -247,4 +247,55 @@ function EmailContentSettings(header, url, subjectColLabel, bodyColLabel)
         this.emailContentUrl = url;
         this.subjectColLabel = subjectColLabel;
         this.bodyColLabel = bodyColLabel;
+}
+
+//////////////////////////////////////////
+// Checkers                             //
+//////////////////////////////////////////
+/**
+ * checkMain
+ *
+ * @param       {MainSettings} main
+ * @returns     {Boolean}
+ */
+SettingsManager.prototype.checkMain = function 
+(main)
+{
+        return true;
+}
+
+/**
+ * checkContacts
+ *
+ * @param       {ContactsSettings} contacts
+ * @returns     {Boolean}
+ */
+SettingsManager.prototype.checkContacts = function
+(contacts)
+{
+        return true;
+}
+
+/**
+ * checkSchedule
+ *
+ * @param       {ScheduleSettings} schedule
+ * @returns     {Boolean}
+ */
+SettingsManager.prototype.checkSchedule = function
+(schedule)
+{
+        return true;
+}
+
+/**
+ * checkEmailContent
+ *
+ * @param       {EmailContentSettings} emailContent
+ * @returns     {Boolean}
+ */
+SettingsManager.prototype.checkEmailContent = function
+(emailContent)
+{
+        return true;
 }

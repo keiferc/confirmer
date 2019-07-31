@@ -255,18 +255,32 @@ SettingsCard.prototype.buildColLabelWidget = function
  */
 function submitButton(response)
 {
-        var input, main, contacts, schedule, emailContent;
+        var manager, input, main, contacts, schedule, emailContent;
 
+        manager = new SettingsManager();
         input = response.formInputs;
 
-        //main = new MainSettings(input.hourOfDay[0], 1,
-        //        input.sendToSelf != undefined);
-        Logger.log(input.sendToSelf != undefined);
+        if (input == undefined) {
+                // TODO: Error display. Push card?
+        }
 
-        Logger.log(input);
-        Logger.log("main: ");
-        //Logger.log(main);
-
+        main = new MainSettings(input.hourOfDay[0], 1,
+                input.sendToSelf != undefined);
+        contacts = new ContactsSettings("Contacts", input.contactsUrl[0],
+                input.nameColLabel[0], input.emailColLabel[0]);
+        schedule = new ScheduleSettings("Schedule", input.scheduleUrl[0],
+                input.dateColLabel[0]);
+        emailContent = new EmailContentSettings("Email Content", 
+                input.emailContentUrl[0], input.subjectColLabel[0],
+                input.bodyColLabel[0]);
+        
+        if (manager.checkMain(main) && manager.checkContacts(contacts) && 
+            manager.checkSchedule(schedule) && 
+            manager.checkEmailContent(emailContent))
+                manager.setAll(main, contacts, schedule, emailContent);
+        else {
+                // TODO: Error display. Push card?
+        }
 }
 
 //============== Dropdown Time Generation ==============//

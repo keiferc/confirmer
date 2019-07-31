@@ -119,7 +119,7 @@ SettingsCard.prototype.getScheduleSection = function ()
  */
 SettingsCard.prototype.getEmailContentSection = function ()
 {
-        var settings, header, widgets, url, subjectColLabel, bodyColLabel;
+        var settings, header, widgets;
 
         settings = new SettingsManager().getEmailContent;
         header = this.formatHeader("Email Content", PRIMARY_COLOR);

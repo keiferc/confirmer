@@ -47,16 +47,29 @@ Card.prototype.build = function
 (header, iconUrl, alt, sections)
 {
         var card, i;
+
+        Logger.log("new1");
         
         card = CardService.newCardBuilder();
+
+        Logger.log("new2");
+
         card.setHeader(CardService.newCardHeader()
                 .setTitle(header)
                 .setImageUrl(iconUrl)
                 .setImageAltText(alt)
         );
 
-        for (i = 0; i < sections.length; i++)
+        Logger.log("new3");
+
+        for (i = 0; i < sections.length; i++) {
+
+                Logger.log("newloop");
+
                 card.addSection(sections[i]);
+        }
+
+        Logger.log("new5");
 
         return card.build();
 }

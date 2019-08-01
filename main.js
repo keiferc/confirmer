@@ -25,55 +25,32 @@ function main()
 {
         var manager, settings;
 
-        Logger.log("main1");
-
         manager = new SettingsManager();
 
-        Logger.log("main2");
-
-        // debug -- force reset
-        // manager.setDefault();
-
-        Logger.log("main3");
+        // debug -- force reset to default 
+        //manager.setDefault();
 
         settings = manager.getAll();
 
-        Logger.log("main4");
-
-        //debug - reset
+        //debug - reset for first init
         // if (JSON.stringify(settings) != "{}") {
-
-        //         Logger.log("main5");
-
         //         manager.getGASO().deleteAllProperties();
-
-        //         Logger.log("main6");
-
         //         settings = manager.getAll();
-
-        //         Logger.log("main7");
         // }
 
-        Logger.log("main8");
-
         if (JSON.stringify(settings) == "{}") { // TOFIX: Not robust enough
-
-                Logger.log("main9");
-
                 manager.setDefault();
-
-                Logger.log("main10");
         }
 
         // debug
         // Logger.log(typeof(manager.getMain()));
-         Logger.log(manager.getAll());
+        Logger.log(manager.getAll());
         // Logger.log(manager.getMain());
         // Logger.log(manager.getContacts());
         // Logger.log(manager.getSchedule());
         // Logger.log(manager.getEmailContent());
 
-        Logger.log("main11");
+        
 
         return buildDeck();
 }
@@ -87,6 +64,6 @@ function buildDeck()
 
         //cardDeck.push(new StatusCard().gCard);
         cardDeck.push(new SettingsCard().gCard);
-        
+
         return cardDeck;
 }

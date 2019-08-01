@@ -22,14 +22,7 @@
  *
  * @returns     {Object}
  */
-function SettingsManager()
-{
-        this.module = "SettingsManager";
-        // this.main = this.getMain();
-        // this.contacts = this.getContacts();
-        // this.schedule = this.getSchedule();
-        // this.emailContent = this.getEmailContent();
-}
+function SettingsManager() {}
 
 //////////////////////////////////////////
 // Getters                              //
@@ -73,8 +66,9 @@ SettingsManager.prototype.getMain = function ()
  */
 SettingsManager.prototype.getContacts = function ()
 {
-        if (this.getAll().contacts == undefined)
-                return null;
+        if (this.getAll().contacts == undefined) {
+                throw "Error: Unable to find 'Contacts' setting";
+        }
 
         return new GasoParser().toJSON(this.getAll().contacts);
 }
@@ -127,14 +121,11 @@ SettingsManager.prototype.setDefault = function ()
 SettingsManager.prototype.setAll = function
 (main, contacts, schedule, emailContent)
 {
-        // TOFIX: Google saves these differently than
-        // when it saves data individually. figure out fix
-
         this.getGASO().setProperties({
-                main: JSON.stringify(main),
-                contacts: JSON.stringify(contacts),
-                schedule: JSON.stringify(schedule),
-                emailContent: JSON.stringify(emailContent)
+                main: main,
+                contacts: contacts,
+                schedule: schedule,
+                emailContent: emailContent
         });
 }
 
@@ -198,9 +189,9 @@ SettingsManager.prototype.setEmailContent = function
  */
 function MainSettings(hourOfDay, everyXDays, sendToSelf)
 {
-        this.hourOfDay = hourOfDay; // [1-12][am|pm] e.g. 9am, 12pm
-        this.everyXDays = everyXDays; // delivery time check
-        this.sendToSelf = sendToSelf;
+        this.hourOfDay = cleanInputSetting(hourOfDay); // [1-12][am|pm]; 9am
+        this.everyXDays = cleanInputSetting(everyXDays); // refresh check
+        this.sendToSelf = cleanInputSetting(sendToSelf);
 }
 
 /**
@@ -214,10 +205,10 @@ function MainSettings(hourOfDay, everyXDays, sendToSelf)
  */
 function ContactsSettings(header, url, nameColLabel, emailColLabel)
 {
-        this.header = header;
-        this.contactsUrl = url;
-        this.nameColLabel = nameColLabel;
-        this.emailColLabel = emailColLabel;
+        this.header = cleanInputSetting(header);
+        this.contactsUrl = cleanInputSetting(url);
+        this.nameColLabel = cleanInputSetting(nameColLabel);
+        this.emailColLabel = cleanInputSetting(emailColLabel);
 }
 
 /**
@@ -230,9 +221,9 @@ function ContactsSettings(header, url, nameColLabel, emailColLabel)
  */
 function ScheduleSettings(header, url, dateColLabel)
 {
-        this.header = header;
-        this.scheduleUrl = url;
-        this.dateColLabel = dateColLabel;
+        this.header = cleanInputSetting(header);
+        this.scheduleUrl = cleanInputSetting(url);
+        this.dateColLabel = cleanInputSetting(dateColLabel);
 }
 
 /**
@@ -246,10 +237,26 @@ function ScheduleSettings(header, url, dateColLabel)
  */
 function EmailContentSettings(header, url, subjectColLabel, bodyColLabel)
 {
-        this.header = header;
-        this.emailContentUrl = url;
-        this.subjectColLabel = subjectColLabel;
-        this.bodyColLabel = bodyColLabel;
+        this.header = cleanInputSetting(header);
+        this.emailContentUrl = cleanInputSetting(url);
+        this.subjectColLabel = cleanInputSetting(subjectColLabel);
+        this.bodyColLabel = cleanInputSetting(bodyColLabel);
+}
+
+//============== Constructor Helpers ==============// 
+/**
+ * cleanInputSetting 
+ *
+ * @param       {any} setting 
+ * @returns     {any}
+ */
+function cleanInputSetting(setting)
+{
+        if (setting == null || setting == undefined  || 
+            setting.toString() === "")
+                return null;
+        else
+                return setting;
 }
 
 //////////////////////////////////////////

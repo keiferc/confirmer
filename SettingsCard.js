@@ -89,7 +89,7 @@ SettingsCard.prototype.getContactsSection = function ()
                 "Names"));
         widgets.push(this.buildColLabelWidget(settings, "emailColLabel", 
                 "Emails"));
-
+                
         return this.buildSection(header, widgets, true);
 }
 
@@ -256,9 +256,6 @@ SettingsCard.prototype.buildColLabelWidget = function
 function submitButton(response)
 {
         var manager, input, main, contacts, schedule, emailContent;
-
-        // debug
-        Logger.log("CLICK!");
 
         manager = new SettingsManager();
         input = response.formInputs;

@@ -239,3 +239,43 @@ Card.prototype.formatHeader = function
         return "<font color='" + color + "'>" + 
                "<b>" + header + "</b></font>"
 }
+
+/**
+ * isUrl
+ *
+ * @param       {String} input
+ * @returns     {Boolean}
+ */
+Card.prototype.isUrl = function 
+(input)
+{
+        // TODO: Test
+        // Note: Localhost URLs are not allowed
+        var regex = new RegExp(
+                "^(http(s?):\/\/)?" + // protocol
+                "((([a-z0-9\-]+\.)+([a-z\-]+[0-9]*))|" + // domain or
+                "((((1?\d\d?)|(2[0-4]\d)|(25[0-5]))\.){3}" + 
+                "((1?\d\d)|(2[0-4]\d)|(25[0-5]))))" + // ipv4
+                "(:(\d+))?" + // port
+                "(\/([a-z0-9\-\._~!$&'()*+,;=:@]*(%[a-f0-9]{2})*)*" + //path
+                "(\?[a-z0-9\-\._~&+;=]*)?" + // query
+                "((#[a-z0-9\-_]*)?$))*" // fragment
+        , "ig");
+
+        // Regex pattern:
+        // ^(http(s?):\/\/)?((([a-z0-9\-]+\.)+([a-z\-]+[0-9]*))|((((1?\d\d?)|(2[0-4]\d)|(25[0-5]))\.){3}((1?\d\d)|(2[0-4]\d)|(25[0-5]))))(:(\d+))?(\/([a-z0-9\-\._~!$&'()*+,;=:@]*(%[a-f0-9]{2})*)*(\?[a-z0-9\-\._~&+;=]*)?((#[a-z0-9\-_]*)?$))*
+
+        return regex.test(input);
+}
+
+/**
+ * sanitize
+ *
+ * @param       {String} input
+ * @returns     {Array}
+ */
+Card.prototype.sanitize = function
+(input)
+{
+        var sanitized, regex;
+}

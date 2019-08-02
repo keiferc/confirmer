@@ -25,9 +25,8 @@ function StatusCard()
         var header, iconUrl, iconAltText;
 
         header = "Status";
-        iconUrl = "https://www.maxpixel.net/static/photo/2x/" + 
-                  "E-Mail-Icon-At-News-At-Sign-Email-1083508.png";
-        iconAltText = "Status Card Icon";
+        iconUrl = "https://i.postimg.cc/mtjhvkm4/status.png";
+        iconAltText = "Status Icon";
 
         Card.call(this, header, iconUrl, iconAltText, this.getSections());
 }

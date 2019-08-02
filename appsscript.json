@@ -11,7 +11,7 @@
         "exceptionLogging": "STACKDRIVER",
         "gmail": {
                 "name": "Confirmer",
-                "logoUrl": "https://i.postimg.cc/RFJBw21L/mail.png",
+                "logoUrl": "https://i.postimg.cc/RN4NpKQG/icon.png",
                 "primaryColor": "#1c8adb",
                 "secondaryColor": "#1c8adb",
                 "useLocaleFromApp": true,

@@ -22,9 +22,8 @@ function SettingsCard()
         var header, iconUrl, iconAltText;
 
         header = "Settings";
-        iconUrl = "https://cdn.pixabay.com/photo/2015/12/04/22/20/" +
-                  "gear-1077550_960_720.png";
-        iconAltText = "Settings Card Icon";
+        iconUrl = "https://i.postimg.cc/87CsNGY6/settings.png"
+        iconAltText = "Settings Icon";
 
         Card.call(this, header, iconUrl, iconAltText, this.getSections());
 }
@@ -89,7 +88,7 @@ SettingsCard.prototype.getContactsSection = function ()
                 "Names"));
         widgets.push(this.buildColLabelWidget(settings, "emailColLabel", 
                 "Emails"));
-                
+
         return this.buildSection(header, widgets, true);
 }
 

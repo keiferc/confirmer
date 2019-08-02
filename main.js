@@ -38,7 +38,7 @@ function main()
         //         settings = manager.getAll();
         // }
 
-        if (JSON.stringify(settings) == "{}") { // TOFIX: Not robust enough
+        if (JSON.stringify(settings) == "{}") { // TOEVAL: Robustness
                 manager.setDefault();
         }
 
@@ -60,7 +60,7 @@ function buildDeck()
 {
         var cardDeck = [];
 
-        //cardDeck.push(new StatusCard().gCard);
+        cardDeck.push(new StatusCard().gCard);
         cardDeck.push(new SettingsCard().gCard);
 
         return cardDeck;

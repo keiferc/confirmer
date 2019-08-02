@@ -286,11 +286,25 @@ Card.prototype.isUrl = function
 /**
  * sanitize
  *
+ * Includes percent-encodings of special characters not included 
+ * in encodeURIComponent. Used as a first-level sanitizer; outputs 
+ * to be passed to content-specific, whitelist-using sanitizers
+ *
  * @param       {String} input
- * @returns     {Array}
+ * @returns     {String}
  */
 Card.prototype.sanitize = function
 (input)
 {
-        var sanitized, regex;
+        var chars = {
+                "(http(s?):\\/\\/)|(ftp:\\/\\/)|(mailto:\\/\\/)": "",
+                "(\\/?)..(\\/?)": "%2E%2E",
+                "\\-{2}": "%2D%2D",
+                "'": "%27"
+        }
+        
+        for (key in chars)
+                input = input.replace(key, chars[key]);
+
+        return input; // TODO: test
 }

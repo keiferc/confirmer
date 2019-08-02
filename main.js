@@ -3,13 +3,15 @@
 // TODO: If error, send email to self containing error message
 //       - No recipients
 //       - Cannot retrieve date of next clinic
-// TODO: Documentation
-// TODO: Change icon CDN host: https://postimages.org/
 // TODO: Expand to create multiple confirmer cards based on needs?
 // TODO: Add direct links to edit sheets?
 // TODO: Input sanitation (Check if Google already does it)
 // TODO: Pentest add-on
 // TODO: remove caching? might be a weird UX
+// TODO: Pause confirmer
+// TODO: Delete confirmer
+// TODO: Add feature that allows for consistent sends?
+// TODO: Add feature that allows users to select number of days prior reminder
 
 /*
  * TODO: Module Documentation

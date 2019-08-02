@@ -13,6 +13,10 @@
  *                      compatibility)
  */
 
+// TODO: Handle time-zones
+// userTimezone.id—The user's timezone identifier. 
+// For example, America/New_York.
+
 /**
  * TimeManager
  *

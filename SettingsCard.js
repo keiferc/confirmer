@@ -163,7 +163,7 @@ SettingsCard.prototype.getSubmitSection = function ()
 /**
  * buildSendToSelfWidget
  *
- * @param       {Object} sectionSettings - section-specific settings object
+ * @param       {Object} sectionSettings: section-specific settings object
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildSendToSelfWidget = function 
@@ -181,7 +181,7 @@ SettingsCard.prototype.buildSendToSelfWidget = function
 /**
  * buildHourOfDayWidget
  *
- * @param       {Object} sectionSettings - section-specific settings object
+ * @param       {Object} sectionSettings: section-specific settings object
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildHourOfDayWidget = function 
@@ -201,9 +201,9 @@ SettingsCard.prototype.buildHourOfDayWidget = function
 /**
  * buildUrlWidget
  *
- * @param       {Object} sectionSettings - section-specific settings object
- * @param       {String} key - section-specific url key
- * @param       {String} sheetTitle - title of sheet
+ * @param       {Object} sectionSettings: section-specific settings object
+ * @param       {String} key: section-specific url key
+ * @param       {String} sheetTitle: title of sheet
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildUrlWidget = function
@@ -223,9 +223,9 @@ SettingsCard.prototype.buildUrlWidget = function
 /**
  * buildColumnLabelWidget
  *
- * @param       {Object} sectionSettings - section-specific settings object
- * @param       {String} key - key of input value
- * @param       {String} columnLabel - section-specific column label
+ * @param       {Object} sectionSettings: section-specific settings object
+ * @param       {String} key: key of input value
+ * @param       {String} columnLabel: section-specific column label
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildColLabelWidget = function 
@@ -259,9 +259,8 @@ function submitButton(response)
         manager = new SettingsManager();
         input = response.formInputs;
 
-        if (input == undefined) {
-                // TODO: Error display. Push card?
-        }
+        if (input == undefined)
+                throw "Error: Unable to retrieve submitted form inputs.";
 
         main = new MainSettings(input.hourOfDay[0], 1,
                 input.sendToSelf != undefined);
@@ -277,9 +276,8 @@ function submitButton(response)
             manager.checkSchedule(schedule) && 
             manager.checkEmailContent(emailContent))
                 manager.setAll(main, contacts, schedule, emailContent);
-        else {
-                // TODO: Error display. Push card?
-        }
+        else
+                throw "ValueError: Invalid submitted input.";
 }
 
 //============== Dropdown Time Generation ==============//
@@ -316,7 +314,10 @@ SettingsCard.prototype.DeliveryTime = function
 }
 
 /**
- * @param       {String} selected - key representing the selected time   
+ * getTimes
+ *
+ * @param       {String} selected: key representing the selected time   
+ * @returns     {Array}
  */
 SettingsCard.prototype.getTimes = function
 (selected)

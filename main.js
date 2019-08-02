@@ -32,7 +32,7 @@ function main()
 
         settings = manager.getAll();
 
-        //debug - reset for first init
+        //debug -- reset to first init
         // if (JSON.stringify(settings) != "{}") {
         //         manager.getGASO().deleteAllProperties();
         //         settings = manager.getAll();
@@ -60,7 +60,7 @@ function buildDeck()
 {
         var cardDeck = [];
 
-        cardDeck.push(new StatusCard().gCard);
+        // cardDeck.push(new StatusCard().gCard);
         cardDeck.push(new SettingsCard().gCard);
 
         return cardDeck;

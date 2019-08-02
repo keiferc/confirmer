@@ -33,7 +33,7 @@ function SettingsManager() {}
  * Returns the Google Apps Script Object containing
  * user settings for the Confirmer add-on
  *
- * @returns     {Object}
+ * @returns     {UserProperties}
  */
 SettingsManager.prototype.getGASO = function ()
 {
@@ -43,7 +43,9 @@ SettingsManager.prototype.getGASO = function ()
 /**
  * getAll
  *
- * Returns a JSON format 
+ * Returns saved user properties in a GASO format
+ *
+ * @returns     {Google Apps Script Object}
  */
 SettingsManager.prototype.getAll = function ()
 {
@@ -52,45 +54,52 @@ SettingsManager.prototype.getAll = function ()
 
 /**
  * getMain
+ *
+ * @returns     {JSON}
  */
 SettingsManager.prototype.getMain = function ()
 {
         if (this.getAll().main == undefined)
-                return null;
+                throw "Error: Saved 'Main' settings are undefined.";
 
         return new GasoParser().toJSON(this.getAll().main);
 }
 
 /**
  * getContacts
+ *
+ * @returns     {JSON}
  */
 SettingsManager.prototype.getContacts = function ()
 {
-        if (this.getAll().contacts == undefined) {
-                throw "Error: Unable to find 'Contacts' setting";
-        }
+        if (this.getAll().contacts == undefined) 
+                throw "Error: Saved 'Contacts' settings are undefined.";
 
         return new GasoParser().toJSON(this.getAll().contacts);
 }
 
 /**
  * getSchedule
+ *
+ * @returns     {JSON}
  */
 SettingsManager.prototype.getSchedule = function ()
 {
         if (this.getAll().schedule == undefined)
-                return null;
+                throw "Error: Saved 'Schedule' settings are undefined";
 
         return new GasoParser().toJSON(this.getAll().schedule);
 }
 
 /**
  * getEmailContent
+ *
+ * @returns     {JSON}
  */
 SettingsManager.prototype.getEmailContent = function ()
 {
         if (this.getAll().emailContent == undefined)
-                return null;
+                throw "Error: Saved 'Email Content' settings are undefined";
 
         return new GasoParser().toJSON(this.getAll().emailContent);
 }
@@ -113,10 +122,10 @@ SettingsManager.prototype.setDefault = function ()
 /**
  * setAll 
  *
- * @param       {Object} main
- * @param       {Object} contacts
- * @param       {Object} schedule
- * @param       {Object} emailContent
+ * @param       {MainSettings} main
+ * @param       {ContactsSettings} contacts
+ * @param       {ScheduleSettings} schedule
+ * @param       {EmailContentSettings} emailContent
  */
 SettingsManager.prototype.setAll = function
 (main, contacts, schedule, emailContent)
@@ -131,6 +140,10 @@ SettingsManager.prototype.setAll = function
 
 /**
  * setMain
+ *
+ * @param       {String} hourOfDay
+ * @param       {Number} everyXDays
+ * @param       {Boolean} sendToSelf
  */
 SettingsManager.prototype.setMain = function
 (hourOfDay, everyXDays, sendToSelf)
@@ -141,6 +154,11 @@ SettingsManager.prototype.setMain = function
 
 /**
  * setContacts
+ *
+ * @param       {String} header
+ * @param       {String} url
+ * @param       {String} nameColLabel
+ * @param       {String} emailColLabel
  */
 SettingsManager.prototype.setContacts = function
 (header, url, nameColLabel, emailColLabel)
@@ -152,6 +170,10 @@ SettingsManager.prototype.setContacts = function
 
 /**
  * setSchedule
+ *
+ * @param       {String} header
+ * @param       {String} url
+ * @param       {String} dateColLabel
  */
 SettingsManager.prototype.setSchedule = function
 (header, url, dateColLabel)
@@ -185,7 +207,7 @@ SettingsManager.prototype.setEmailContent = function
  * @param       {String} hourOfDay
  * @param       {Number} everyXDays
  * @param       {Boolean} sendToSelf
- * @param       {Object}
+ * @param       {MainSettings}
  */
 function MainSettings(hourOfDay, everyXDays, sendToSelf)
 {
@@ -201,7 +223,7 @@ function MainSettings(hourOfDay, everyXDays, sendToSelf)
  * @param       {String} url 
  * @param       {String} nameColLabel 
  * @param       {String} emailColLabel 
- * @returns     {Object}
+ * @returns     {ContactsSettings}
  */
 function ContactsSettings(header, url, nameColLabel, emailColLabel)
 {
@@ -217,7 +239,7 @@ function ContactsSettings(header, url, nameColLabel, emailColLabel)
  * @param       {String} header
  * @param       {String} url 
  * @param       {String} dateColLabel 
- * @returns     {Object}
+ * @returns     {ScheduleSettings}
  */
 function ScheduleSettings(header, url, dateColLabel)
 {
@@ -233,7 +255,7 @@ function ScheduleSettings(header, url, dateColLabel)
  * @param       {String} url
  * @param       {String} subjectColLabel
  * @param       {String} bodyColLabel
- * @returns     {Object} 
+ * @returns     {EmailContentSettings} 
  */
 function EmailContentSettings(header, url, subjectColLabel, bodyColLabel)
 {
@@ -247,8 +269,8 @@ function EmailContentSettings(header, url, subjectColLabel, bodyColLabel)
 /**
  * cleanInputSetting 
  *
- * @param       {any} setting 
- * @returns     {any}
+ * @param       {Object} setting 
+ * @returns     {Object|null}
  */
 function cleanInputSetting(setting)
 {

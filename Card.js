@@ -249,21 +249,60 @@ Card.prototype.formatHeader = function
 Card.prototype.isUrl = function 
 (input)
 {
-        // TODO: Test
-        // Note: Localhost URLs are not allowed
+        // Source: https://tools.ietf.org/html/rfc3986#appendix-A
+        // Note:   Localhost URLs are not allowed
+        // Valid: 
+        //         https://duckduckgo.com/?q=test+regex&t=ffab&ia=web#sffqwefq
+        //         https://stackoverflow.com/questions/161738/asdfasdf-fsda-ef
+        //         https://developers.google.com/apps-sc/refce/spt/seet#nlah()
+        //         https://255.255.255.255:80/s?q=f+s&s=c.mit:*i=U-8&&sI=&sP=1
+        //         https://some-url.com?query=&name=joe?filter=.#some_anchor
+        //         https://regex101.com:80/asdf$afljlijbqewfu
+        //         https://asdah.gov/asdh-ah.as
+        //         https://www3.google.com
+        //         http://255.255.255.255:80/s?q=fd+s&s=c.mit:*i=U-8&&sI=&sP=
+        //         http://hh-1.wut.blabla.com:80/test/t/test.aspx?dd=dd&id=dk
+        //         http://sub.web-site.com/cgi-/perl.cgi?key1=v&key2=value2e
+        //         http://foobar.net/casual/archive/2005/12/01/61722.aspx
+        //         http://www.my.com/calendar#filter:year/2010/month/5k
+        //         http://www.asdah.com/~joe
+        //         255.255.255.255:80/s?q=fd+s&s=c.mit:*i=U-8&&sI=&sP=1
+        //         i.imgur.com/98efqkp19ubfasdfbp1u2bfis.jpg==.
+        //         flanders.co.nz/2009/11/08/blah-foo-bar-wut/
+        //         www.m.google.com/help.php?a=5
+        //         255.255.255.255
+        //         google.ruhroh
+        //         regex101.com/
+        //         regex101.com
+        //         192.52.193.0
+        //         192.0.0.171
+        //         100.64.0.0
+        //         127.0.0.1
+        //         10.0.0.0
+        //         0.0.0.0
+        //         432.3.s
+        //         23.com
+        // Invalid:
+        //         https://some-url.com?query=&name=foo?filter=.#some_anchor
+        //         http://hh-1hallo. msn.bla.cm:80800/t/test.aspx?dd=dd&id=d
+        //         www.google.com/somthing"/somethingmore
+        //         google.com?fdad
+        //         255.24.10.1.1
+        //         500.20.30.1
+        //         asdf.com/%
+        //         asdf
+        //         a.1
+
         var regex = new RegExp(
                 "^(http(s?):\/\/)?" + // protocol
                 "((([a-z0-9\-]+\.)+([a-z\-]+[0-9]*))|" + // domain or
-                "((((1?\d\d?)|(2[0-4]\d)|(25[0-5]))\.){3}" + 
-                "((1?\d\d)|(2[0-4]\d)|(25[0-5]))))" + // ipv4
+                "((((25[0-5])|(2[0-4]\d)|(1?\d\d?))\.){3}" + 
+                "((25[0-5])|(2[0-4]\d)|(1?\d\d?))))" + // ipv4
                 "(:(\d+))?" + // port
-                "(\/([a-z0-9\-\._~!$&'()*+,;=:@]*(%[a-f0-9]{2})*)*)*" + //path
-                "(\?[a-z0-9\-\._~&+;=]*)?" + // query
-                "((#[a-z0-9\-\._~!$&'()*+,;=:@/?]*(%[a-f0-9]{2})*)?$)" // fragment
+                "((\/([a-z0-9\-\._~!$&'()*+,;=:@]*(%[a-f0-9]{2})*)*)" + //path
+                "(\?[a-z0-9\-\._~!$&'()*+,;=:@/?]*(%[a-f0-9]{2})*)?" + // query
+                "((#[a-z0-9\-\._~!$&'()*+,;=:@/?]*(%[a-f0-9]{2})*$)?))*" // fragment
         , "im");
-
-        // Regex pattern:
-        // ^(http(s?):\/\/)?((([a-z0-9\-]+\.)+([a-z\-]+[0-9]*))|((((1?\d\d?)|(2[0-4]\d)|(25[0-5]))\.){3}((1?\d\d)|(2[0-4]\d)|(25[0-5]))))(:(\d+))?(\/([a-z0-9\-\._~!$&'()*+,;=:@]*(%[a-f0-9]{2})*)*(\?[a-z0-9\-\._~&+;=]*)?((#[a-z0-9\-_]*)?$))*
 
         return regex.test(input);
 }

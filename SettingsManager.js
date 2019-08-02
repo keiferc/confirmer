@@ -331,3 +331,7 @@ SettingsManager.prototype.checkEmailContent = function
 {
         return true;
 }
+
+//============== Checker Helpers ==============//
+/**
+ */

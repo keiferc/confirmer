@@ -12,8 +12,8 @@
         "gmail": {
                 "name": "Confirmer",
                 "logoUrl": "https://i.postimg.cc/RN4NpKQG/icon.png",
-                "primaryColor": "#1c8adb",
-                "secondaryColor": "#1c8adb",
+                "primaryColor": "#267cb5",
+                "secondaryColor": "#267cb5",
                 "useLocaleFromApp": true,
                 "contextualTriggers": [
                         {

@@ -18,8 +18,8 @@
 //////////////////////////////////////////
 // Main                                 //
 //////////////////////////////////////////
-var PRIMARY_COLOR = "#1c8adb";
-var SECONDARY_COLOR = "#1c8adb";
+var PRIMARY_COLOR = "#267cb5";
+var SECONDARY_COLOR = "#267cb5";
 
 function main()
 {

@@ -11,8 +11,8 @@
         },
         "exceptionLogging": "STACKDRIVER",
         "gmail": {
-                "name": "Schedule Confirmer",
-                "logoUrl": "https://cdn2.iconfinder.com/data/icons/social-media-8/512/reload.png",
+                "name": "Confirmer",
+                "logoUrl": "https://i.postimg.cc/RFJBw21L/mail.png",
                 "primaryColor": "#1c8adb",
                 "secondaryColor": "#1c8adb",
                 "contextualTriggers": [

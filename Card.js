@@ -57,6 +57,7 @@ Card.prototype.build = function
         card.setHeader(CardService.newCardHeader()
                 .setTitle(header)
                 .setImageUrl(iconUrl)
+                .setImageStyle(CardService.ImageStyle.CIRCLE)
                 .setImageAltText(alt)
         );
 

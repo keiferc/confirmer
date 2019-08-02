@@ -3,13 +3,13 @@
 // TODO: If error, send email to self containing error message
 //       - No recipients
 //       - Cannot retrieve date of next clinic
-// TODO: Abstract program to not use clinic-specific language (schedule confirmer?)
 // TODO: Documentation
 // TODO: Change icon CDN host: https://postimages.org/
 // TODO: Expand to create multiple confirmer cards based on needs?
 // TODO: Add direct links to edit sheets?
 // TODO: Input sanitation (Check if Google already does it)
 // TODO: Pentest add-on
+// TODO: remove caching? might be a weird UX
 
 /*
  * TODO: Module Documentation
@@ -49,8 +49,6 @@ function main()
         // Logger.log(manager.getContacts());
         // Logger.log(manager.getSchedule());
         // Logger.log(manager.getEmailContent());
-
-        
 
         return buildDeck();
 }

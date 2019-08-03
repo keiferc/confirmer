@@ -353,10 +353,8 @@ SettingsManager.prototype.isGSheetUrl = function
 
         if (!card.isUrl(url))
                 return false;
-        else {
-                url = card.sanitize(url);
-                return url.indexOf(format) !== -1;
-        }
+        else
+                return card.sanitize(url).indexOf(format) !== -1;
 }
 
 /**

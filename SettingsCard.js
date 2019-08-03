@@ -217,7 +217,7 @@ SettingsCard.prototype.buildUrlWidget = function
         if (value == "null")
                 value = null;
         else
-                value = "docs.google.com/spreadsheets/d/" + value;
+                value = GSHEET_URL_FORMAT + value;
 
         return this.buildTextInputWidget(key, label, null, value, null);
 }

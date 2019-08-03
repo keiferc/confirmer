@@ -302,5 +302,5 @@ Card.prototype.sanitize = function
         for (i = 0; i < replacers.length; i++)
                 input = input.replace(replacers[i][0], replacers[i][1]);
 
-        return input;
+        return input.toString();
 }

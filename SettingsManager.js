@@ -336,7 +336,7 @@ SettingsManager.prototype.checkEmailContent = function
 
 //============== Checker Helpers ==============//
 /**
- * isGSheetUrl
+ * isGSheetUrl // TODO: test
  *
  * Returns true if the given string is a valid Google Sheets URL.
  *
@@ -346,12 +346,21 @@ SettingsManager.prototype.checkEmailContent = function
 SettingsManager.prototype.isGSheetUrl = function
 (url)
 {
-        // TODO
+        var card, format;
+        
+        card = new Card("", "", "", []);
+        format = encodeURIComponent(GSHEET_URL_FORMAT);
+
+        if (!card.isUrl(url))
+                return false;
+        else {
+                url = card.sanitize(url);
+                return url.indexOf(format) !== -1;
+        }
 }
 
-
 /**
- * sanitizeGSheetUrl
+ * sanitizeGSheetUrl // TODO: test
  *
  * Sanitizes the given Google Sheet ID and returns the sheet's
  * unique ID.
@@ -362,5 +371,19 @@ SettingsManager.prototype.isGSheetUrl = function
 SettingsManager.prototype.sanitizeGSheetUrl = function
 (url)
 {
-        // TODO
+        var id, blacklist, format;
+
+        blacklist = /[^a-z0-9\-_]/gi;
+        format = encodeURIComponent(GSHEET_URL_FORMAT);
+
+        url = this.sanitize(url);
+
+        id = decodeURIComponent(url.replace(format, ""));
+        id = id.replace(/\/.*$/gi, "");
+        id = id.replace(blacklist, "");
+
+        // debug
+        Logger.log("sanitized gsheet:   " + id);
+
+        return id;
 }

@@ -47,29 +47,16 @@ Card.prototype.build = function
 (header, iconUrl, alt, sections)
 {
         var card, i;
-
-        Logger.log("new1");
         
-        card = CardService.newCardBuilder();
+        card = CardService.newCardBuilder()
+                .setHeader(CardService.newCardHeader()
+                        .setTitle(header)
+                        .setImageUrl(iconUrl)
+                        .setImageAltText(alt)
+                );
 
-        Logger.log("new2");
-
-        card.setHeader(CardService.newCardHeader()
-                .setTitle(header)
-                .setImageUrl(iconUrl)
-                .setImageAltText(alt)
-        );
-
-        Logger.log("new3");
-
-        for (i = 0; i < sections.length; i++) {
-
-                Logger.log("newloop");
-
+        for (i = 0; i < sections.length; i++)
                 card.addSection(sections[i]);
-        }
-
-        Logger.log("new5");
 
         return card.build();
 }
@@ -249,30 +236,31 @@ Card.prototype.formatHeader = function
 Card.prototype.isUrl = function 
 (input)
 {
-        var regex, match;
-        
+        var regex, match, unreserved, pctEncoded, subDelims, pchar, qf, e8, 
+        pcharPct, qfPct, protocol, domain, ipv4, port, path, query, fragment;
+
+        unreserved      = "a-z0-9\\-\\._~";
+        pctEncoded      = "(%[a-f0-9]{2})";
+        subDelims       = "!$&'()*+,;=";
+        pchar           = unreserved + subDelims + ":@";
+        qf              = pchar + "/?"; // queries & fragments
+        e8              = "((25[0-5])|(2[0-4]\\d)|(1?\\d\\d?))"; // 0 - 255
+
+        pcharPct        = pctEncoded + "*[" + pchar + "]*";
+        qfPct           = pctEncoded + "*[" + qf + "]*";
+
+        protocol        = "^(http(s?):\\/\\/)?";
+        domain          = "(([a-z0-9\\-]+\\.)+([a-z\\-]+[0-9]*))";
+        ipv4            = "((" + e8 + "\\.){3}" + e8 + ")";
+        port            = "(:(\\d+))?";
+
+        path            = "(\\/(" + pcharPct + ")*)";
+        query           = "(\\?(" + qfPct + ")*)?";
+        fragment        = "((#(" + qfPct + ")*)$)?";
+
         regex = new RegExp(
-                // Protocol
-                "^(http(s?):\\/\\/)?" + 
-
-                // Domain or
-                "((([a-z0-9\\-]+\\.)+([a-z\\-]+[0-9]*))|" + 
-
-                // IPv4
-                "((((25[0-5])|(2[0-4]\\d)|(1?\\d\\d?))\\.){3}" + 
-                "((25[0-5])|(2[0-4]\\d)|(1?\\d\\d?))))" + 
-
-                // Port
-                "(:(\\d+))?" + 
-
-                // Path
-                "((\\/([a-z0-9\\-\\._~!$&'()*+,;=:@]*(%[a-f0-9]{2})*)*)" +
-
-                // Query 
-                "(\\?[a-z0-9\\-\\._~!$&'()*+,;=:@/?]*(%[a-f0-9]{2})*)?" +
-
-                // Fragment 
-                "((#[a-z0-9\\-\\._~!$&'()*+,;=:@/?]*(%[a-f0-9]{2})*$)?))*" 
+                protocol + "(" + domain + "|" + ipv4 + ")" + port + 
+                "(" + path + query + fragment + ")*"
         , "im");
 
         match = input.match(regex);
@@ -296,15 +284,30 @@ Card.prototype.isUrl = function
 Card.prototype.sanitize = function
 (input)
 {
-        var chars = {
-                "(http(s?):\\/\\/)|(ftp:\\/\\/)|(mailto:\\/\\/)": "",
-                "(\\/?)..(\\/?)": "%2E%2E",
-                "\\-{2}": "%2D%2D",
-                "'": "%27"
+        var replacers, protocol, i;
+
+        // debug
+        Logger.log("input:      " + input);
+
+        protocol = /(http(s?):\/\/)|(ftp:\/\/)|(mailto:\/\/)/ig; 
+        replacers = [
+                [/(\/?)\.\.(\/?)/ig, "%2E%2E"], // path traversal
+                [/\-{2}/ig, "%2D%2D"], // SQL comments
+                [/'/ig, "%27"] // single quotes
+        ];
+
+        if (this.isUrl(input)) {
+                Logger.log("isURL");
+                input = decodeURIComponent(input);
         }
-        
-        for (key in chars)
-                input = input.replace(key, chars[key]);
+
+        Logger.log("decoded:    " + input);
+
+        input = input.replace(protocol, ""); // remote file inclusion
+        input = encodeURIComponent(input);
+
+        for (i = 0; i < replacers.length; i++)
+                input = input.replace(replacers[i][0], replacers[i][1]);
 
         return input; // TODO: test
 }

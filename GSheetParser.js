@@ -15,12 +15,12 @@
 /**
  * GSheetParser
  *
- * @param       {String} ssUrl
+ * @param       {String} ssId
  * @returns     {Object}
  */
-function GSheetParser(ssUrl)
+function GSheetParser(ssId)
 {
-        this.ss = SpreadsheetApp.openByUrl(ssUrl)
+        this.ss = SpreadsheetApp.openById(ssId)
 }
 
 //////////////////////////////////////////

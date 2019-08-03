@@ -78,7 +78,7 @@ Emailer.prototype.email = function ()
 Emailer.prototype.generateSubject = function
 (date)
 {
-        var parser = new GSheetParser(this.emailContent.url);
+        var parser = new GSheetParser(this.emailContent.emailContentId);
 
         return  "[" + date + "]: " +
                 parser.getColumn(this.emailContent.subjectColLabel)[0];
@@ -98,7 +98,7 @@ Emailer.prototype.generateEmailBody = function
 {
         var parser, body, signature;
         
-        parser = new GSheetParser(this.emailContent.url);
+        parser = new GSheetParser(this.emailContent.emailContentId);
         body = parser.getColumn(this.emailContent.bodyColLabel)[0];
         signature = Gmail.Users.Settings.SendAs.list("me").sendAs.filter(
                 function (account) {
@@ -155,7 +155,7 @@ Emailer.prototype.getContacts = function ()
 {
         var parser, namesArr, emailsArr, contacts, i;
 
-        parser = new GSheetParser(this.contacts.url);
+        parser = new GSheetParser(this.contacts.contactsId);
         namesArr = parser.getColumn(this.contacts.nameColLabel);
         emailsArr = parser.getColumn(this.contacts.emailColLabel);
         contacts = {};
@@ -181,5 +181,5 @@ Emailer.prototype.getContacts = function ()
 Emailer.prototype.getScheduled = function
 (date) 
 {
-        return new GSheetParser(this.schedule.url).getRow(date);
+        return new GSheetParser(this.schedule.scheduleId).getRow(date);
 }

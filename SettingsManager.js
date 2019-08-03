@@ -156,15 +156,15 @@ SettingsManager.prototype.setMain = function
  * setContacts
  *
  * @param       {String} header
- * @param       {String} url
+ * @param       {String} id
  * @param       {String} nameColLabel
  * @param       {String} emailColLabel
  */
 SettingsManager.prototype.setContacts = function
-(header, url, nameColLabel, emailColLabel)
+(header, id, nameColLabel, emailColLabel)
 {
         this.getGASO().setProperty("contacts",
-                new ContactsSettings(header, url, nameColLabel, 
+                new ContactsSettings(header, id, nameColLabel, 
                         emailColLabel));
 }
 
@@ -172,29 +172,29 @@ SettingsManager.prototype.setContacts = function
  * setSchedule
  *
  * @param       {String} header
- * @param       {String} url
+ * @param       {String} id
  * @param       {String} dateColLabel
  */
 SettingsManager.prototype.setSchedule = function
-(header, url, dateColLabel)
+(header, id, dateColLabel)
 {
         this.getGASO().setProperty("schedule", 
-                new ScheduleSettings(header, url, dateColLabel));
+                new ScheduleSettings(header, id, dateColLabel));
 }
 
 /**
  * setEmailContent
  *
  * @param       {String} header
- * @param       {String} url
+ * @param       {String} id
  * @param       {String} subjectColLabel
  * @param       {String} bodyColLabel
  */
 SettingsManager.prototype.setEmailContent = function
-(header, url, subjectColLabel, bodyColLabel)
+(header, id, subjectColLabel, bodyColLabel)
 {
         this.getGASO().setProperty("emailContent",
-                new EmailContentSettings(header, url, subjectColLabel, 
+                new EmailContentSettings(header, id, subjectColLabel, 
                         bodyColLabel));
 }
 
@@ -220,15 +220,15 @@ function MainSettings(hourOfDay, everyXDays, sendToSelf)
  * ContactsSettings
  *
  * @param       {String} header
- * @param       {String} url 
+ * @param       {String} id 
  * @param       {String} nameColLabel 
  * @param       {String} emailColLabel 
  * @returns     {ContactsSettings}
  */
-function ContactsSettings(header, url, nameColLabel, emailColLabel)
+function ContactsSettings(header, id, nameColLabel, emailColLabel)
 {
         this.header = cleanInputSetting(header);
-        this.contactsUrl = cleanInputSetting(url);
+        this.contactsId = cleanInputSetting(id);
         this.nameColLabel = cleanInputSetting(nameColLabel);
         this.emailColLabel = cleanInputSetting(emailColLabel);
 }
@@ -237,14 +237,14 @@ function ContactsSettings(header, url, nameColLabel, emailColLabel)
  * ScheduleSettings
  *
  * @param       {String} header
- * @param       {String} url 
+ * @param       {String} id 
  * @param       {String} dateColLabel 
  * @returns     {ScheduleSettings}
  */
-function ScheduleSettings(header, url, dateColLabel)
+function ScheduleSettings(header, id, dateColLabel)
 {
         this.header = cleanInputSetting(header);
-        this.scheduleUrl = cleanInputSetting(url);
+        this.scheduleId = cleanInputSetting(id);
         this.dateColLabel = cleanInputSetting(dateColLabel);
 }
 
@@ -252,15 +252,15 @@ function ScheduleSettings(header, url, dateColLabel)
  * EmailContentSettings
  *
  * @param       {String} header
- * @param       {String} url
+ * @param       {String} id
  * @param       {String} subjectColLabel
  * @param       {String} bodyColLabel
  * @returns     {EmailContentSettings} 
  */
-function EmailContentSettings(header, url, subjectColLabel, bodyColLabel)
+function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
 {
         this.header = cleanInputSetting(header);
-        this.emailContentUrl = cleanInputSetting(url);
+        this.emailContentId = cleanInputSetting(id);
         this.subjectColLabel = cleanInputSetting(subjectColLabel);
         this.bodyColLabel = cleanInputSetting(bodyColLabel);
 }
@@ -269,7 +269,7 @@ function EmailContentSettings(header, url, subjectColLabel, bodyColLabel)
 /**
  * cleanInputSetting 
  *
- * @param       {Object} setting 
+ * @param       {any} setting 
  * @returns     {Object|null}
  */
 function cleanInputSetting(setting)
@@ -277,6 +277,8 @@ function cleanInputSetting(setting)
         if (setting == null || setting == undefined  || 
             setting.toString() === "")
                 return null;
+        else if (this.isGSheetUrl(setting.toString()))
+                return this.sanitizeGSheetUrl(setting.toString());
         else
                 return setting;
 }
@@ -334,4 +336,31 @@ SettingsManager.prototype.checkEmailContent = function
 
 //============== Checker Helpers ==============//
 /**
+ * isGSheetUrl
+ *
+ * Returns true if the given string is a valid Google Sheets URL.
+ *
+ * @param       {String} url
+ * @returns     {Boolean}
  */
+SettingsManager.prototype.isGSheetUrl = function
+(url)
+{
+        // TODO
+}
+
+
+/**
+ * sanitizeGSheetUrl
+ *
+ * Sanitizes the given Google Sheet ID and returns the sheet's
+ * unique ID.
+ *
+ * @param       {String} url
+ * @returns     {String}
+ */
+SettingsManager.prototype.sanitizeGSheetUrl = function
+(url)
+{
+        // TODO
+}

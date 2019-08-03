@@ -52,46 +52,6 @@ function main()
         // Logger.log(manager.getSchedule());
         // Logger.log(manager.getEmailContent());
 
-        // debug
-        var c = new Card("asdf", "asdf", "asdf", []);
-        var arr = [
-                // valid urls
-                "https://du.com/?q=en%25ter%253Ayr%252F2010%252Fmoth%252F5k&t",
-                "https://duckduckgo.com/?q=test+regex&t=ffab&ia=web#sffqwefq",
-                "https://stackoverflow.com/questions/161738/asdfasdf-fsda-ef",
-                "https://developers.google.com/apps-sc/refce/spt/seet#nlah()",
-                "https://255.255.255.255:80/s?q=f+s&s=c.mit:*i=U-8&&sI=&sP=1",
-                "https://regex101.com:80/asdf$afljlijbqewfu",
-                "https://asdah.gov/asdh-ah.as",
-                "https://www3.google.com",
-                "http://255.255.255.255:80/s?q=fd+s&s=c.mit:*i=U-8&&sI=&sP=",
-                "http://hh-1.wut.blabla.com:80/test/t/test.aspx?dd=dd&id=dk",
-                "http://sub.web-site.com/cgi-/perl.cgi?key1=v&key2=value2e",
-                "http://foobar.net/casual/archive/2005/12/01/61722.aspx",
-                "http://www.my.com/calendar#filter:year/2010/month/5k",
-                "http://www.asdah.com/~joe",
-                "255.255.255.255:80/s?q=fd+s&s=c.mit:*i=U-8&&sI=&sP=1",
-                "i.imgur.com/98efqkp19ubfasdfbp1u2bfis.jpg==.",
-                "flanders.co.nz/2009/11/08/blah-foo-bar-wut/",
-                "www.m.google.com/help.php?a=5",
-                // invalid urls
-                "https://some-url.com?query=&name=foo?filter=.#some_anchor",
-                "http://hh-1hallo. msn.bla.cm:80800/t/test.aspx?dd=dd&id=d",
-                "www.google.com/somthing\"/somethingmore",
-                "google.com?fdad",
-                "255.24.10.1.1",
-                "500.20.30.1",
-                "asdf.com/%",
-                "jfyjtf",
-                "%%34",
-                "%",
-        ];
-
-        for (var i = 0; i < arr.length; i++) {
-                Logger.log("sanitized:  " + c.sanitize(arr[i]));
-                Logger.log("=========================================");
-        }
-
         return buildDeck();
 }
 

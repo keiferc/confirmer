@@ -3,13 +3,12 @@
  *      author:         @KeiferC
  *      version:        0.0.1
  *      date:           29 July 2019
- *      description:    This module contains a Card object used in the
+ *      description:    This module contains a Card object used in the 
  *                      Confirmer GMail add-on
  *
- *      note:           This module is to be in a Google Script
- *                      and thus uses constructor functions
- *                      instead of Classes (due to GAS' lack of class
- *                      compatibility)
+ *      note:           This module is to be in a Google Script and thus uses
+ *                      constructor functions instead of Classes (due to GAS' 
+ *                      lack of class compatibility)
  */
 
 /**
@@ -230,6 +229,9 @@ Card.prototype.formatHeader = function
 /**
  * isUrl
  *
+ * Returns true if the given string is a RFC 3986 compliant URL.
+ * See https://tools.ietf.org/html/rfc3986#appendix-A
+ *
  * @param       {String} input
  * @returns     {Boolean}
  */
@@ -243,7 +245,7 @@ Card.prototype.isUrl = function
         pctEncoded      = "(%[a-f0-9]{2})";
         subDelims       = "!$&'()*+,;=";
         pchar           = unreserved + subDelims + ":@";
-        qf              = pchar + "/?"; // queries & fragments
+        qf              = pchar + "/?"; // query & fragment chars
         e8              = "((25[0-5])|(2[0-4]\\d)|(1?\\d\\d?))"; // 0 - 255
 
         pcharPct        = pctEncoded + "*[" + pchar + "]*";
@@ -258,10 +260,8 @@ Card.prototype.isUrl = function
         query           = "(\\?(" + qfPct + ")*)?";
         fragment        = "((#(" + qfPct + ")*)$)?";
 
-        regex = new RegExp(
-                protocol + "(" + domain + "|" + ipv4 + ")" + port + 
-                "(" + path + query + fragment + ")*"
-        , "im");
+        regex = new RegExp(protocol + "(" + domain + "|" + ipv4 + ")" + port +
+                "(" + path + query + fragment + ")*", "im");
 
         match = input.match(regex);
 
@@ -276,7 +276,7 @@ Card.prototype.isUrl = function
  *
  * Includes percent-encodings of special characters not included 
  * in encodeURIComponent. Used as a first-level sanitizer; outputs 
- * to be passed to content-specific, whitelist-using sanitizers
+ * to be passed to content-specific, whitelist-using sanitizers.
  *
  * @param       {String} input
  * @returns     {String}
@@ -286,9 +286,6 @@ Card.prototype.sanitize = function
 {
         var replacers, protocol, i;
 
-        // debug
-        Logger.log("input:      " + input);
-
         protocol = /(http(s?):\/\/)|(ftp:\/\/)|(mailto:\/\/)/ig; 
         replacers = [
                 [/(\/?)\.\.(\/?)/ig, "%2E%2E"], // path traversal
@@ -296,18 +293,14 @@ Card.prototype.sanitize = function
                 [/'/ig, "%27"] // single quotes
         ];
 
-        if (this.isUrl(input)) {
-                Logger.log("isURL");
-                input = decodeURIComponent(input);
-        }
-
-        Logger.log("decoded:    " + input);
+        if (this.isUrl(input))
+                input = decodeURIComponent(input); // double encoding
 
         input = input.replace(protocol, ""); // remote file inclusion
-        input = encodeURIComponent(input);
+        input = encodeURIComponent(input); // XSS and SQLi
 
         for (i = 0; i < replacers.length; i++)
                 input = input.replace(replacers[i][0], replacers[i][1]);
 
-        return input; // TODO: test
+        return input;
 }

@@ -29,7 +29,6 @@ function Card(cardName, iconUrl, iconAltText, sections)
         this.gCard = this.build(this.name, this.icon, 
                                 this.alt, this.sections);
 }
-
 //////////////////////////////////////////
 // Builders                             //
 //////////////////////////////////////////

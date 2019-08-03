@@ -336,7 +336,7 @@ SettingsManager.prototype.checkEmailContent = function
 
 //============== Checker Helpers ==============//
 /**
- * isGSheetUrl // TODO: more tests
+ * isGSheetUrl // TODO: more tests. Get more sheet urls
  *
  * Returns true if the given string is a valid Google Sheets URL.
  *
@@ -354,7 +354,7 @@ SettingsManager.prototype.isGSheetUrl = function
         if (!card.isUrl(url))
                 return false;
         else
-                return card.sanitize(url).indexOf(format) !== -1;
+                return (card.sanitize(url).indexOf(format) !== -1);
 }
 
 /**

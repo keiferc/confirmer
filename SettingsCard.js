@@ -262,7 +262,8 @@ function submitButton(response)
         input = response.formInputs;
 
         if (isEmpty(input))
-                throw "Error: Unable to retrieve submitted form inputs.";
+                return printError("Error: Unable to retrieve " + 
+                                  "submitted form inputs.");
 
         mainSetting = new MainSettings(input.hourOfDay[0], 1,
                 input.sendToSelf != undefined);
@@ -279,9 +280,9 @@ function submitButton(response)
             manager.checkSchedule(schedule) && 
             manager.checkEmailContent(emailContent)) {
                 manager.setAll(mainSetting, contacts, schedule, emailContent);
-                return updateCard();
+                return updateCard(new SettingsCard().gCard);
         } else
-                throw "ValueError: Invalid submitted input.";
+                return printError("ValueError: Invalid submitted input.");
 }
 
 //============== Dropdown Time Generation ==============//

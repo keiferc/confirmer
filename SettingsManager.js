@@ -290,33 +290,6 @@ function cleanInputSetting(setting, isUrl)
                 return sanitize(setting.toString());
 }
 
-/**
- * cleanInputUrl
- *
- * @param       {any} setting 
- */
-function cleanInputUrl(setting)
-{
-        if (isGSheetUrl(setting.toString()))
-                return sanitizeGSheetUrl(setting.toString());
-        else if (isValidUrl(setting.toString()))
-                return sanitize(setting.toString());
-        
-        throw "Error: " + setting.toString() + " is not a valid URL";
-}
-
-/**
- * isEmptySetting 
- *
- * @param       {any} input
- */
- function isEmpty(input)
- {
-         return input == null || input == undefined || 
-                input.toString() === "" || input.toString() == "null" ||
-                input.toString() == "undefined";
- }
-
 //////////////////////////////////////////
 // Checkers                             //
 //////////////////////////////////////////

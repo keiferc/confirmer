@@ -235,13 +235,71 @@ Card.prototype.formatHeader = function
  */
 function updateCard(card) 
 {
-        var nav = CardService.newNavigation()
-                .updateCard(card;
+        var nav = CardService.newNavigation().updateCard(card).popToRoot();
 
         return CardService.newActionResponseBuilder()
                 .setStateChanged(true)
                 .setNavigation(nav)
                 .build();
+}
+
+/**
+ *  
+ *
+ * @param       {String} error
+ */
+function printError(error)
+{
+        var errorCard, nav;
+        
+        errorCard = CardService.newCardBuilder()
+                .setHeader(CardService.newCardHeader()
+                        .setTitle("Oops! Something went wrong!")
+                )
+                .addSection(CardService.newCardSection()
+                        .addWidget(
+                                CardService.newTextParagraph().setText(error)
+                        )
+                )
+                .build();
+
+        nav = CardService.newNavigation().pushCard(errorCard);
+
+        return CardService.newActionResponseBuilder()
+                .setStateChanged(true)
+                .setNavigation(nav)
+                .build();
+}
+
+
+//////////////////////////////////////////
+// Sanitizers                           //
+//////////////////////////////////////////
+/**
+ * cleanInputUrl
+ *
+ * @param       {any} setting 
+ */
+function cleanInputUrl(setting)
+{
+        if (isGSheetUrl(setting.toString()))
+                return sanitizeGSheetUrl(setting.toString());
+        else if (isValidUrl(setting.toString()))
+                return sanitize(setting.toString());
+        
+        throw "Error: " + setting.toString() + " is not a valid URL";
+}
+
+/**
+ * isEmptySetting 
+ *
+ * @param       {any} input
+ */
+function isEmpty(input)
+{
+        return input == null || input == undefined || 
+        input.toString() === "" || input.toString() == "null" ||
+        input.toString() == "undefined";
 }
 
 /**

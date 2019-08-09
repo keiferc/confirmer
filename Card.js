@@ -226,7 +226,26 @@ Card.prototype.formatHeader = function
 }
 
 /**
- * isUrl
+ * updateCard
+ *
+ * Conducts an in-place update of the given card
+ *
+ * @param       {Google Apps Script Card} card
+ * @returns     {ActionResponse}
+ */
+function updateCard(card) 
+{
+        var nav = CardService.newNavigation()
+                .updateCard(card;
+
+        return CardService.newActionResponseBuilder()
+                .setStateChanged(true)
+                .setNavigation(nav)
+                .build();
+}
+
+/**
+ * isValidUrl
  *
  * Returns true if the given string is a RFC 3986 compliant URL.
  * See https://tools.ietf.org/html/rfc3986#appendix-A
@@ -234,7 +253,7 @@ Card.prototype.formatHeader = function
  * @param       {String} input
  * @returns     {Boolean}
  */
-function isUrl(input)
+function isValidUrl(input)
 {
         var regex, match, unreserved, pctEncoded, subDelims, pchar, qf, e8, 
         pcharPct, qfPct, protocol, domain, ipv4, port, path, query, fragment;
@@ -290,7 +309,7 @@ function sanitize(input)
                 [/'/ig, "%27"] // single quotes
         ];
 
-        if (isUrl(input))
+        if (isValidUrl(input))
                 input = decodeURIComponent(input); // double encoding
 
         input = input.replace(protocol, ""); // remote file inclusion

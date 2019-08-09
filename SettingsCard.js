@@ -82,7 +82,7 @@ SettingsCard.prototype.getContactsSection = function ()
         header = this.formatHeader("Contacts", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildUrlWidget(settings, "contactsUrl", 
+        widgets.push(this.buildUrlWidget(settings, "contactsId", 
                 "Contacts List"));
         widgets.push(this.buildColLabelWidget(settings, "nameColLabel", 
                 "Names"));
@@ -105,7 +105,7 @@ SettingsCard.prototype.getScheduleSection = function ()
         header = this.formatHeader("Schedule", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildUrlWidget(settings, "scheduleUrl", "Schedule"));
+        widgets.push(this.buildUrlWidget(settings, "scheduleId", "Schedule"));
         widgets.push(this.buildColLabelWidget(settings, "dateColLabel", 
                 "Date"));
 
@@ -125,7 +125,7 @@ SettingsCard.prototype.getEmailContentSection = function ()
         header = this.formatHeader("Email Content", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildUrlWidget(settings, "emailContentUrl", 
+        widgets.push(this.buildUrlWidget(settings, "emailContentId", 
                 "Email Content"));
         widgets.push(this.buildColLabelWidget(settings, "subjectColLabel",
                 "Email Subject"));
@@ -214,7 +214,7 @@ SettingsCard.prototype.buildUrlWidget = function
         label = "Google Sheets URL - " + sheetTitle;
         value = sectionSettings[key];
 
-        if (value == "null")
+        if (isEmpty(value))
                 value = null;
         else
                 value = GSHEET_URL_FORMAT + value;
@@ -236,9 +236,9 @@ SettingsCard.prototype.buildColLabelWidget = function
         var label, value;
 
         label = "Column Label - " + columnLabel;
-        value = sectionSettings[key];
+        value = decodeURIComponent(sectionSettings[key]);
 
-        if (value == "null")
+        if (isEmpty(value))
                 value = null;
 
         return this.buildTextInputWidget(key, label, null, value, null);
@@ -256,29 +256,31 @@ SettingsCard.prototype.buildColLabelWidget = function
  */
 function submitButton(response)
 {
-        var manager, input, main, contacts, schedule, emailContent;
+        var manager, input, mainSetting, contacts, schedule, emailContent;
 
         manager = new SettingsManager();
         input = response.formInputs;
 
-        if (input == undefined)
+        if (isEmpty(input))
                 throw "Error: Unable to retrieve submitted form inputs.";
 
-        main = new MainSettings(input.hourOfDay[0], 1,
+        mainSetting = new MainSettings(input.hourOfDay[0], 1,
                 input.sendToSelf != undefined);
-        contacts = new ContactsSettings("Contacts", input.contactsUrl[0],
+        contacts = new ContactsSettings("Contacts", input.contactsId[0],
                 input.nameColLabel[0], input.emailColLabel[0]);
-        schedule = new ScheduleSettings("Schedule", input.scheduleUrl[0],
+        schedule = new ScheduleSettings("Schedule", input.scheduleId[0],
                 input.dateColLabel[0]);
         emailContent = new EmailContentSettings("Email Content", 
-                input.emailContentUrl[0], input.subjectColLabel[0],
+                input.emailContentId[0], input.subjectColLabel[0],
                 input.bodyColLabel[0]);
         
-        if (manager.checkMain(main) && manager.checkContacts(contacts) && 
+        if (manager.checkMain(mainSetting) && 
+            manager.checkContacts(contacts) && 
             manager.checkSchedule(schedule) && 
-            manager.checkEmailContent(emailContent))
-                manager.setAll(main, contacts, schedule, emailContent);
-        else
+            manager.checkEmailContent(emailContent)) {
+                manager.setAll(mainSetting, contacts, schedule, emailContent);
+                return updateCard();
+        } else
                 throw "ValueError: Invalid submitted input.";
 }
 

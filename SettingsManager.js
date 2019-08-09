@@ -113,10 +113,11 @@ SettingsManager.prototype.getEmailContent = function ()
 SettingsManager.prototype.setDefault = function ()
 {
         this.setMain("9am", 1, true);
-        this.setContacts("Contacts", null, "Contact Names", "Emails");
-        this.setSchedule("Schedule", null, "Event Date");
-        this.setEmailContent("Email Content",null, "Subject Line", 
-                             "Email Body");
+        this.setContacts("Contacts", null, "e.g. Contact Names", 
+                "e.g. Emails");
+        this.setSchedule("Schedule", null, "e.g. Event Date");
+        this.setEmailContent("Email Content",null, "e.g. Subject Line", 
+                "e.g. Email Body");
 }
 
 /**
@@ -211,9 +212,13 @@ SettingsManager.prototype.setEmailContent = function
  */
 function MainSettings(hourOfDay, everyXDays, sendToSelf)
 {
-        this.hourOfDay = cleanInputSetting(hourOfDay); // [1-12][am|pm]; 9am
-        this.everyXDays = cleanInputSetting(everyXDays); // refresh check
-        this.sendToSelf = cleanInputSetting(sendToSelf);
+        // Format: [1-12][am|pm]; 9am
+        this.hourOfDay = cleanInputSetting(hourOfDay, false); 
+
+        // Used for push refresh frequency
+        this.everyXDays = cleanInputSetting(everyXDays, false);
+
+        this.sendToSelf = cleanInputSetting(sendToSelf, false);
 }
 
 /**
@@ -227,10 +232,10 @@ function MainSettings(hourOfDay, everyXDays, sendToSelf)
  */
 function ContactsSettings(header, id, nameColLabel, emailColLabel)
 {
-        this.header = cleanInputSetting(header);
-        this.contactsId = cleanInputSetting(id);
-        this.nameColLabel = cleanInputSetting(nameColLabel);
-        this.emailColLabel = cleanInputSetting(emailColLabel);
+        this.header = cleanInputSetting(header, false);
+        this.contactsId = cleanInputSetting(id, true);
+        this.nameColLabel = cleanInputSetting(nameColLabel, false);
+        this.emailColLabel = cleanInputSetting(emailColLabel, false);
 }
 
 /**
@@ -243,9 +248,9 @@ function ContactsSettings(header, id, nameColLabel, emailColLabel)
  */
 function ScheduleSettings(header, id, dateColLabel)
 {
-        this.header = cleanInputSetting(header);
-        this.scheduleId = cleanInputSetting(id);
-        this.dateColLabel = cleanInputSetting(dateColLabel);
+        this.header = cleanInputSetting(header, false);
+        this.scheduleId = cleanInputSetting(id, true);
+        this.dateColLabel = cleanInputSetting(dateColLabel, false);
 }
 
 /**
@@ -259,10 +264,10 @@ function ScheduleSettings(header, id, dateColLabel)
  */
 function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
 {
-        this.header = cleanInputSetting(header);
-        this.emailContentId = cleanInputSetting(id);
-        this.subjectColLabel = cleanInputSetting(subjectColLabel);
-        this.bodyColLabel = cleanInputSetting(bodyColLabel);
+        this.header = cleanInputSetting(header, false);
+        this.emailContentId = cleanInputSetting(id, true);
+        this.subjectColLabel = cleanInputSetting(subjectColLabel, false);
+        this.bodyColLabel = cleanInputSetting(bodyColLabel, false);
 }
 
 //============== Constructor Helpers ==============// 
@@ -270,18 +275,47 @@ function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
  * cleanInputSetting 
  *
  * @param       {any} setting 
- * @returns     {Object|null}
+ * @param       {Boolean} isUrl
+ * @returns     {Object|number|null}
  */
-function cleanInputSetting(setting)
+function cleanInputSetting(setting, isUrl)
 {
-        if (setting == null || setting == undefined  || 
-            setting.toString() === "")
+        if (isEmpty(setting))
                 return null;
-        else if (isGSheetUrl(setting.toString()))
-                return sanitizeGSheetUrl(setting.toString());
-        else
+        else if (isUrl || isValidUrl(setting.toString()))
+                return cleanInputUrl(setting);
+        else if (typeof(setting) === "number")
                 return setting;
+        else
+                return sanitize(setting.toString());
 }
+
+/**
+ * cleanInputUrl
+ *
+ * @param       {any} setting 
+ */
+function cleanInputUrl(setting)
+{
+        if (isGSheetUrl(setting.toString()))
+                return sanitizeGSheetUrl(setting.toString());
+        else if (isValidUrl(setting.toString()))
+                return sanitize(setting.toString());
+        
+        throw "Error: " + setting.toString() + " is not a valid URL";
+}
+
+/**
+ * isEmptySetting 
+ *
+ * @param       {any} input
+ */
+ function isEmpty(input)
+ {
+         return input == null || input == undefined || 
+                input.toString() === "" || input.toString() == "null" ||
+                input.toString() == "undefined";
+ }
 
 //////////////////////////////////////////
 // Checkers                             //
@@ -347,7 +381,7 @@ function isGSheetUrl(url)
 {
         var format = encodeURIComponent(GSHEET_URL_FORMAT);
 
-        if (!isUrl(url))
+        if (!isValidUrl(url))
                 return false;
         else
                 return (sanitize(url).indexOf(format) !== -1);
@@ -366,7 +400,7 @@ function sanitizeGSheetUrl(url)
 {
         var id, blacklist, format;
 
-        blacklist = /[^a-z0-9\-_]/gi;
+        blacklist = /[^a-z0-9\-_]/;
         format = encodeURIComponent(GSHEET_URL_FORMAT);
 
         url = sanitize(url);

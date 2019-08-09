@@ -31,7 +31,7 @@ function main()
         manager = new SettingsManager();
 
         // debug -- force reset to default 
-        //manager.setDefault();
+        // manager.setDefault();
 
         settings = manager.getAll();
 
@@ -63,7 +63,7 @@ function buildDeck()
 {
         var cardDeck = [];
 
-        // cardDeck.push(new StatusCard().gCard);
+        cardDeck.push(new StatusCard().gCard);
         cardDeck.push(new SettingsCard().gCard);
 
         return cardDeck;

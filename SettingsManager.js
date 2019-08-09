@@ -277,8 +277,8 @@ function cleanInputSetting(setting)
         if (setting == null || setting == undefined  || 
             setting.toString() === "")
                 return null;
-        else if (this.isGSheetUrl(setting.toString()))
-                return this.sanitizeGSheetUrl(setting.toString());
+        else if (isGSheetUrl(setting.toString()))
+                return sanitizeGSheetUrl(setting.toString());
         else
                 return setting;
 }
@@ -343,18 +343,14 @@ SettingsManager.prototype.checkEmailContent = function
  * @param       {String} url
  * @returns     {Boolean}
  */
-SettingsManager.prototype.isGSheetUrl = function
-(url)
+function isGSheetUrl(url)
 {
-        var card, format;
-        
-        card = new Card("", "", "", []);
-        format = encodeURIComponent(GSHEET_URL_FORMAT);
+        var format = encodeURIComponent(GSHEET_URL_FORMAT);
 
-        if (!card.isUrl(url))
+        if (!isUrl(url))
                 return false;
         else
-                return (card.sanitize(url).indexOf(format) !== -1);
+                return (sanitize(url).indexOf(format) !== -1);
 }
 
 /**
@@ -366,15 +362,14 @@ SettingsManager.prototype.isGSheetUrl = function
  * @param       {String} url
  * @returns     {String}
  */
-SettingsManager.prototype.sanitizeGSheetUrl = function
-(url)
+function sanitizeGSheetUrl(url)
 {
         var id, blacklist, format;
 
         blacklist = /[^a-z0-9\-_]/gi;
         format = encodeURIComponent(GSHEET_URL_FORMAT);
 
-        url = new Card("", "", "", []).sanitize(url);
+        url = sanitize(url);
         id = decodeURIComponent(url.replace(format, ""));
         id = id.replace(/\/.*$/gi, "");
         id = id.replace(blacklist, "");

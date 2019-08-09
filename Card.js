@@ -234,8 +234,7 @@ Card.prototype.formatHeader = function
  * @param       {String} input
  * @returns     {Boolean}
  */
-Card.prototype.isUrl = function 
-(input)
+function isUrl(input)
 {
         var regex, match, unreserved, pctEncoded, subDelims, pchar, qf, e8, 
         pcharPct, qfPct, protocol, domain, ipv4, port, path, query, fragment;
@@ -280,8 +279,7 @@ Card.prototype.isUrl = function
  * @param       {String} input
  * @returns     {String}
  */
-Card.prototype.sanitize = function
-(input)
+function sanitize(input)
 {
         var replacers, protocol, i;
 
@@ -292,7 +290,7 @@ Card.prototype.sanitize = function
                 [/'/ig, "%27"] // single quotes
         ];
 
-        if (this.isUrl(input))
+        if (isUrl(input))
                 input = decodeURIComponent(input); // double encoding
 
         input = input.replace(protocol, ""); // remote file inclusion

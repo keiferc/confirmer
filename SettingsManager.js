@@ -359,6 +359,7 @@ function sanitizeContacts(raw)
         emailColLabel = cleanInputSetting(emailColLabel, false);
 
         // TODO: Check validity
+        
 
         return new ContactsSettings(header, id, nameColLabel, emailColLabel);
 }

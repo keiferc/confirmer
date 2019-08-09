@@ -288,7 +288,7 @@ function cleanInputUrl(setting)
         else if (isValidUrl(setting.toString()))
                 return sanitize(setting.toString());
         
-        return printError("Error: " + setting.toString() + " is not a valid URL");
+        throw setting.toString() + " is not a valid URL.";
 }
 
 /**

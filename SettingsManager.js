@@ -351,15 +351,19 @@ function updateSettings(main, contacts, schedule, emailContent)
  */
 function sanitizeContacts(raw)
 {
-        var header, id, nameColLabel, emailColLabel;
+        var header, id, nameColLabel, emailColLabel, parser;
 
         header = cleanInputSetting(raw.header, false);
         id = cleanInputSetting(raw.contactsId, true);
         nameColLabel = cleanInputSetting(raw.nameColLabel, false);
-        emailColLabel = cleanInputSetting(emailColLabel, false);
+        emailColLabel = cleanInputSetting(raw.emailColLabel, false);
 
-        // TODO: Check validity
+        if (id == null)
+                throw "URLs cannot be empty.";
         
+        parser = getGSheet(id);
+        parser.getColumnIndex(decodeURIComponent(nameColLabel));
+        parser.getColumnIndex(decodeURIComponent(emailColLabel));
 
         return new ContactsSettings(header, id, nameColLabel, emailColLabel);
 }
@@ -378,8 +382,11 @@ function sanitizeSchedule(raw)
         id = cleanInputSetting(raw.scheduleId, true);
         dateColLabel = cleanInputSetting(raw.dateColLabel, false);
 
-        // TODO: Check Validity
-
+        if (id == null)
+                throw "URLs cannot be empty.";
+        
+        parser = getGSheet(id);
+        parser.getColumnIndex(decodeURIComponent(dateColLabel));
 
         return new ScheduleSettings(header, id, dateColLabel);
 }
@@ -438,7 +445,7 @@ function sanitizeGSheetUrl(url)
 {
         var id, blacklist, format;
 
-        blacklist = /[^a-z0-9\-_]/;
+        blacklist = /[^a-z0-9\-_]/ig;
         format = encodeURIComponent(GSHEET_URL_FORMAT);
 
         url = sanitize(url);
@@ -447,4 +454,26 @@ function sanitizeGSheetUrl(url)
         id = id.replace(blacklist, "");
 
         return id;
+}
+
+/**
+ * getGSheet
+ *
+ * @param       {String} id
+ * @returns     {GSheetParser}
+ */
+function getGSheet(id)
+{
+        var parser;
+        
+        try {
+                parser = new GSheetParser(id);
+        } catch (e) {
+                throw GSHEET_URL_FORMAT + id + 
+                        " is not a retrievable Google Sheet. " +
+                        "Please check that the URL is spelled correctly " +
+                        "and that you have permission to access the Sheet. ";
+        }
+
+        return parser;
 }

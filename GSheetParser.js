@@ -40,10 +40,30 @@ GSheetParser.prototype.getSheet = function
 {
         //this.ss.setActiveSheet(ss.getSheets()[0]);
         //return this.ss.getActiveSheet()
-        if (nth < 0)
+        if (index < 0)
                 throw "Invalid sheet number.";
 
         return this.ss.getSheets()[index];
+}
+
+GSheetParser.prototype.getColumnIndex = function
+(columnLabel)
+{
+        var sheet, range, textFinder, index;
+
+        sheet = this.getSheet(0);
+        range = sheet.getDataRange();
+        
+        textFinder = range.createTextFinder(columnLabel);
+        index = textFinder.findNext();
+
+        if (index == null)
+                throw "Unable to find column \"" + columnLabel + 
+                      "\" in given Google Sheet. Please make sure that " + 
+                      "the column label is spelled correctly and that it " + 
+                      "exists in the given Google Sheet.";
+
+        return index.getColumn();
 }
 
 /**
@@ -57,16 +77,12 @@ GSheetParser.prototype.getSheet = function
 GSheetParser.prototype.getColumn = function
 (columnLabel) 
 {
-        var sheet, range, textFinder, index, 
-            columnIndex, columnValues, values, i;
+        var sheet, columnIndex, columnValues, values, i;
 
         sheet = this.getSheet(0);
-        range = sheet.getDataRange();
         values = [];
 
-        textFinder = range.createTextFinder(columnLabel);
-        index = textFinder.findNext();
-        columnIndex = index.getColumn();
+        columnIndex = this.getColumnIndex(columnLabel);
         columnValues = sheet.getSheetValues(1, columnIndex,
                 sheet.getLastRow(), 1);
 

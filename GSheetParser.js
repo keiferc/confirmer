@@ -54,7 +54,7 @@ GSheetParser.prototype.getColumnIndex = function
         sheet = this.getSheet(0);
         range = sheet.getDataRange();
         
-        textFinder = range.createTextFinder(columnLabel);
+        textFinder = range.createTextFinder(columnLabel).matchEntireCell(true);
         index = textFinder.findNext();
 
         if (index == null)

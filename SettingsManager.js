@@ -360,7 +360,9 @@ function sanitizeContacts(raw)
 
         if (id == null)
                 throw "URLs cannot be empty.";
-        
+        if (nameColLabel == null || emailColLabel == null)
+                throw "Column Labels cannot be empty.";
+
         parser = getGSheet(id);
         parser.getColumnIndex(decodeURIComponent(nameColLabel));
         parser.getColumnIndex(decodeURIComponent(emailColLabel));
@@ -384,6 +386,8 @@ function sanitizeSchedule(raw)
 
         if (id == null)
                 throw "URLs cannot be empty.";
+        if (dateColLabel == null)
+                throw "Column Labels cannot be empty.";
         
         parser = getGSheet(id);
         parser.getColumnIndex(decodeURIComponent(dateColLabel));
@@ -406,8 +410,15 @@ function sanitizeEmailContent(raw)
         subjectColLabel = cleanInputSetting(raw.subjectColLabel, false);
         bodyColLabel = cleanInputSetting(raw.bodyColLabel, false);
 
-        // TODO: Check Validity
-
+        
+        if (id == null)
+                throw "URLs cannot be empty.";
+        if (subjectColLabel == null || bodyColLabel == null)
+                throw "Column Labels cannot be empty.";
+        
+        parser = getGSheet(id);
+        parser.getColumnIndex(decodeURIComponent(subjectColLabel));
+        parser.getColumnIndex(decodeURIComponent(bodyColLabel));
 
         return new EmailContentSettings(header, id, subjectColLabel, 
                 bodyColLabel);

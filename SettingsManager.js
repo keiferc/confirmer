@@ -232,10 +232,10 @@ function MainSettings(hourOfDay, everyXDays, sendToSelf)
  */
 function ContactsSettings(header, id, nameColLabel, emailColLabel)
 {
-        this.header = cleanInputSetting(header, false);
-        this.contactsId = cleanInputSetting(id, true);
-        this.nameColLabel = cleanInputSetting(nameColLabel, false);
-        this.emailColLabel = cleanInputSetting(emailColLabel, false);
+        this.header = header;
+        this.contactsId = id;
+        this.nameColLabel = nameColLabel;
+        this.emailColLabel = emailColLabel;
 }
 
 /**
@@ -248,9 +248,9 @@ function ContactsSettings(header, id, nameColLabel, emailColLabel)
  */
 function ScheduleSettings(header, id, dateColLabel)
 {
-        this.header = cleanInputSetting(header, false);
-        this.scheduleId = cleanInputSetting(id, true);
-        this.dateColLabel = cleanInputSetting(dateColLabel, false);
+        this.header = header;
+        this.scheduleId = id;
+        this.dateColLabel = dateColLabel;
 }
 
 /**
@@ -264,10 +264,10 @@ function ScheduleSettings(header, id, dateColLabel)
  */
 function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
 {
-        this.header = cleanInputSetting(header, false);
-        this.emailContentId = cleanInputSetting(id, true);
-        this.subjectColLabel = cleanInputSetting(subjectColLabel, false);
-        this.bodyColLabel = cleanInputSetting(bodyColLabel, false);
+        this.header = header
+        this.emailContentId = id;
+        this.subjectColLabel = subjectColLabel;
+        this.bodyColLabel = bodyColLabel;
 }
 
 //============== Constructor Helpers ==============// 
@@ -294,51 +294,115 @@ function cleanInputSetting(setting, isUrl)
 // Checkers                             //
 //////////////////////////////////////////
 /**
- * checkMain
+ * updateSettings
  *
  * @param       {MainSettings} main
- * @returns     {Boolean}
- */
-SettingsManager.prototype.checkMain = function 
-(main)
-{
-        return true;
-}
-
-/**
- * checkContacts
- *
  * @param       {ContactsSettings} contacts
- * @returns     {Boolean}
+ * @param       {ScheduleSettings} schedule
+ * @param       {EmailContentSettings} emailContent
+ * @returns     {ActionResponse}
  */
-SettingsManager.prototype.checkContacts = function
-(contacts)
+function updateSettings(main, contacts, schedule, emailContent)
 {
-        return true;
+        var manager, errors, message, i, 
+            cleanContacts, cleanSchedule, cleanEmailContent;
+
+        manager = new SettingsManager();
+        errors = [];
+        message = "";
+
+        try {
+                cleanContacts = sanitizeContacts(contacts);
+        } catch(e) {
+                errors.push(e);
+        } finally {
+                try {
+                        cleanSchedule = sanitizeSchedule(schedule);
+                } catch(e) {
+                        errors.push(e);
+                } finally {
+                        try {
+                                cleanEmailContent = sanitizeEmailContent(
+                                        emailContent);
+                        } catch(e) {
+                                errors.push(e);
+                        } finally {
+                                if (errors.length == 0) {
+                                        manager.setAll(main, cleanContacts,
+                                                cleanSchedule, 
+                                                cleanEmailContent);
+                                        return updateCard(new SettingsCard().gCard);
+                                }
+
+                                for (i = 0; i < errors.length; i++)
+                                        message += (errors[i] + " ");
+        
+                                return printError(message);
+                        }
+                }
+        }
 }
 
 /**
- * checkSchedule
+ * sanitizeContacts
  *
- * @param       {ScheduleSettings} schedule
- * @returns     {Boolean}
+ * @param       {ContactsSettings} raw
+ * @returns     {ContactsSettings}
  */
-SettingsManager.prototype.checkSchedule = function
-(schedule)
+function sanitizeContacts(raw)
 {
-        return true;
+        var header, id, nameColLabel, emailColLabel;
+
+        header = cleanInputSetting(raw.header, false);
+        id = cleanInputSetting(raw.contactsId, true);
+        nameColLabel = cleanInputSetting(raw.nameColLabel, false);
+        emailColLabel = cleanInputSetting(emailColLabel, false);
+
+        // TODO: Check validity
+
+        return new ContactsSettings(header, id, nameColLabel, emailColLabel);
+}
+
+/**
+ * sanitizeSchedule
+ *
+ * @param       {ScheduleSettings} raw
+ * @returns     {ScheduleSettings}
+ */
+function sanitizeSchedule(raw)
+{
+        var header, id, dateColLabel;
+
+        header = cleanInputSetting(raw.header, false);
+        id = cleanInputSetting(raw.scheduleId, true);
+        dateColLabel = cleanInputSetting(raw.dateColLabel, false);
+
+        // TODO: Check Validity
+
+
+        return new ScheduleSettings(header, id, dateColLabel);
 }
 
 /**
  * checkEmailContent
  *
- * @param       {EmailContentSettings} emailContent
- * @returns     {Boolean}
+ * @param       {EmailContentSettings} raw
+ * @returns     {EmailContentSettings}
  */
-SettingsManager.prototype.checkEmailContent = function
-(emailContent)
+function sanitizeEmailContent(raw)
 {
-        return true;
+        var header, id, subjectColLabel, bodyColLabel;
+
+        header = cleanInputSetting(raw.header, false);
+        id = cleanInputSetting(raw.emailContentId, true);
+        subjectColLabel = cleanInputSetting(raw.subjectColLabel, false);
+        bodyColLabel = cleanInputSetting(raw.bodyColLabel, false);
+
+        // TODO: Check Validity
+
+
+        return new EmailContentSettings(header, id, subjectColLabel, 
+                bodyColLabel);
 }
 
 //============== Checker Helpers ==============//

@@ -279,6 +279,7 @@ function printError(error)
  * cleanInputUrl
  *
  * @param       {any} setting 
+ * @returns     {String}
  */
 function cleanInputUrl(setting)
 {
@@ -287,19 +288,20 @@ function cleanInputUrl(setting)
         else if (isValidUrl(setting.toString()))
                 return sanitize(setting.toString());
         
-        throw "Error: " + setting.toString() + " is not a valid URL";
+        return printError("Error: " + setting.toString() + " is not a valid URL");
 }
 
 /**
  * isEmptySetting 
  *
  * @param       {any} input
+ * @returns     {Boolean}
  */
 function isEmpty(input)
 {
         return input == null || input == undefined || 
-        input.toString() === "" || input.toString() == "null" ||
-        input.toString() == "undefined";
+               input.toString() === "" || input.toString() == "null" ||
+               input.toString() == "undefined";
 }
 
 /**

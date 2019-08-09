@@ -256,16 +256,15 @@ SettingsCard.prototype.buildColLabelWidget = function
  */
 function submitButton(response)
 {
-        var manager, input, mainSetting, contacts, schedule, emailContent;
+        var input, main, contacts, schedule, emailContent;
 
-        manager = new SettingsManager();
         input = response.formInputs;
 
         if (isEmpty(input))
                 return printError("Error: Unable to retrieve " + 
                                   "submitted form inputs.");
 
-        mainSetting = new MainSettings(input.hourOfDay[0], 1,
+        main = new MainSettings(input.hourOfDay[0], 1,
                 input.sendToSelf != undefined);
         contacts = new ContactsSettings("Contacts", input.contactsId[0],
                 input.nameColLabel[0], input.emailColLabel[0]);
@@ -274,15 +273,8 @@ function submitButton(response)
         emailContent = new EmailContentSettings("Email Content", 
                 input.emailContentId[0], input.subjectColLabel[0],
                 input.bodyColLabel[0]);
-        
-        if (manager.checkMain(mainSetting) && 
-            manager.checkContacts(contacts) && 
-            manager.checkSchedule(schedule) && 
-            manager.checkEmailContent(emailContent)) {
-                manager.setAll(mainSetting, contacts, schedule, emailContent);
-                return updateCard(new SettingsCard().gCard);
-        } else
-                return printError("ValueError: Invalid submitted input.");
+
+        return updateSettings(main, contacts, schedule, emailContent);
 }
 
 //============== Dropdown Time Generation ==============//

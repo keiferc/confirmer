@@ -20,7 +20,14 @@
  */
 function GSheetParser(ssId)
 {
-        this.ss = SpreadsheetApp.openById(ssId)
+        try {
+                this.ss = SpreadsheetApp.openById(ssId);
+        } catch(e) {
+                throw "Error: Unable to open the given Google Sheet \"" +
+                      GSHEET_URL_FORMAT + ssId + "\". Please check if " +
+                      "the given URL is spelled correctly and if you " +
+                      "have permission to access the given Google Sheet.";
+        }
 }
 
 //////////////////////////////////////////
@@ -38,10 +45,8 @@ function GSheetParser(ssId)
 GSheetParser.prototype.getSheet = function
 (index) 
 {
-        //this.ss.setActiveSheet(ss.getSheets()[0]);
-        //return this.ss.getActiveSheet()
         if (index < 0)
-                throw "Invalid sheet number.";
+                throw "Error: Invalid sheet number.";
 
         return this.ss.getSheets()[index];
 }
@@ -58,7 +63,7 @@ GSheetParser.prototype.getColumnIndex = function
         index = textFinder.findNext();
 
         if (index == null)
-                throw "Unable to find column \"" + columnLabel + 
+                throw "Error: Unable to find column \"" + columnLabel + 
                       "\" in given Google Sheet. Please make sure that " + 
                       "the column label is spelled correctly and that it " + 
                       "exists in the given Google Sheet.";

@@ -36,18 +36,19 @@ function TimeManager() {};
  */
 TimeManager.prototype.getNextDate = function ()
 {
-         var parser, next_dates, current_date, i;
-         
-         parser = new GSheetParser(volunteersSignupSheet);
-         next_dates = parser.getColumn(dateColumnTitle);
-         current_date = new Date();
- 
-         for (i in next_dates) {
-                 if (next_dates[i] >= current_date)
-                         return next_dates[i]
-         }
- 
-         throw "Unable to retrieve next scheduled date.";
+        var schedule, parser, next_dates, current_date, i;
+        
+        schedule = new SettingsManager().getSchedule();
+        parser = new GSheetParser(schedule.scheduleId);
+        next_dates = parser.getColumn(schedule.dateColLabel);
+        current_date = new Date();
+
+        for (i in next_dates) {
+                if (next_dates[i] >= current_date)
+                        return next_dates[i]
+        }
+
+        throw "Error: Unable to retrieve next scheduled date.";
 }
 
 /**

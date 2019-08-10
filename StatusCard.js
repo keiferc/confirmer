@@ -41,10 +41,29 @@ StatusCard.prototype = Object.create(Card.prototype);
  */
 StatusCard.prototype.getSections = function ()
 {
-        var sections = [];
+        var settings, emailer, sections;
+        
+        settings = new SettingsManager();
 
-        sections.push(this.getScheduleSection());
-        sections.push(this.getEmailSection());
+        // debug
+        Logger.log("here1");
+
+        emailer = new Emailer(settings.getMain(), settings.getContacts(), 
+                settings.getSchedule(), settings.getEmailContent());
+        sections = [];
+
+        // debug
+        Logger.log("here2");
+
+        sections.push(this.getScheduleSection(emailer));
+
+        // debug
+        Logger.log("here3");
+
+        sections.push(this.getEmailSection(emailer));
+
+        // debug
+        Logger.log("here4");
 
         return sections;
 }
@@ -52,20 +71,16 @@ StatusCard.prototype.getSections = function ()
 /**
  * getScheduleSection
  */
-StatusCard.prototype.getScheduleSection = function ()
+StatusCard.prototype.getScheduleSection = function
+(emailer)
 {
         var header, widgets, nextEventDate, sendingDate;
 
         header = this.formatHeader("Schedule", PRIMARY_COLOR);
         widgets = [];
 
-        nextEventDate = this.buildTextKeyValWidget("Next Event Date", 
-                null, "asdf", false);
-        sendingDate = this.buildTextKeyValWidget("Reminder Email Sending Date", 
-                null, "input here", false);
-        
-        widgets.push(nextEventDate);
-        widgets.push(sendingDate);
+        widgets.push(this.buildNextEventDateWidget(emailer));
+        widgets.push(this.buildSendingDateWidget(emailer));
 
         return this.buildSection(header, widgets, false);
 }
@@ -73,25 +88,18 @@ StatusCard.prototype.getScheduleSection = function ()
 /**
  * getEmailSection
  */
-StatusCard.prototype.getEmailSection = function ()
+StatusCard.prototype.getEmailSection = function 
+(emailer)
 {
         var header, widgets, sender, bcc, subject, body;
 
         header = this.formatHeader("Email", PRIMARY_COLOR);
         widgets = [];
 
-        sender = this.buildTextKeyValWidget("Sender", null, 
-                "Sender email here", false);
-        bcc = this.buildTextKeyValWidget("BCC", null, 
-                "bcc1<br>bcc2<br>bcc3", true);
-        subject = this.buildTextKeyValWidget("Subject", null, 
-                "Subject Line Here", false);
-        body = this.buildTextParagraphWidget("here is the email body");
-
-        widgets.push(sender);
-        widgets.push(bcc);
-        widgets.push(subject);
-        widgets.push(body);
+        widgets.push(this.buildSenderWidget(emailer));
+        widgets.push(this.buildBccWidget(emailer));
+        widgets.push(this.buildSubjectWidget(emailer));
+        widgets.push(this.buildBodyWidget(emailer));
 
         return this.buildSection(header, widgets, false);
 }
@@ -99,7 +107,90 @@ StatusCard.prototype.getEmailSection = function ()
 //////////////////////////////////////////
 // Widget Builders                      //
 //////////////////////////////////////////
+//============== Schedule Section ==============/
+StatusCard.prototype.buildNextEventDateWidget = function
+(emailer)
+{
+        var calendar, topLabel, content;
 
+        calendar = new TimeManager();
+        topLabel = "Next Event Date";
+
+        try {
+                content = calendar.getNextDate();
+        } catch(e) {
+                return this.buildTextKeyValWidget(topLabel, null, 
+                        "N/A", false);
+        }
+
+        return this.buildTextKeyValWidget(topLabel, null, content, false);
+}
+
+StatusCard.prototype.buildSendingDateWidget = function
+(emailer)
+{
+        var topLabel, content;
+
+        topLabel = "Reminder Email Sending Date";
+        content = "TOFINISH";
+
+        // TODO: get content
+        
+        return this.buildTextKeyValWidget(topLabel, null, content, false);
+}
+
+//============== Email Section ==============/
+StatusCard.prototype.buildSenderWidget = function
+(emailer)
+{
+        var topLabel, content;
+
+        topLabel = "Sender";
+        content = Session.getEffectiveUser().toString();
+
+        return this.buildTextKeyValWidget(topLabel, null, content, false);
+}
+
+StatusCard.prototype.buildBccWidget = function
+(emailer)
+{
+        var calendar, date, topLabel, content;
+
+        calendar = new TimeManager();
+        topLabel = "BCC";
+
+        try {
+                date = calendar.formatDate(calendar.getNextDate());
+                content = emailer.getRecipients(date);
+        } catch(e) {
+                return this.buildTextKeyValWidget(topLabel, null, "N/A", true);
+        }
+
+        return this.buildTextKeyValWidget(topLabel, null, content, true);
+}
+
+StatusCard.prototype.buildSubjectWidget = function 
+(emailer)
+{
+        var topLabel, content;
+
+        topLabel = "Subject";
+        content = "TOFINISH";
+
+        // TODO: get content
+
+        return this.buildTextKeyValWidget(topLabel, null, content, false);
+}
+
+StatusCard.prototype.buildBodyWidget = function
+(emailer)
+{
+        var content = "TOFINISH";
+
+        // TODO: get content
+
+        return this.buildTextParagraphWidget(content);
+}
 
 //////////////////////////////////////////
 // TODO: Helpers                        //

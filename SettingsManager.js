@@ -444,7 +444,7 @@ function isGSheetUrl(url)
 }
 
 /**
- * sanitizeGSheetUrl // TODO: more tests
+ * sanitizeGSheetUrl
  *
  * Sanitizes the given Google Sheet ID and returns the sheet's
  * unique ID.

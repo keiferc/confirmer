@@ -15,12 +15,14 @@
 /**
  * Emailer 
  *
+ * @param       {MainSettings} main
  * @param       {Object} contacts 
  * @param       {Object} schedule 
  * @param       {Object} emailContent 
  * @returns     {Object}
  */
-function Emailer(contacts, schedule, emailContent) {
+function Emailer(main, contacts, schedule, emailContent) {
+        this.main = main;
         this.contacts = contacts;
         this.schedule = schedule;
         this.emailContent = emailContent;
@@ -34,24 +36,25 @@ function Emailer(contacts, schedule, emailContent) {
  */
 Emailer.prototype.email = function () 
 {
-        var calendar, date, contacts, recipients, subject, message;
-
-        calendar = new TimeManager();
+        var calendar, date, recipients, subject, message;
 
         // Calculate date
         try {
-                date = calendar.getNextDate();
+                date = new TimeManager().getNextDate();
         } catch(e) {
-                Logger.log(e);
+                // TODO : Send error email (next event is not scheduled)
+                // debug
+                throw e;
         }
 
         // Retrieve recipient emails
-        contacts = this.getContacts();
-        recipients = this.getRecipients(contacts, 
-                this.getScheduled(date), true); // TODO: get sendToSelf
-
-        //debug
-        Logger.log(recipients);
+        try {
+                recipients = this.getRecipients(date);
+        } catch(e) {
+                // TODO: Send error email (no one is scheduled for next event)
+                // debug
+                throw e;
+        }
 
         // Compose email
         date = calendar.formatDate(date);
@@ -116,10 +119,32 @@ Emailer.prototype.generateEmailBody = function
 //////////////////////////////////////////
 /**
  * getRecipients
+ *
+ * Client-facing function. Used for status card.
+ */
+Emailer.prototype.getRecipients = function 
+(date)
+{
+        var contacts, settings, recipients;
+
+        contacts = this.getContacts();
+        settings = new SettingsManager().getMain();
+
+        recipients = this.getRecipients(contacts, this.getScheduled(date),
+                settings.sendToSelf());
+        
+        if (recipients.length == 0)
+                throw "Error: No persons scheduled for the next event.";
+        
+        return recipients;
+}
+
+/**
+ * getRecipients
  * 
  * Given an array of scheduled names and the contacts
  * list, return an array containing emails of the 
- * scheduled people
+ * scheduled people. Overloaded helper to getRecipients
  *
  * @param       {Object} contacts
  * @param       {Array} scheduled
@@ -161,7 +186,9 @@ Emailer.prototype.getContacts = function ()
         contacts = {};
 
         if (namesArr.length != emailsArr.length)
-                Logger.log("Error: asymmetric contact info");
+                throw "Error: asymmetric contact info. The number of names " + 
+                      "is not equal to the number of emails in the given " + 
+                      "Google Sheet.";
 
         for (i = 0; i < namesArr.length; i++)
                 contacts[namesArr[i]] = emailsArr[i];

@@ -41,15 +41,17 @@ StatusCard.prototype = Object.create(Card.prototype);
  */
 StatusCard.prototype.getSections = function ()
 {
-        var settings, emailer, sections;
+        var settings, emailer, calendar, sections;
         
         settings = new SettingsManager();
         emailer = new Emailer(settings.getMain(), settings.getContacts(), 
                 settings.getSchedule(), settings.getEmailContent());
+        calendar = new TimeManager();
+
         sections = [];
 
-        sections.push(this.getScheduleSection(emailer));
-        sections.push(this.getEmailSection(emailer));
+        sections.push(this.getScheduleSection(emailer, calendar));
+        sections.push(this.getEmailSection(emailer, calendar));
 
         return sections;
 }
@@ -58,15 +60,15 @@ StatusCard.prototype.getSections = function ()
  * getScheduleSection
  */
 StatusCard.prototype.getScheduleSection = function
-(emailer)
+(emailer, calendar)
 {
-        var header, widgets, nextEventDate, sendingDate;
+        var header, widgets;
 
         header = this.formatHeader("Schedule", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildNextEventDateWidget(emailer));
-        widgets.push(this.buildSendingDateWidget(emailer));
+        widgets.push(this.buildNextEventDateWidget(emailer, calendar));
+        widgets.push(this.buildSendingDateWidget(emailer, calendar));
 
         return this.buildSection(header, widgets, false);
 }
@@ -75,17 +77,17 @@ StatusCard.prototype.getScheduleSection = function
  * getEmailSection
  */
 StatusCard.prototype.getEmailSection = function 
-(emailer)
+(emailer, calendar)
 {
-        var header, widgets, sender, bcc, subject, body;
+        var header, widgets;
 
         header = this.formatHeader("Email", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildSenderWidget(emailer));
-        widgets.push(this.buildBccWidget(emailer));
-        widgets.push(this.buildSubjectWidget(emailer));
-        widgets.push(this.buildBodyWidget(emailer));
+        widgets.push(this.buildSenderWidget(emailer, calendar));
+        widgets.push(this.buildBccWidget(emailer, calendar));
+        widgets.push(this.buildSubjectWidget(emailer, calendar));
+        widgets.push(this.buildBodyWidget(emailer, calendar));
 
         return this.buildSection(header, widgets, false);
 }
@@ -95,11 +97,10 @@ StatusCard.prototype.getEmailSection = function
 //////////////////////////////////////////
 //============== Schedule Section ==============/
 StatusCard.prototype.buildNextEventDateWidget = function
-(emailer)
+(emailer, calendar)
 {
-        var calendar, topLabel, content;
+        var topLabel, content;
 
-        calendar = new TimeManager();
         topLabel = "Next Event Date";
 
         try {
@@ -113,7 +114,7 @@ StatusCard.prototype.buildNextEventDateWidget = function
 }
 
 StatusCard.prototype.buildSendingDateWidget = function
-(emailer)
+(emailer, calendar)
 {
         var topLabel, content;
 
@@ -138,20 +139,16 @@ StatusCard.prototype.buildSenderWidget = function
 }
 
 StatusCard.prototype.buildBccWidget = function
-(emailer)
+(emailer, calendar)
 {
-        var calendar, date, topLabel, content;
+        var topLabel, content, date;
 
-        calendar = new TimeManager();
         topLabel = "BCC";
 
         try {
                 date = calendar.getNextDate();
                 content = emailer.getRecipients(date);
         } catch(e) {
-                // debug
-                Logger.log(e);
-
                 return this.buildTextKeyValWidget(topLabel, null, "N/A", true);
         }
 
@@ -161,26 +158,37 @@ StatusCard.prototype.buildBccWidget = function
 }
 
 StatusCard.prototype.buildSubjectWidget = function 
-(emailer)
+(emailer, calendar)
 {
         var topLabel, content;
 
         topLabel = "Subject";
-        content = "TOFINISH";
 
-        // TODO: get content
+        try {
+                date = calendar.formatDate(calendar.getNextDate());
+                content = emailer.generateSubject(date);
+        } catch(e) {
+                return this.buildTextKeyValWidget(topLabel, null, 
+                        "N/A", false);
+        } 
 
-        return this.buildTextKeyValWidget(topLabel, null, content, false);
+        return this.buildTextKeyValWidget(topLabel, null, content, true);
 }
 
 StatusCard.prototype.buildBodyWidget = function
-(emailer)
+(emailer, calendar)
 {
-        var content = "TOFINISH";
+        topLabel = "Message";
 
-        // TODO: get content
+        try {
+                date = calendar.formatDate(calendar.getNextDate());
+                content = emailer.generateEmailBody(date);
+        } catch(e) {
+                return this.buildTextKeyValWidget(topLabel, null, 
+                        "N/A", false);
+        } 
 
-        return this.buildTextParagraphWidget(content);
+        return this.buildTextKeyValWidget(topLabel, null, content, true);
 }
 
 //////////////////////////////////////////

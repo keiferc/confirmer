@@ -331,7 +331,8 @@ function updateSettings(main, contacts, schedule, emailContent)
                                         manager.setAll(main, cleanContacts,
                                                 cleanSchedule, 
                                                 cleanEmailContent);
-                                        return updateCard(new SettingsCard().gCard);
+                                        return updateCard(
+                                                new SettingsCard().gCard);
                                 }
 
                                 for (i = 0; i < errors.length; i++)

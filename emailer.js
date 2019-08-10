@@ -109,9 +109,9 @@ Emailer.prototype.generateEmailBody = function
                                 return true
                 })[0].signature;
 
-        return  "<p>Dear Volunteers,</p>" + 
-                "<p>" + date + " is our next immigration clinic. " + 
-                body +"</p>" + signature;
+        return  "Dear Volunteers,<br><br>" + 
+                date + " is our next immigration clinic. " + 
+                body + "<br><br>" + signature;
 }
 
 //////////////////////////////////////////
@@ -130,8 +130,9 @@ Emailer.prototype.getRecipients = function
         contacts = this.getContacts();
         settings = new SettingsManager().getMain();
         scheduled = this.getScheduled(date);
+
         recipients = this.getRecipientsHelper(contacts, scheduled, 
-                settings.sendToSelf != undefined);
+                settings.sendToSelf == "true");
 
         if (isEmpty(recipients))
                 throw "Error: No persons scheduled for the next event.";

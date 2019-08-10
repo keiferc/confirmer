@@ -52,6 +52,7 @@ StatusCard.prototype.getSections = function ()
 
         sections.push(this.getScheduleSection(emailer, calendar));
         sections.push(this.getEmailSection(emailer, calendar));
+        sections.push(this.getRefreshSection());
 
         return sections;
 }
@@ -89,7 +90,26 @@ StatusCard.prototype.getEmailSection = function
         widgets.push(this.buildSubjectWidget(emailer, calendar));
         widgets.push(this.buildBodyWidget(emailer, calendar));
 
-        return this.buildSection(header, widgets, false);
+        return this.buildSection(header, widgets, true);
+}
+
+/**
+ * getRefreshSection
+ */
+StatusCard.prototype.getRefreshSection = function ()
+{
+        var action = CardService.newAction()
+                .setFunctionName("refreshStatus");
+
+        return this.buildSection(null, 
+                [CardService.newTextButton()
+                        .setText("Refresh")
+                        .setTextButtonStyle(
+                                CardService.TextButtonStyle.FILLED
+                        )
+                        .setOnClickAction(action)
+                ],
+                false);
 }
 
 //////////////////////////////////////////
@@ -192,5 +212,12 @@ StatusCard.prototype.buildBodyWidget = function
 }
 
 //////////////////////////////////////////
-// TODO: Helpers                        //
+// Widget Helpers                       //
 //////////////////////////////////////////
+/**
+ * refreshStatus
+ */
+function refreshStatus(response)
+{
+        return updateCard(new StatusCard().gCard, false)
+}

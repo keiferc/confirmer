@@ -233,9 +233,12 @@ Card.prototype.formatHeader = function
  * @param       {Google Apps Script Card} card
  * @returns     {ActionResponse}
  */
-function updateCard(card) 
+function updateCard(card, pop) 
 {
-        var nav = CardService.newNavigation().updateCard(card).popToRoot();
+        var nav = CardService.newNavigation().updateCard(card);
+
+        if (pop)
+                nav.popToRoot();
 
         return CardService.newActionResponseBuilder()
                 .setStateChanged(true)

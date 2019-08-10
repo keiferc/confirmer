@@ -332,7 +332,8 @@ function updateSettings(main, contacts, schedule, emailContent)
                                                 cleanSchedule, 
                                                 cleanEmailContent);
                                         return updateCard(
-                                                new SettingsCard().gCard);
+                                                new SettingsCard().gCard, 
+                                                true);
                                 }
 
                                 for (i = 0; i < errors.length; i++)

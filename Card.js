@@ -292,7 +292,7 @@ function cleanInputUrl(setting)
 }
 
 /**
- * isEmptySetting 
+ * isEmpty
  *
  * @param       {any} input
  * @returns     {Boolean}

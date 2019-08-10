@@ -125,33 +125,33 @@ Emailer.prototype.generateEmailBody = function
 Emailer.prototype.getRecipients = function 
 (date)
 {
-        var contacts, settings, recipients;
+        var contacts, settings, scheduled, recipients;
 
         contacts = this.getContacts();
         settings = new SettingsManager().getMain();
+        scheduled = this.getScheduled(date);
+        recipients = this.getRecipientsHelper(contacts, scheduled, 
+                settings.sendToSelf != undefined);
 
-        recipients = this.getRecipients(contacts, this.getScheduled(date),
-                settings.sendToSelf());
-        
-        if (recipients.length == 0)
+        if (isEmpty(recipients))
                 throw "Error: No persons scheduled for the next event.";
         
         return recipients;
 }
 
 /**
- * getRecipients
+ * getRecipientsHelper
  * 
  * Given an array of scheduled names and the contacts
  * list, return an array containing emails of the 
- * scheduled people. Overloaded helper to getRecipients
+ * scheduled people.
  *
  * @param       {Object} contacts
  * @param       {Array} scheduled
  * @param       {Boolean} sendToSelf
- * @returns     {Array}
+ * @returns     {String}
  */
-Emailer.prototype.getRecipients = function
+Emailer.prototype.getRecipientsHelper = function
 (contacts, scheduled, sendToSelf) 
 {
         var emails, i;
@@ -208,5 +208,11 @@ Emailer.prototype.getContacts = function ()
 Emailer.prototype.getScheduled = function
 (date) 
 {
-        return new GSheetParser(this.schedule.scheduleId).getRow(date);
+        var scheduled = new GSheetParser(this.schedule.scheduleId)
+                .getRow(date);
+
+        if (isEmpty(scheduled))
+                throw "Error: No persons scheduled for the next event.";
+
+        return scheduled;
 }

@@ -56,6 +56,7 @@ GSheetParser.prototype.getColumnIndex = function
 {
         var sheet, range, textFinder, index;
 
+        columnLabel = decodeURIComponent(columnLabel);
         sheet = this.getSheet(0);
         range = sheet.getDataRange();
         
@@ -110,9 +111,13 @@ GSheetParser.prototype.getRow = function
 {
         var sheet, range, rowValues, values, i, j;
 
+        if (typeof(rowLabel) === "string")
+                rowLabel = decodeURIComponent(rowLabel);
+
         sheet = this.getSheet(0);
         range = sheet.getSheetValues(1, 1, sheet.getLastRow(),
                 sheet.getLastColumn())
+        rowValues = []
         values = [];
 
         // Get row

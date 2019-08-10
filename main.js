@@ -31,7 +31,7 @@ function main()
         manager = new SettingsManager();
 
         // debug -- force reset to default 
-        manager.setDefault();
+        // manager.setDefault();
 
         settings = manager.getAll();
 

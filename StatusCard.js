@@ -44,26 +44,12 @@ StatusCard.prototype.getSections = function ()
         var settings, emailer, sections;
         
         settings = new SettingsManager();
-
-        // debug
-        Logger.log("here1");
-
         emailer = new Emailer(settings.getMain(), settings.getContacts(), 
                 settings.getSchedule(), settings.getEmailContent());
         sections = [];
 
-        // debug
-        Logger.log("here2");
-
         sections.push(this.getScheduleSection(emailer));
-
-        // debug
-        Logger.log("here3");
-
         sections.push(this.getEmailSection(emailer));
-
-        // debug
-        Logger.log("here4");
 
         return sections;
 }
@@ -117,7 +103,7 @@ StatusCard.prototype.buildNextEventDateWidget = function
         topLabel = "Next Event Date";
 
         try {
-                content = calendar.getNextDate();
+                content = calendar.formatDate(calendar.getNextDate());
         } catch(e) {
                 return this.buildTextKeyValWidget(topLabel, null, 
                         "N/A", false);
@@ -160,11 +146,16 @@ StatusCard.prototype.buildBccWidget = function
         topLabel = "BCC";
 
         try {
-                date = calendar.formatDate(calendar.getNextDate());
+                date = calendar.getNextDate();
                 content = emailer.getRecipients(date);
         } catch(e) {
+                // debug
+                Logger.log(e);
+
                 return this.buildTextKeyValWidget(topLabel, null, "N/A", true);
         }
+
+        content = content.replace(/,/gi, "<br>");
 
         return this.buildTextKeyValWidget(topLabel, null, content, true);
 }

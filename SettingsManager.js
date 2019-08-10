@@ -364,8 +364,8 @@ function sanitizeContacts(raw)
                 throw "Column Labels cannot be empty.";
 
         parser = getGSheet(id);
-        parser.getColumnIndex(decodeURIComponent(nameColLabel));
-        parser.getColumnIndex(decodeURIComponent(emailColLabel));
+        parser.getColumnIndex(nameColLabel);
+        parser.getColumnIndex(emailColLabel);
 
         return new ContactsSettings(header, id, nameColLabel, emailColLabel);
 }
@@ -390,7 +390,7 @@ function sanitizeSchedule(raw)
                 throw "Column Labels cannot be empty.";
         
         parser = getGSheet(id);
-        parser.getColumnIndex(decodeURIComponent(dateColLabel));
+        parser.getColumnIndex(dateColLabel);
 
         return new ScheduleSettings(header, id, dateColLabel);
 }
@@ -417,8 +417,8 @@ function sanitizeEmailContent(raw)
                 throw "Column Labels cannot be empty.";
         
         parser = getGSheet(id);
-        parser.getColumnIndex(decodeURIComponent(subjectColLabel));
-        parser.getColumnIndex(decodeURIComponent(bodyColLabel));
+        parser.getColumnIndex(subjectColLabel);
+        parser.getColumnIndex(bodyColLabel);
 
         return new EmailContentSettings(header, id, subjectColLabel, 
                 bodyColLabel);

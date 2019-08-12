@@ -1,13 +1,8 @@
-// https://developers.google.com/apps-script/reference/properties/properties
-//
 // TODO: If error, send email to self containing error message
 //       - No recipients
 //       - Cannot retrieve date of next clinic
 // TODO: Expand to create multiple confirmer cards based on needs?
 // TODO: Add direct links to edit sheets?
-// TODO: Input sanitation (Check if Google already does it)
-// TODO: Pentest add-on
-// TODO: remove caching? might be a weird UX
 // TODO: Pause confirmer
 // TODO: Delete confirmer
 // TODO: Add feature that allows for consistent sends?
@@ -20,12 +15,18 @@
  *      date:           12 August 2019
  *      description:    This module handles the response to the Confirmer
  *                      Gmail add-on's contextual trigger.
- *
- *      note:           This module is to be in a Google Script
- *                      and thus uses constructor functions
- *                      instead of Classes (due to GAS' lack of class
- *                      compatibility)
  */
+
+/*------------------------------------------------------------
+ *                         Functions
+ *------------------------------------------------------------
+ * ---- Main ---- 
+ * main()
+ *
+ * ---- Helpers ----
+ * buildDeck()
+ * confirm()
+ ------------------------------------------------------------*/
 
 //////////////////////////////////////////
 // Main                                 //
@@ -75,7 +76,7 @@ function main()
 }
 
 //////////////////////////////////////////
-// Deck Builder                         //
+// Helpers                              //
 //////////////////////////////////////////
 /**
  * buildDeck
@@ -110,7 +111,4 @@ function confirm()
                 settings.getSchedule(), settings.getEmailContent());
         
         emailer.email();
-
-        // debug
-        Logger.log("test");
 }

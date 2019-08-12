@@ -274,7 +274,7 @@ function submitButton(response)
                 input.emailContentId[0], input.subjectColLabel[0],
                 input.bodyColLabel[0]);
 
-        return updateSettings(main, contacts, schedule, emailContent);
+        return sanitizeSettings(main, contacts, schedule, emailContent);
 }
 
 //============== Dropdown Time Generation ==============//

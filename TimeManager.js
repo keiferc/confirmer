@@ -45,10 +45,15 @@ TimeManager.prototype.getNextDate = function ()
 
         for (i in next_dates) {
                 if (next_dates[i] >= current_date)
-                        return next_dates[i]
+                        return next_dates[i];
         }
 
         throw "Error: Unable to retrieve next scheduled date.";
+}
+
+TimeManager.prototype.getSendingDate = function ()
+{
+        return new Date(new Date().setDate(this.getNextDate().getDate() - 3));
 }
 
 /**
@@ -85,10 +90,11 @@ TimeManager.prototype.formatDate = function
 TimeManager.prototype.startTimeTrigger = function 
 (frequency, time)
 {
-        ScriptApp.newTrigger("main")
+        ScriptApp.newTrigger("confirm")
                 .timeBased()
-                .everyDays(frequency)
-                .atHour(time)
+                //.everyDays(frequency)
+                //.atHour(time)
+                .everyHours(frequency) // debug
                 .inTimezone("America/New_York")
                 .create();
 }

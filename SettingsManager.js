@@ -291,10 +291,45 @@ function cleanInputSetting(setting, isUrl)
 }
 
 //////////////////////////////////////////
-// Checkers                             //
+// Helpers                              //
+//////////////////////////////////////////
+function parseHourOfDay(hourOfDay)
+{
+        var time, am, pm, message;
+
+        am = RegExp("am", "gi");
+        pm = RegExp("pm", "gi");
+        message = "Error: Unable to parse time of day.";
+
+        if (am.test(hourOfDay)) {
+                time = hourOfDay.replace(am, "");
+                time = parseInt(time);
+
+                if (time == 12)
+                        return 0;
+                if (isNaN(time))
+                        throw message;
+
+                return time;
+
+        } else if (pm.test(hourOfDay)) {
+                time = hourOfDay.replace(pm, "");
+                time = parseInt(time);
+
+                if (isNaN(time))
+                        throw message;
+                        
+                return (time + 12);
+        }
+
+        throw message;
+}
+
+//////////////////////////////////////////
+// Sanitizers                           //
 //////////////////////////////////////////
 /**
- * updateSettings
+ * sanitizeSettings
  *
  * @param       {MainSettings} main
  * @param       {ContactsSettings} contacts
@@ -302,44 +337,30 @@ function cleanInputSetting(setting, isUrl)
  * @param       {EmailContentSettings} emailContent
  * @returns     {ActionResponse}
  */
-function updateSettings(main, contacts, schedule, emailContent)
+function sanitizeSettings(main, rawContacts, rawSchedule, rawEmailContent)
 {
-        var manager, errors, message, i, 
-            cleanContacts, cleanSchedule, cleanEmailContent;
+        var errors, contacts, schedule, emailContent;
 
-        manager = new SettingsManager();
         errors = [];
-        message = "";
 
         try {
-                cleanContacts = sanitizeContacts(contacts);
-        } catch(e) {
+                contacts = sanitizeContacts(rawContacts);
+        } catch (e) {
                 errors.push(e);
         } finally {
                 try {
-                        cleanSchedule = sanitizeSchedule(schedule);
+                        schedule = sanitizeSchedule(rawSchedule);
                 } catch(e) {
                         errors.push(e);
                 } finally {
                         try {
-                                cleanEmailContent = sanitizeEmailContent(
-                                        emailContent);
+                                emailContent = sanitizeEmailContent(
+                                        rawEmailContent);
                         } catch(e) {
                                 errors.push(e);
                         } finally {
-                                if (errors.length == 0) {
-                                        manager.setAll(main, cleanContacts,
-                                                cleanSchedule, 
-                                                cleanEmailContent);
-                                        return updateCard(
-                                                new SettingsCard().gCard, 
-                                                true);
-                                }
-
-                                for (i = 0; i < errors.length; i++)
-                                        message += (errors[i] + " ");
-        
-                                return printError(message);
+                                return updateSettings(main, contacts,
+                                        schedule, emailContent, errors);
                         }
                 }
         }
@@ -426,7 +447,7 @@ function sanitizeEmailContent(raw)
                 bodyColLabel);
 }
 
-//============== Checker Helpers ==============//
+//============== Sanitizer Helpers ==============//
 /**
  * isGSheetUrl // TODO: more tests. Get more sheet urls
  *
@@ -489,4 +510,35 @@ function getGSheet(id)
         }
 
         return parser;
+}
+
+//////////////////////////////////////////
+// Updaters                             //
+//////////////////////////////////////////
+function updateSettings(main, contacts, schedule, emailContent, errors)
+{
+        var settings, calendar, message, frequency, time, i;
+
+        settings = new SettingsManager();
+        calendar = new TimeManager();
+        message = "";
+
+        if (errors.length == 0) {
+                settings.setAll(main, contacts, schedule, emailContent);
+                frequency = main.everyXDays;
+                time = parseHourOfDay(main.hourOfDay);
+
+                try {
+                        calendar.editTimeTrigger(frequency, time);
+                } catch(e) {
+                        calendar.startTimeTrigger(frequency, time);
+                }
+                
+                return updateCard(new SettingsCard().gCard, true);
+        }
+
+        for (i = 0; i < errors.length; i++)
+                message += (errors[i] + " ");
+
+        return printError(message);
 }

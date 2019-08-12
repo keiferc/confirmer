@@ -139,10 +139,14 @@ StatusCard.prototype.buildSendingDateWidget = function
         var topLabel, content;
 
         topLabel = "Reminder Email Sending Date";
-        content = "TOFINISH";
 
-        // TODO: get content
-        
+        try {
+                content = calendar.formatDate(calendar.getSendingDate());
+        } catch(e) {
+                return this.buildTextKeyValWidget(topLabel, null, 
+                        "N/A", false); 
+        }
+
         return this.buildTextKeyValWidget(topLabel, null, content, false);
 }
 

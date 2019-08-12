@@ -47,7 +47,7 @@ function main()
 
         // debug
         // Logger.log(typeof(manager.getMain()));
-        Logger.log(manager.getAll());
+        // Logger.log(manager.getAll());
         // Logger.log(manager.getMain());
         // Logger.log(manager.getContacts());
         // Logger.log(manager.getSchedule());
@@ -67,4 +67,11 @@ function buildDeck()
         cardDeck.push(new SettingsCard().gCard);
 
         return cardDeck;
+}
+
+function confirm()
+{
+        var settings, calendar, emailer;
+
+        Logger.log("test");
 }

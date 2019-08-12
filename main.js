@@ -14,7 +14,17 @@
 // TODO: Add feature that allows users to select number of days prior reminder
 
 /*
- * TODO: Module Documentation
+ *      filename:       main.js
+ *      author:         @KeiferC
+ *      version:        0.0.1
+ *      date:           12 August 2019
+ *      description:    This module handles the response to the Confirmer
+ *                      Gmail add-on's contextual trigger.
+ *
+ *      note:           This module is to be in a Google Script
+ *                      and thus uses constructor functions
+ *                      instead of Classes (due to GAS' lack of class
+ *                      compatibility)
  */
 
 //////////////////////////////////////////
@@ -24,6 +34,13 @@ var PRIMARY_COLOR = "#267cb5";
 var SECONDARY_COLOR = "#267cb5";
 var GSHEET_URL_FORMAT = "docs.google.com/spreadsheets/d/";
 
+/**
+ * main
+ *
+ * Main callback function to the Confirmer add-on's contextual trigger.
+ *
+ * @returns     {Array}: Array of Google Cards
+ */
 function main()
 {
         var manager, settings;
@@ -41,7 +58,8 @@ function main()
         //         settings = manager.getAll();
         // }
 
-        if (JSON.stringify(settings) == "{}") { // TOEVAL: Robustness
+        // Initializes default settings for first install
+        if (JSON.stringify(settings) == "{}") {
                 manager.setDefault();
         }
 
@@ -59,6 +77,13 @@ function main()
 //////////////////////////////////////////
 // Deck Builder                         //
 //////////////////////////////////////////
+/**
+ * buildDeck
+ *
+ * Returns an array of constructed Google Cards
+ *
+ * @returns     {Array}: Array of Google Cards
+ */
 function buildDeck()
 {
         var cardDeck = [];
@@ -69,9 +94,23 @@ function buildDeck()
         return cardDeck;
 }
 
+/**
+ * confirm
+ *
+ * Callback function for Google time-based trigger. Used to control the
+ * add-on's emailing process
+ */
 function confirm()
 {
         var settings, calendar, emailer;
 
+        settings = new SettingsManager();
+        calendar = new TimeManager();
+        emailer = new Emailer(settings.getMain(), settings.getContacts(),
+                settings.getSchedule(), settings.getEmailContent());
+        
+        emailer.email();
+
+        // debug
         Logger.log("test");
 }

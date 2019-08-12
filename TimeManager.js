@@ -79,6 +79,7 @@ TimeManager.prototype.formatDate = function
 //////////////////////////////////////////
 // Time Trigger Management              //
 //////////////////////////////////////////
+// debugging
 /**
  * startTimeTrigger 
  *
@@ -94,6 +95,7 @@ TimeManager.prototype.startTimeTrigger = function
                 .timeBased()
                 //.everyDays(frequency)
                 .everyHours(frequency) // debug
+                //.everyMinutes(frequency) // debug
                 //.atHour(time)
                 .inTimezone("America/New_York")
                 .create();

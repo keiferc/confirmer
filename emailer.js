@@ -38,13 +38,15 @@ Emailer.prototype.email = function ()
 {
         var calendar, date, recipients, subject, message;
 
+        calendar = new TimeManager();
+
         // Calculate date
         try {
-                date = new TimeManager().getNextDate();
+                date = calendar.getNextDate();
         } catch(e) {
-                // TODO : Send error email (next event is not scheduled)
-                // subject = ...
+                // TODO: Nothing scheduled
                 // debug
+                this.emailError("Date retrieval error: " + e);
                 throw e;
         }
 
@@ -52,10 +54,15 @@ Emailer.prototype.email = function ()
         try {
                 recipients = this.getRecipients(date);
         } catch(e) {
-                // TODO: Send error email (no one is scheduled for next event)
+                // TODO: No one scheduled. Add a checker
                 // debug
+                this.emailError("Recipient retrieval error: " + e);
                 throw e;
         }
+
+        // debug
+        Logger.log("date: " + date);
+        Logger.log("type: " + typeof(date));
 
         // Compose email
         date = calendar.formatDate(date);
@@ -63,11 +70,11 @@ Emailer.prototype.email = function ()
         message = this.generateEmailBody(date);
 
         // Send email
-        // MailApp.sendEmail({
-        //         bcc: recipients,
-        //         subject: subject,
-        //         htmlBody: message
-        // });
+        MailApp.sendEmail({
+                bcc: recipients,
+                subject: "TEST" + subject,
+                htmlBody: message
+        });
 }
 
 /**
@@ -217,4 +224,14 @@ Emailer.prototype.getScheduled = function
                 throw "Error: No persons scheduled for the next event.";
 
         return scheduled;
+}
+
+Emailer.prototype.emailError = function
+(message)
+{
+        MailApp.sendEmail({
+                bcc: Session.getEffectiveUser(),
+                subject: "[Confirmer Add-on] Email Sending Error",
+                htmlBody: message
+        });
 }

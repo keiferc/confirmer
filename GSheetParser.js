@@ -5,13 +5,18 @@
  *      date:           29 July 2019
  *      description:    This module contains an object that parses
  *                      Google Sheets
- *
- *      note:           This module is to be in a Google Script
- *                      and thus uses constructor functions
- *                      instead of Classes (due to GAS' lack of class
- *                      compatibility)
  */
 
+/*------------------------------------------------------------
+ *                         Functions
+ * -----------------------------------------------------------
+ * ---- Object Constructor ----
+ * GSheetParser::GSheetParser(string)
+ *
+ * ---- Methods ----
+ * GasoParser::toJSO(Google Apps Script Object)
+ ------------------------------------------------------------*/
+ 
 /**
  * GSheetParser
  *

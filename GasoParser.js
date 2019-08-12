@@ -36,8 +36,8 @@ function GasoParser() {}
  * Given a Google Apps Script nested object, return
  * a JS version of the object
  *
- * @param       {String} gaso: Google Apps Script nested object
- * @returns     {JSO}: JS object to be used in the Confirmer add-on
+ * @param       {string} gaso: Google Apps Script nested object
+ * @returns     {Object}: JS object to be used in the Confirmer add-on
  */
 GasoParser.prototype.toJSO = function
 (gaso)

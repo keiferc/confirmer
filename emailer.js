@@ -32,16 +32,19 @@
  *
  * ---- Helpers ----
  * Emailer::emailError(string)
- ------------------------------------------------------------*
+ ------------------------------------------------------------*/
 
 /**
- * Emailer 
+ * Emailer
  *
- * @param       {MainSettings} main
- * @param       {Object} contacts 
- * @param       {Object} schedule 
- * @param       {Object} emailContent 
- * @returns     {Object}
+ * Custom object constructor handling emailing processes.
+ *
+ * @param       {MainSettings} main: SettingsManager obj for main
+ * @param       {ContactsSettings} contacts: SettingsManager obj for contacts
+ * @param       {ScheduleSettings} schedule: SettingsManager obj for schedules
+ * @param       {EmailContentSettings} emailContent: SettingsManager obj for
+ *                                                   email content
+ * @returns     {Emailer}: Object instance for handling emailing processes
  */
 function Emailer(main, contacts, schedule, emailContent) {
         this.main = main;
@@ -54,7 +57,9 @@ function Emailer(main, contacts, schedule, emailContent) {
 // Email Composition                    //
 //////////////////////////////////////////
 /**
- * Calls and manages main processes
+ * email
+ *
+ * Composes and sends add-on emails.
  */
 Emailer.prototype.email = function () 
 {
@@ -62,7 +67,6 @@ Emailer.prototype.email = function ()
 
         calendar = new TimeManager();
 
-        // Calculate date
         try {
                 date = calendar.getNextDate();
         } catch(e) {
@@ -72,7 +76,6 @@ Emailer.prototype.email = function ()
                 throw e;
         }
 
-        // Retrieve recipient emails
         try {
                 recipients = this.getRecipients(date);
         } catch(e) {
@@ -81,10 +84,6 @@ Emailer.prototype.email = function ()
                 this.emailError("Recipient retrieval error: " + e);
                 throw e;
         }
-
-        // debug
-        Logger.log("date: " + date);
-        Logger.log("type: " + typeof(date));
 
         // Compose email
         date = calendar.formatDate(date);
@@ -105,8 +104,8 @@ Emailer.prototype.email = function ()
  * Formats the subject line from the given spreadsheet,
  * column label, and formatted date
  *
- * @param       {Date} date
- * @returns     {String}
+ * @param       {Date} date: JS Date object
+ * @returns     {String}: Formatted subject line for email
  */
 Emailer.prototype.generateSubject = function
 (date)
@@ -123,8 +122,8 @@ Emailer.prototype.generateSubject = function
  * Formats the email body from the given spreadsheet,
  * column label, and formatted date.
  *
- * @param       {Date} date
- * @returns     {String}
+ * @param       {Date} date: JS Date object
+ * @returns     {String}: Formatted message body for email
  */
 Emailer.prototype.generateEmailBody = function 
 (date)
@@ -150,7 +149,11 @@ Emailer.prototype.generateEmailBody = function
 /**
  * getRecipients
  *
- * Client-facing function. Used for status card.
+ * Returns a comma-delineated string of email address to send email to.
+ * Call helper function getRecipientsHelper
+ *
+ * @param       {Date}: JS Date object
+ * @returns     {string}: Comma-delineated string of email addresses
  */
 Emailer.prototype.getRecipients = function 
 (date)
@@ -173,14 +176,13 @@ Emailer.prototype.getRecipients = function
 /**
  * getRecipientsHelper
  * 
- * Given an array of scheduled names and the contacts
- * list, return an array containing emails of the 
- * scheduled people.
+ * Given an array of scheduled names and the contacts list, return an array 
+ * containing emails of the scheduled people.
  *
- * @param       {Object} contacts
- * @param       {Array} scheduled
- * @param       {Boolean} sendToSelf
- * @returns     {String}
+ * @param       {Object} contacts: Object - { name : email_address }
+ * @param       {Array} scheduled: Array of names of scheduled people
+ * @param       {Boolean} sendToSelf: True if to send a copy of email to self
+ * @returns     {String}: Comma-delineated string of email addresses
  */
 Emailer.prototype.getRecipientsHelper = function
 (contacts, scheduled, sendToSelf) 
@@ -203,9 +205,9 @@ Emailer.prototype.getRecipientsHelper = function
 /**
  * getContacts
  * 
- * Merges two arrays into a key-value object
+ * Merges two arrays into a key-value object.
  * 
- * @return      {Object}
+ * @return      {Object}: Object = { name : email_address }
  */
 Emailer.prototype.getContacts = function () 
 {
@@ -231,10 +233,10 @@ Emailer.prototype.getContacts = function ()
  * getScheduled
  *
  * Returns an array of scheduled people who signed up for
- * the given scheduled date
+ * the given scheduled date.
  *
- * @param       {Date} date
- * @returns     {Array}
+ * @param       {Date} date: JS Date object
+ * @returns     {Array}: Array of people scheduled for given event date
  */
 Emailer.prototype.getScheduled = function
 (date) 
@@ -251,7 +253,13 @@ Emailer.prototype.getScheduled = function
 //////////////////////////////////////////
 // Helpers                              //
 //////////////////////////////////////////
-
+/**
+ * emailError
+ *
+ * Emails the given error message to the user.
+ *
+ * @param       {string} message: Error message to email to user
+ */
 Emailer.prototype.emailError = function
 (message)
 {

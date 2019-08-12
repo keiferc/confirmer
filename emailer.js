@@ -5,11 +5,6 @@
  *      date:           29 July 2019
  *      description:    This module manages the emailing processes
  *                      involved with the Confirmer GMail add-on
- *
- *      note:           This module is to be in a Google Script
- *                      and thus uses constructor functions
- *                      instead of Classes (due to GAS' lack of class
- *                      compatibility)
  */
 
 /*------------------------------------------------------------

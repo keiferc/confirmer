@@ -43,6 +43,7 @@ Emailer.prototype.email = function ()
                 date = new TimeManager().getNextDate();
         } catch(e) {
                 // TODO : Send error email (next event is not scheduled)
+                // subject = ...
                 // debug
                 throw e;
         }

@@ -310,11 +310,13 @@ function parseHourOfDay(hourOfDay)
                 if (isNaN(time))
                         throw message;
                 return time;
-                
+
         } else if (pm.test(hourOfDay)) {
                 time = hourOfDay.replace(pm, "");
                 time = parseInt(time);
 
+                if (time == 12)
+                        return time;
                 if (isNaN(time))
                         throw message;
                 return (time + 12);
@@ -525,12 +527,7 @@ function updateSettings(main, contacts, schedule, emailContent, errors)
                 settings.setAll(main, contacts, schedule, emailContent);
                 frequency = main.everyXDays;
                 time = parseHourOfDay(main.hourOfDay);
-
-                try {
-                        calendar.editTimeTrigger(frequency, time);
-                } catch(e) {
-                        calendar.startTimeTrigger(frequency, time);
-                }
+                calendar.editTimeTrigger(frequency, time);
                 
                 return updateCard(new SettingsCard().gCard, true);
         }

@@ -296,7 +296,7 @@ SettingsCard.prototype.DeliveryTime = function
         else
                 opt = "";
         
-        if (isAM && hour != 12)
+        if ((isAM && hour != 12) || (!isAM && hour == 12))
                 time_period = "am";
         else
                 time_period = "pm";

@@ -93,8 +93,8 @@ TimeManager.prototype.startTimeTrigger = function
         ScriptApp.newTrigger("confirm")
                 .timeBased()
                 //.everyDays(frequency)
-                //.atHour(time)
                 .everyHours(frequency) // debug
+                //.atHour(time)
                 .inTimezone("America/New_York")
                 .create();
 }
@@ -129,6 +129,6 @@ TimeManager.prototype.stopTimeTrigger = function ()
 TimeManager.prototype.editTimeTrigger = function 
 (frequency, time)
 {
-        stopTimeTrigger();
-        startTimeTrigger(frequency, time);
+        this.stopTimeTrigger();
+        this.startTimeTrigger(frequency, time);
 }

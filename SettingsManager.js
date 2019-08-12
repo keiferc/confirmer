@@ -309,16 +309,14 @@ function parseHourOfDay(hourOfDay)
                         return 0;
                 if (isNaN(time))
                         throw message;
-
                 return time;
-
+                
         } else if (pm.test(hourOfDay)) {
                 time = hourOfDay.replace(pm, "");
                 time = parseInt(time);
 
                 if (isNaN(time))
                         throw message;
-                        
                 return (time + 12);
         }
 

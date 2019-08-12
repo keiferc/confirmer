@@ -9,7 +9,7 @@
 
 /*------------------------------------------------------------
  *                         Functions
- * -----------------------------------------------------------
+ *------------------------------------------------------------
  * ---- Object Constructor ----
  * Emailer::Emailer(MainSettings, ContactsSettings, 
  *      ScheduleSettings, EmailContentSettings)

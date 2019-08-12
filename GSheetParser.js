@@ -3,25 +3,30 @@
  *      author:         @KeiferC
  *      version:        0.0.1
  *      date:           29 July 2019
- *      description:    This module contains an object that parses
- *                      Google Sheets
+ *      description:    This module contains an object that parses Google 
+ *                      Sheets
  */
 
 /*------------------------------------------------------------
  *                         Functions
- * -----------------------------------------------------------
+ *------------------------------------------------------------
  * ---- Object Constructor ----
  * GSheetParser::GSheetParser(string)
  *
  * ---- Methods ----
- * GasoParser::toJSO(Google Apps Script Object)
+ * GSheetParser::getSheet(number)
+ * GSheetParser::getColumnIndex(string)
+ * GSheetParser::getColumn(string)
+ * GSheetParser::getRow(string)
  ------------------------------------------------------------*/
  
 /**
  * GSheetParser
  *
- * @param       {String} ssId
- * @returns     {Object}
+ * Object constructor for parsing the Google Spreadsheet of the given ID
+ *
+ * @param       {String} ssId: Google Spreadsheet ID
+ * @returns     {GSheetParser}: Object that parses the given Google Spreadsheet 
  */
 function GSheetParser(ssId)
 {
@@ -41,11 +46,10 @@ function GSheetParser(ssId)
 /**
  * getSheet
  *
- * Returns nth sheet in the Google Sheet.
- * Uses zero-indexing.
+ * Returns nth sheet in the Google Sheet. Uses zero-indexing.
  *
- * @param       {Number} index
- * @returns     {Sheet}
+ * @param       {number} index: Index of sheet to return
+ * @returns     {Google Sheet}: Sheet of the Google Spreadsheet
  */
 GSheetParser.prototype.getSheet = function
 (index) 
@@ -56,6 +60,15 @@ GSheetParser.prototype.getSheet = function
         return this.ss.getSheets()[index];
 }
 
+/**
+ * getColumnIndex
+ *
+ * Searches the Google first Google Sheet of the Spreadsheet for the column
+ * index containing the given string. Throws exception if not found.
+ *
+ * @param       {string}: String to search in the Sheet
+ * @returns     {number}: Index of column containing given string
+ */
 GSheetParser.prototype.getColumnIndex = function
 (columnLabel)
 {
@@ -80,10 +93,10 @@ GSheetParser.prototype.getColumnIndex = function
 /**
  * getColumn
  *
- * Returns an array of values of the given column
+ * Returns an array of values of the column containing the given string.
  *
- * @param       {String} columnLabel
- * @returns      {Array}
+ * @param       {string} columnLabel: String representing column
+ * @returns     {Array}: Array of column values
  */
 GSheetParser.prototype.getColumn = function
 (columnLabel) 
@@ -106,10 +119,11 @@ GSheetParser.prototype.getColumn = function
 /**
  * getRow
  *
- * Returns an array of values of the given row
+ * Returns an array of values of the row containing the given string.
+ * Ignores empty cells.
  *
- * @param       {String} rowLabel
- * @returns     {Array}
+ * @param       {String} rowLabel: String representing row
+ * @returns     {Array}: Array of row values
  */
 GSheetParser.prototype.getRow = function
 (rowLabel)

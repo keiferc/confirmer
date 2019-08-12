@@ -3,8 +3,8 @@
  *      author:         @KeiferC
  *      version:        0.0.1
  *      date:           29 July 2019
- *      description:    This module manages the emailing processes
- *                      involved with the Confirmer GMail add-on
+ *      description:    This module manages the emailing processes involved 
+ *                      with the Confirmer GMail add-on
  */
 
 /*------------------------------------------------------------

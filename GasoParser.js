@@ -1,46 +1,47 @@
 /*
- *      filename:       gaso-to-json.js
+ *      filename:       GasoParser.js
  *      author:         @KeiferC
  *      version:        0.0.1
  *      date:           29 July 2019
- *      description:    This module contains an object that
- *                      parses a Google Apps Script object
- *                      and converts it into a valid JSON
- *                      object.
- *
- *      note:           This module is to be in a Google Script
- *                      and thus uses function object constructors
- *                      instead of Classes (due to GAS' lack of class
- *                      compatibility)
+ *      description:    This module contains an object that parses a Google 
+ *                      Apps Script object (GASO) and converts it into a valid 
+ *                      JS object.
  */
+
+/*------------------------------------------------------------
+ *                         Functions
+ * -----------------------------------------------------------
+ * ---- Object Constructor ----
+ * GasoParser::GasoParser()
+ *
+ * ---- Methods ----
+ * GasoParser::toJSO(Google Apps Script Object)
+ ------------------------------------------------------------*/
 
 /**
  * GasoParser
  *
- * A class that provides the function 
- * toJSON
+ * An object constructor that provides the function toJSO.
  *
- * @returns     {Object}
+ * @returns     {GasoParser}: Object that converts GASOs to JS objects
  */
 function GasoParser() {}
-
 
 //////////////////////////////////////////
 // Methods                              //
 //////////////////////////////////////////
 /**
- * toJSON
+ * toJSO
  *
  * Given a Google Apps Script nested object, return
- * a JSON version of the object
+ * a JS version of the object
  *
- * @param       {String} gaso
- * @returns     {JSON}
+ * @param       {String} gaso: Google Apps Script nested object
+ * @returns     {JSO}: JS object to be used in the Confirmer add-on
  */
-GasoParser.prototype.toJSON = function
+GasoParser.prototype.toJSO = function
 (gaso)
 {
-        // TODO: Reduce after done debugging
         var json = gaso.replace(/=/g, '":"')
                 .replace(/,\s/g, '","')
                 .replace(/\{/g, '"{"')

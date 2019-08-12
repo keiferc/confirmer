@@ -62,7 +62,7 @@ SettingsManager.prototype.getMain = function ()
         if (this.getAll().main == undefined)
                 throw "Error: Saved 'Main' settings are undefined.";
 
-        return new GasoParser().toJSON(this.getAll().main);
+        return new GasoParser().toJSO(this.getAll().main);
 }
 
 /**
@@ -75,7 +75,7 @@ SettingsManager.prototype.getContacts = function ()
         if (this.getAll().contacts == undefined) 
                 throw "Error: Saved 'Contacts' settings are undefined.";
 
-        return new GasoParser().toJSON(this.getAll().contacts);
+        return new GasoParser().toJSO(this.getAll().contacts);
 }
 
 /**
@@ -88,7 +88,7 @@ SettingsManager.prototype.getSchedule = function ()
         if (this.getAll().schedule == undefined)
                 throw "Error: Saved 'Schedule' settings are undefined";
 
-        return new GasoParser().toJSON(this.getAll().schedule);
+        return new GasoParser().toJSO(this.getAll().schedule);
 }
 
 /**
@@ -101,7 +101,7 @@ SettingsManager.prototype.getEmailContent = function ()
         if (this.getAll().emailContent == undefined)
                 throw "Error: Saved 'Email Content' settings are undefined";
 
-        return new GasoParser().toJSON(this.getAll().emailContent);
+        return new GasoParser().toJSO(this.getAll().emailContent);
 }
 
 //////////////////////////////////////////

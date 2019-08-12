@@ -12,6 +12,28 @@
  *                      compatibility)
  */
 
+/*------------------------------------------------------------
+ *                         Functions
+ * -----------------------------------------------------------
+ * ---- Object Constructor ----
+ * Emailer::Emailer(MainSettings, ContactsSettings, 
+ *      ScheduleSettings, EmailContentSettings)
+ *
+ * ---- Email Composition ----
+ * Emailer::email()
+ * Emailer::generateSubject(Date)
+ * Emailer::generateEmailBody(Date)
+ * 
+ * ---- Contacts Retrieval ----
+ * Emailer::getRecipients(Date)
+ * Emailer::getRecipientsHelper(Object, Array , Boolean)
+ * Emailer::getContacts()
+ * Emailer::getScheduled(Date)
+ *
+ * ---- Helpers ----
+ * Emailer::emailError(string)
+ ------------------------------------------------------------*
+
 /**
  * Emailer 
  *
@@ -225,6 +247,10 @@ Emailer.prototype.getScheduled = function
 
         return scheduled;
 }
+
+//////////////////////////////////////////
+// Helpers                              //
+//////////////////////////////////////////
 
 Emailer.prototype.emailError = function
 (message)

@@ -14,7 +14,8 @@
  *      version:        0.0.1
  *      date:           12 August 2019
  *      description:    This module handles the response to the Confirmer
- *                      Gmail add-on's contextual trigger.
+ *                      Gmail add-on's contextual trigger as well as the 
+ *                      main emailing process.
  */
 
 /*------------------------------------------------------------

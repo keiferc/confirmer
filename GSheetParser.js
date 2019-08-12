@@ -4,7 +4,7 @@
  *      version:        0.0.1
  *      date:           29 July 2019
  *      description:    This module contains an object that parses Google 
- *                      Sheets
+ *                      Sheets.
  */
 
 /*------------------------------------------------------------

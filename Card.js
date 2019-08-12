@@ -4,7 +4,7 @@
  *      version:        0.0.1
  *      date:           12 August 2019
  *      description:    This module contains a Card object constructor used in 
- *                      the Confirmer GMail add-on
+ *                      the Confirmer GMail add-on.
  */
 
 /*------------------------------------------------------------

@@ -2,3 +2,5 @@ config.js
 .clasp.json
 .vscode
 test/
+node_modules/
+package-lock.json

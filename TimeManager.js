@@ -127,12 +127,15 @@ TimeManager.prototype.stopTimeTrigger = function ()
  * Edits the time trigger with the given frequency and time
  * values
  *
- * @param       {Number} frequency 
- * @param       {Number} time 
+ * @param       {number} frequency 
+ * @param       {number} time 
+ * @param       {boolean} pause
  */
 TimeManager.prototype.editTimeTrigger = function 
-(frequency, time)
+(frequency, time, pause)
 {
         this.stopTimeTrigger();
-        this.startTimeTrigger(frequency, time);
+
+        if (!pause)
+                this.startTimeTrigger(frequency, time);
 }

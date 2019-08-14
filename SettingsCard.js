@@ -58,6 +58,7 @@ SettingsCard.prototype.getMainSection = function ()
         settings = new SettingsManager().getMain();
         widgets = [];
 
+        widgets.push(this.buildPauseWidget(settings));
         widgets.push(this.buildSendToSelfWidget(settings));
         widgets.push(this.buildHourOfDayWidget(settings));
 

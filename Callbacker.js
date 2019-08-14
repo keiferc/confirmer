@@ -423,7 +423,7 @@ function getGSheet(id)
 //////////////////////////////////////////
 function updateSettings(main, contacts, schedule, emailContent, errors)
 {
-        var settings, calendar, message, frequency, time, i;
+        var settings, calendar, message, frequency, time, pause, i;
 
         settings = new SettingsManager();
         calendar = new TimeManager();
@@ -433,6 +433,7 @@ function updateSettings(main, contacts, schedule, emailContent, errors)
                 settings.setAll(main, contacts, schedule, emailContent);
                 frequency = main.everyXDays;
                 time = parseHourOfDay(main.hourOfDay);
+                pause = main.pause == "true";
                 calendar.editTimeTrigger(frequency, time);
                 
                 return updateCard(new SettingsCard().gCard, true);

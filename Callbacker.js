@@ -14,8 +14,7 @@
  *------------------------------------------------------------
  * ---- Callbacks ----
  * submitButton(Google Apps Script Object)
- * updateCard(Google Card, boolean)
- * printError(string)
+ * refreshStatus(Google Apps Script Object)
  *
  * ---- Sanitizers ----
  * cleanInputSetting(any, boolean)
@@ -33,14 +32,14 @@
  * isValidUrl(string)
  * isGSheetUrl(string) 
  *
- * ---- Updaters ----
- * updateSettings(MainSettings, ContactsSettings, ScheduleSettings, 
- *         EmailContentSettings, Array) // for SettingsManager 
- *
  * ---- Getters ----
  * getGSheet(string)
  *
  * ---- Helpers ----
+ * updateSettings(MainSettings, ContactsSettings, ScheduleSettings, 
+ *         EmailContentSettings, Array) // for SettingsManager 
+ * updateCard(Google Card, boolean)
+ * printError(string)
  * parseHourOfDay(string)
  *
  ------------------------------------------------------------*/
@@ -88,54 +87,13 @@ function submitButton(response)
 }
 
 /**
- * updateCard
+ * refreshStatus
  *
- * Conducts an in-place update of the given card.
- *
- * @param       {Google Card} card: Google Card to update
- * @returns     {Google ActionResponse}: ActionResponse that updates Card
+ * @param       {Google Apps Script Object} response 
  */
-function updateCard(card, pop) 
+function refreshStatus(response)
 {
-        var nav = CardService.newNavigation().updateCard(card);
-
-        if (pop)
-                nav.popToRoot();
-
-        return CardService.newActionResponseBuilder()
-                .setStateChanged(true)
-                .setNavigation(nav)
-                .build();
-}
-
-/**
- * printError
- *
- * Pushes a Google Card on the add-on stack displaying error messages.
- *
- * @param       {string} error: Errors to display
- * @returns     {Google ActionResponse}: ActionResponse that pushes Card
- */
-function printError(error)
-{
-        var errorCard, nav;
-        
-        errorCard = CardService.newCardBuilder()
-                .setHeader(CardService.newCardHeader()
-                        .setTitle("Oops! Something went wrong!")
-                )
-                .addSection(CardService.newCardSection()
-                        .addWidget(CardService.newTextParagraph()
-                                        .setText(error))
-                )
-                .build();
-
-        nav = CardService.newNavigation().pushCard(errorCard);
-
-        return CardService.newActionResponseBuilder()
-                .setStateChanged(true)
-                .setNavigation(nav)
-                .build();
+        return updateCard(new StatusCard().gCard, false)
 }
 
 //////////////////////////////////////////
@@ -436,32 +394,6 @@ function isGSheetUrl(url)
 }
 
 //////////////////////////////////////////
-// Updaters                             //
-//////////////////////////////////////////
-function updateSettings(main, contacts, schedule, emailContent, errors)
-{
-        var settings, calendar, message, frequency, time, i;
-
-        settings = new SettingsManager();
-        calendar = new TimeManager();
-        message = "";
-
-        if (errors.length == 0) {
-                settings.setAll(main, contacts, schedule, emailContent);
-                frequency = main.everyXDays;
-                time = parseHourOfDay(main.hourOfDay);
-                calendar.editTimeTrigger(frequency, time);
-                
-                return updateCard(new SettingsCard().gCard, true);
-        }
-
-        for (i = 0; i < errors.length; i++)
-                message += (errors[i] + " ");
-
-        return printError(message);
-}
-
-//////////////////////////////////////////
 // Getters                            //
 //////////////////////////////////////////
 /**
@@ -489,6 +421,80 @@ function getGSheet(id)
 //////////////////////////////////////////
 // Helpers                              //
 //////////////////////////////////////////
+function updateSettings(main, contacts, schedule, emailContent, errors)
+{
+        var settings, calendar, message, frequency, time, i;
+
+        settings = new SettingsManager();
+        calendar = new TimeManager();
+        message = "";
+
+        if (errors.length == 0) {
+                settings.setAll(main, contacts, schedule, emailContent);
+                frequency = main.everyXDays;
+                time = parseHourOfDay(main.hourOfDay);
+                calendar.editTimeTrigger(frequency, time);
+                
+                return updateCard(new SettingsCard().gCard, true);
+        }
+
+        for (i = 0; i < errors.length; i++)
+                message += (errors[i] + " ");
+
+        return printError(message);
+}
+
+/**
+ * updateCard
+ *
+ * Conducts an in-place update of the given card.
+ *
+ * @param       {Google Card} card: Google Card to update
+ * @returns     {Google ActionResponse}: ActionResponse that updates Card
+ */
+function updateCard(card, pop) 
+{
+        var nav = CardService.newNavigation().updateCard(card);
+
+        if (pop)
+                nav.popToRoot();
+
+        return CardService.newActionResponseBuilder()
+                .setStateChanged(true)
+                .setNavigation(nav)
+                .build();
+}
+
+/**
+ * printError
+ *
+ * Pushes a Google Card on the add-on stack displaying error messages.
+ *
+ * @param       {string} error: Errors to display
+ * @returns     {Google ActionResponse}: ActionResponse that pushes Card
+ */
+function printError(error)
+{
+        var errorCard, nav;
+        
+        errorCard = CardService.newCardBuilder()
+                .setHeader(CardService.newCardHeader()
+                        .setTitle("Oops! Something went wrong!")
+                )
+                .addSection(CardService.newCardSection()
+                        .addWidget(CardService.newTextParagraph()
+                                        .setText(error))
+                )
+                .build();
+
+        nav = CardService.newNavigation().pushCard(errorCard);
+
+        return CardService.newActionResponseBuilder()
+                .setStateChanged(true)
+                .setNavigation(nav)
+                .build();
+}
+
 /**
  * parseHourOfDay 
  *

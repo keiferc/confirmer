@@ -215,13 +215,4 @@ StatusCard.prototype.buildBodyWidget = function
         return this.buildTextKeyValWidget(topLabel, null, content, true);
 }
 
-//////////////////////////////////////////
-// Widget Helpers                       //
-//////////////////////////////////////////
-/**
- * refreshStatus
- */
-function refreshStatus(response)
-{
-        return updateCard(new StatusCard().gCard, false)
-}
+

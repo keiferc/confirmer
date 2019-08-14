@@ -130,7 +130,7 @@ StatusCard.prototype.getRefreshSection = function ()
 //////////////////////////////////////////
 // Widget Builders                      //
 //////////////////////////////////////////
-
+//============== Main Section ==============/
 StatusCard.prototype.buildPauseStatusWidget = function
 (emailer, calendar)
 {

@@ -9,6 +9,8 @@
 // TODO: Email error testing
 // TODO: Email error sending date
 // TODO: Sending confirmation email date
+// TODO: Testing confirmation email sending date
+// TODO: Testing confirmation email sending time
 // TODO: Docs
 
 /*
@@ -45,14 +47,14 @@
  */
 function main()
 {
-        var manager, settings;
+        var settingsManager, settings;
 
-        manager = new SettingsManager();
+        settingsManager = new SettingsManager();
 
         // debug -- force reset to default 
         // manager.setDefault();
 
-        settings = manager.getAll();
+        settings = settingsManager.getAll();
 
         //debug -- reset to first init
         // if (JSON.stringify(settings) != "{}") {
@@ -62,16 +64,16 @@ function main()
 
         // Initializes default settings for first install
         if (JSON.stringify(settings) == "{}") {
-                manager.setDefault();
+                settingsManager.setDefault();
         }
 
         // debug
-        // Logger.log(typeof(manager.getMain()));
-        // Logger.log(manager.getAll());
-        Logger.log(manager.getMain());
-        // Logger.log(manager.getContacts());
-        // Logger.log(manager.getSchedule());
-        // Logger.log(manager.getEmailContent());
+        // Logger.log(typeof(settingsManager.getMain()));
+        // Logger.log(settingsManager.getAll());
+        Logger.log(settingsManager.getMain());
+        // Logger.log(settingsManager.getContacts());
+        // Logger.log(settingsManager.getSchedule());
+        // Logger.log(settingsManager.getEmailContent());
 
         return buildDeck();
 }

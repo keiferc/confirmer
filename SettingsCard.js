@@ -156,6 +156,20 @@ SettingsCard.prototype.getSubmitSection = function ()
 //////////////////////////////////////////
 //============== Main Section ==============//
 /**
+ * buildPauseWidget
+ */
+SettingsCard.prototype.buildPauseWidget = function
+(sectionSettings)
+{
+        var key, label, selected;
+        key = "pause";
+        label = "Pause email confirmations?";
+        selected = sectionSettings.pause == "true";
+
+        return this.buildSwitchWidget(key, label, selected, null);
+}
+
+/**
  * buildSendToSelfWidget
  *
  * @param       {Object} sectionSettings: section-specific settings object

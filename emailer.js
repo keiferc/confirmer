@@ -67,7 +67,7 @@ Emailer.prototype.email = function ()
         } catch(e) {
                 // TODO: Nothing scheduled
                 // debug
-                this.emailError("Date retrieval error: " + e);
+                this.emailError("Date retrieval error. " + e);
                 throw e;
         }
 
@@ -76,7 +76,7 @@ Emailer.prototype.email = function ()
         } catch(e) {
                 // TODO: No one scheduled. Add a checker
                 // debug
-                this.emailError("Recipient retrieval error: " + e);
+                this.emailError("Recipient retrieval error. " + e);
                 throw e;
         }
 
@@ -163,7 +163,10 @@ Emailer.prototype.getRecipients = function
                 settings.sendToSelf == "true");
 
         if (isEmpty(recipients))
-                throw "Error: No persons scheduled for the next event.";
+                throw "Error: No persons scheduled for the next event. " + 
+                       "Please check that there is someone scheduled for " +
+                       "the event on " + new TimeManager().formatDate(date) +
+                       ".";
         
         return recipients;
 }

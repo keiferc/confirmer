@@ -48,7 +48,9 @@ TimeManager.prototype.getNextDate = function ()
                         return next_dates[i];
         }
 
-        throw "Error: Unable to retrieve next scheduled date.";
+        throw "Error: Unable to retrieve next scheduled date. Please check" + 
+              "that there is an event scheduled after today's date: " + 
+              this.formatDate(current_Date) + ".";
 }
 
 TimeManager.prototype.getSendingDate = function ()

@@ -125,7 +125,7 @@ TimeManager.prototype.stopTimeTrigger = function ()
  * editTimeTrigger 
  *
  * Edits the time trigger with the given frequency and time
- * values
+ * values.
  *
  * @param       {number} frequency 
  * @param       {number} time 

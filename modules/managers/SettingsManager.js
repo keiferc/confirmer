@@ -51,9 +51,20 @@ SettingsManager.prototype.getAll = function ()
 }
 
 /**
+ * getEmailStatus
+ */
+SettingsManager.prototype.getEmailStatus = function ()
+{
+        if (this.getAll().emailStatus == undefined)
+                throw "Error: 'Email Status' settings are undefined";
+        
+        return new GasoParser().toJSO(this.getAll().emailStatus);
+}
+
+/**
  * getMain
  *
- * @returns     {JSON}
+ * @returns     {Object}
  */
 SettingsManager.prototype.getMain = function ()
 {
@@ -66,7 +77,7 @@ SettingsManager.prototype.getMain = function ()
 /**
  * getContacts
  *
- * @returns     {JSON}
+ * @returns     {Object}
  */
 SettingsManager.prototype.getContacts = function ()
 {
@@ -110,6 +121,7 @@ SettingsManager.prototype.getEmailContent = function ()
  */
 SettingsManager.prototype.setDefault = function ()
 {
+        this.setEmailStatus(null, null, null, false, false);
         this.setMain("9am", 1, true, true);
         this.setContacts("Contacts", null, "e.g. Contact Names", 
                 "e.g. Emails");
@@ -121,6 +133,7 @@ SettingsManager.prototype.setDefault = function ()
 /**
  * setAll 
  *
+ * @param       {EmailStatusSettings} emailStatus
  * @param       {MainSettings} main
  * @param       {ContactsSettings} contacts
  * @param       {ScheduleSettings} schedule
@@ -130,11 +143,29 @@ SettingsManager.prototype.setAll = function
 (main, contacts, schedule, emailContent)
 {
         this.getGASO().setProperties({
+                emailStatus: emailStatus,
                 main: main,
                 contacts: contacts,
                 schedule: schedule,
                 emailContent: emailContent
         });
+}
+
+/**
+ * setEmailStatus
+ * 
+ * @param       {Date} nextDate
+ * @param       {Date} sendingDate
+ * @param       {Date} warningDate
+ * @param       {boolean} sentWarning
+ * @param       {boolean} confirmed
+ */
+SettingsManager.prototype.setEmailStatus = function
+(nextDate, sendingDate, warningDate, sentWarning, confirmed)
+{
+        this.getGASO().setProperty("emailStatus",
+                new EmailStatusSettings(nextDate, sendingDate, warningDate,
+                        sentWarning, confirmed));
 }
 
 /**
@@ -201,6 +232,16 @@ SettingsManager.prototype.setEmailContent = function
 //////////////////////////////////////////
 // Object Constructors                  //
 //////////////////////////////////////////
+function EmailStatusSettings(nextDate, sendingDate, warningDate, 
+        sentWarning, confirmed)
+{
+        this.nextDate = cleanInputSetting(nextDate, false);
+        this.sendingDate = cleanInputSetting(sendingDate, false);
+        this.warningDate = cleanInputSetting(warningDate, false);
+        this.sentWarning = cleanInputSetting(sentWarning, false);
+        this.confirmed = cleanInputSetting(confirmed, false);
+}
+
 /**
  * MainSettings
  * 
@@ -269,4 +310,31 @@ function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
         this.emailContentId = id;
         this.subjectColLabel = subjectColLabel;
         this.bodyColLabel = bodyColLabel;
+}
+
+//////////////////////////////////////////
+// Helpers                              //
+//////////////////////////////////////////
+// TODO
+SettingsManager.prototype.updateEmailStatus = function
+(rawEmailStatus, schedule)
+{
+        var calendar, nextDate, sendingDate, warningDate, sentWarning,
+                confirmed;
+
+        calendar = new TimeManager();
+        sentWarning = rawEmailStatus.sentWarning;
+        confirmed = rawEmailStatus.confirmed;
+
+        try {
+                nextDate = calendar.setNextDate();
+        } catch (e) {
+                // debug
+                throw e;
+        }
+
+        sendingDate = calendar.setDate(3);
+        warningDate = calendar.setDate(7);
+
+        // new settings manager?
 }

@@ -6,12 +6,21 @@
 // TODO: Add feature that allows for consistent sends?
 // TODO: Add feature that allows users to select number of days prior reminder
 
+// TODO: Send warning when number of participants < given
 // TODO: Email error testing
 // TODO: Email error sending date
 // TODO: Sending confirmation email date
 // TODO: Testing confirmation email sending date
 // TODO: Testing confirmation email sending time
 // TODO: Docs
+// TODO: Optimization
+// TODO: finish EmailStatus -- see callbacker
+//       submitButton --> try { emailStatus.nextDate = nextDate from schedule }
+//                      fail -->  
+//                   success --> 
+//                             >
+//       which module should manage EmailStatus
+//       optimization strategies
 
 /*
  *      filename:       main.js
@@ -106,12 +115,14 @@ function buildDeck()
  */
 function confirm()
 {
-        var settings, calendar, emailer;
+        var settings, calendar, emailer, today, nextDate;
 
         settings = new SettingsManager();
         calendar = new TimeManager();
         emailer = new Emailer(settings.getMain(), settings.getContacts(),
                 settings.getSchedule(), settings.getEmailContent());
-        
+        today = new Date();
+
+        // TODO        
         emailer.email();
 }

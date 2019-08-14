@@ -25,8 +25,10 @@
 function TimeManager() {};
 
 //////////////////////////////////////////
-// Schedule Calculations                //
+// Getters                              //
 //////////////////////////////////////////
+//TODO
+// Getters should retrieve from EmailStatusSettings
 /**
  * getNextDate
  *
@@ -56,6 +58,42 @@ TimeManager.prototype.getNextDate = function ()
 TimeManager.prototype.getSendingDate = function ()
 {
         return new Date(new Date().setDate(this.getNextDate().getDate() - 3));
+}
+
+TimeManager.prototype.getWarningDate = function ()
+{
+        return new Date(new Date().setDate(this.getNextDate().getDate() - 7));
+}
+
+//////////////////////////////////////////
+// Setters                              //
+//////////////////////////////////////////
+// TODO: Figure out how users should customize this
+TimeManager.prototype.setDate = function
+(days)
+{
+        return new Date(new Date().setDate(this.getNextDate().getDate() - days));
+}
+
+//////////////////////////////////////////
+// Helpers                              //
+//////////////////////////////////////////
+
+// TODO
+TimeManager.prototype.checkDate = function 
+(emailer)
+{
+        var today, nextDate, sendingDate, warningDate;
+        today = new Date();
+
+        try {
+                nextDate = this.getNextDate();
+        } catch(e) {
+                emailer.emailError(e);
+        }
+
+        sendingDate = this.getSendingDate();
+        warningDate = this.getWarningDate();
 }
 
 /**

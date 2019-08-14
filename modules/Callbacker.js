@@ -65,7 +65,7 @@ var GSHEET_URL_FORMAT = "docs.google.com/spreadsheets/d/";
  */
 function submitButton(response)
 {
-        var input, main, contacts, schedule, emailContent;
+        var input, emailStatus, main, contacts, schedule, emailContent;
 
         input = response.formInputs;
 
@@ -73,6 +73,9 @@ function submitButton(response)
                 return printError("Error: Unable to retrieve " + 
                                 "submitted form inputs.");
 
+        emailStatus = new EmailStatusSettings(input.nextDate[0], 
+                input.sendingDate[0], input.warningDate[0], 
+                input.sentWarning[0] == "true", input.confirmed == "true");
         main = new MainSettings(input.hourOfDay[0], 1, 
                 input.pause != undefined, input.sendToSelf != undefined);
         contacts = new ContactsSettings("Contacts", input.contactsId[0],
@@ -83,7 +86,8 @@ function submitButton(response)
                 input.emailContentId[0], input.subjectColLabel[0],
                 input.bodyColLabel[0]);
 
-        return sanitizeSettings(main, contacts, schedule, emailContent);
+        return sanitizeSettings(emailStatus, main, contacts, schedule, 
+                emailContent);
 }
 
 /**
@@ -196,13 +200,15 @@ function sanitizeGSheetUrl(url)
 /**
  * sanitizeSettings
  *
+ * @param       {EmailStatusSettings} emailStatus
  * @param       {MainSettings} main
  * @param       {ContactsSettings} rawContacts
  * @param       {ScheduleSettings} rawSchedule
  * @param       {EmailContentSettings} rawEmailContent
  * @returns     {ActionResponse}
  */
-function sanitizeSettings(main, rawContacts, rawSchedule, rawEmailContent)
+function sanitizeSettings(emailStatus, main, rawContacts, rawSchedule, 
+        rawEmailContent)
 {
         var errors, contacts, schedule, emailContent;
 
@@ -224,8 +230,9 @@ function sanitizeSettings(main, rawContacts, rawSchedule, rawEmailContent)
                         } catch(e) {
                                 errors.push(e);
                         } finally {
-                                return updateSettings(main, contacts,
-                                        schedule, emailContent, errors);
+                                return updateSettings(emailStatus, main, 
+                                        contacts, schedule, emailContent, 
+                                        errors);
                         }
                 }
         }
@@ -421,7 +428,8 @@ function getGSheet(id)
 //////////////////////////////////////////
 // Helpers                              //
 //////////////////////////////////////////
-function updateSettings(main, contacts, schedule, emailContent, errors)
+function updateSettings(emailStatus, main, contacts, schedule, emailContent, 
+        errors)
 {
         var settings, calendar, message, frequency, time, pause, i;
 
@@ -430,7 +438,11 @@ function updateSettings(main, contacts, schedule, emailContent, errors)
         message = "";
 
         if (errors.length == 0) {
-                settings.setAll(main, contacts, schedule, emailContent);
+                settings.setAll(emailStatus, main, contacts, schedule, 
+                        emailContent);
+
+                //TODO: update email status
+
                 frequency = main.everyXDays;
                 time = parseHourOfDay(main.hourOfDay);
                 pause = (main.pause == "true");

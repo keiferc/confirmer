@@ -27,15 +27,12 @@
  * ---- Helpers ----
  * buildDeck()
  * confirm()
+ *
  ------------------------------------------------------------*/
 
 //////////////////////////////////////////
 // Main                                 //
 //////////////////////////////////////////
-var PRIMARY_COLOR = "#267cb5";
-var SECONDARY_COLOR = "#267cb5";
-var GSHEET_URL_FORMAT = "docs.google.com/spreadsheets/d/";
-
 /**
  * main
  *

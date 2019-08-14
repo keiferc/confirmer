@@ -25,17 +25,8 @@
  *      Card::buildTextParagraphWidget(string)
  *
  * ---- Helpers ----
- * updateCard(Google Card, boolean);
- * printError(string);
  * Card::formatHeader(string, string);
- *              
- * ---- Sanitizers ----
- * sanitize(string)
- * cleanInputUrl(any)
  *
- * ---- Checkers ----
- * isEmpty(any)
- * isValidUrl(string)
  ------------------------------------------------------------*/
 
 /**
@@ -255,57 +246,6 @@ Card.prototype.buildTextParagraphWidget = function
 // Helpers                              //
 //////////////////////////////////////////
 /**
- * updateCard
- *
- * Conducts an in-place update of the given card.
- *
- * @param       {Google Card} card: Google Card to update
- * @returns     {Google ActionResponse}: ActionResponse that updates Card
- */
-function updateCard(card, pop) 
-{
-        var nav = CardService.newNavigation().updateCard(card);
-
-        if (pop)
-                nav.popToRoot();
-
-        return CardService.newActionResponseBuilder()
-                .setStateChanged(true)
-                .setNavigation(nav)
-                .build();
-}
-
-/**
- * printError
- *
- * Pushes a Google Card on the add-on stack displaying error messages.
- *
- * @param       {string} error: Errors to display
- * @returns     {Google ActionResponse}: ActionResponse that pushes Card
- */
-function printError(error)
-{
-        var errorCard, nav;
-        
-        errorCard = CardService.newCardBuilder()
-                .setHeader(CardService.newCardHeader()
-                        .setTitle("Oops! Something went wrong!")
-                )
-                .addSection(CardService.newCardSection()
-                        .addWidget(CardService.newTextParagraph()
-                                        .setText(error))
-                )
-                .build();
-
-        nav = CardService.newNavigation().pushCard(errorCard);
-
-        return CardService.newActionResponseBuilder()
-                .setStateChanged(true)
-                .setNavigation(nav)
-                .build();
-}
-
-/**
  * formatHeader
  *
  * Helper function used for formatting the given header with the given color.
@@ -319,121 +259,4 @@ Card.prototype.formatHeader = function
 {
         return "<font color='" + color + "'>" + 
                "<b>" + header + "</b></font>"
-}
-
-//////////////////////////////////////////
-// Sanitizers                           //
-//////////////////////////////////////////
-/**
- * sanitize
- *
- * Includes percent-encodings of special characters not included 
- * in encodeURIComponent. Used as a first-level sanitizer; outputs 
- * to be passed to content-specific, whitelist-using sanitizers.
- *
- * @param       {string} input: User input to be sanitized
- * @returns     {string} Sanitized user input
- */
-function sanitize(input)
-{
-        var replacers, protocol, i;
-
-        protocol = /(http(s?):\/\/)|(ftp:\/\/)|(mailto:\/\/)/ig; 
-        replacers = [
-                [/(\/?)\.\.(\/?)/ig, "%2E%2E"], // path traversal
-                [/\-{2}/ig, "%2D%2D"], // SQL comments
-                [/'/ig, "%27"] // single quotes
-        ];
-
-        if (isValidUrl(input))
-                input = decodeURIComponent(input); // double encoding
-
-        input = input.replace(protocol, ""); // remote file inclusion
-        input = encodeURIComponent(input); // XSS and SQLi
-
-        for (i = 0; i < replacers.length; i++)
-                input = input.replace(replacers[i][0], replacers[i][1]);
-
-        return input.toString();
-}
-
-/**
- * cleanInputUrl
- *
- * Returns a sanitized version of the given URL
- *
- * @param       {any} url: Input URL to sanitize
- * @returns     {string}: Sanitized input URL
- */
-function cleanInputUrl(url)
-{
-        if (isGSheetUrl(url.toString()))
-                return sanitizeGSheetUrl(url.toString());
-        else if (isValidUrl(url.toString()))
-                return sanitize(url.toString());
-        
-        throw "\""+ url.toString() + "\" is not a valid URL.";
-}
-
-//////////////////////////////////////////
-// Checkers                             //
-//////////////////////////////////////////
-/**
- * isEmpty
- *
- * Helper function that handles multiple return types from Google.
- * Returns true if the value is "empty" or null.
- *
- * @param       {any} input: Input to be evaluated
- * @returns     {boolean}: True if input is empty / null
- */
-function isEmpty(input)
-{
-        return input == null || input == undefined || 
-               input.toString() === "" || input.toString() == "null" ||
-               input.toString() == "undefined";
-}
-
-/**
- * isValidUrl
- *
- * Returns true if the given string is a RFC 3986 compliant URL.
- * See https://tools.ietf.org/html/rfc3986#appendix-A.
- *
- * @param       {string} input: User input to check
- * @returns     {boolean}: True if input is a RFC 3986 compliant URL
- */
-function isValidUrl(input)
-{
-        var regex, match, unreserved, pctEncoded, subDelims, pchar, qf, e8, 
-        pcharPct, qfPct, protocol, domain, ipv4, port, path, query, fragment;
-
-        unreserved      = "a-z0-9\\-\\._~";
-        pctEncoded      = "(%[a-f0-9]{2})";
-        subDelims       = "!$&'()*+,;=";
-        pchar           = unreserved + subDelims + ":@";
-        qf              = pchar + "/?"; // query & fragment chars
-        e8              = "((25[0-5])|(2[0-4]\\d)|(1?\\d\\d?))"; // 0 - 255
-
-        pcharPct        = pctEncoded + "*[" + pchar + "]*";
-        qfPct           = pctEncoded + "*[" + qf + "]*";
-
-        protocol        = "^(http(s?):\\/\\/)?";
-        domain          = "(([a-z0-9\\-]+\\.)+([a-z\\-]+[0-9]*))";
-        ipv4            = "((" + e8 + "\\.){3}" + e8 + ")";
-        port            = "(:(\\d+))?";
-
-        path            = "(\\/(" + pcharPct + ")*)";
-        query           = "(\\?(" + qfPct + ")*)?";
-        fragment        = "((#(" + qfPct + ")*)$)?";
-
-        regex = new RegExp(protocol + "(" + domain + "|" + ipv4 + ")" + port +
-                "(" + path + query + fragment + ")*", "im");
-
-        match = input.match(regex);
-
-        if (match == null)
-                return false;
-        else
-                return match[0] == input;
 }

@@ -242,36 +242,6 @@ SettingsCard.prototype.buildColLabelWidget = function
 //////////////////////////////////////////
 // Settings Widget Helpers              //
 //////////////////////////////////////////
-//============== Submit Button ==============//
-/**
- * submitSettings 
- *
- * Callback function from when settings submit
- * button is activated
- */
-function submitButton(response)
-{
-        var input, main, contacts, schedule, emailContent;
-
-        input = response.formInputs;
-
-        if (isEmpty(input))
-                return printError("Error: Unable to retrieve " + 
-                                  "submitted form inputs.");
-
-        main = new MainSettings(input.hourOfDay[0], 1,
-                input.sendToSelf != undefined);
-        contacts = new ContactsSettings("Contacts", input.contactsId[0],
-                input.nameColLabel[0], input.emailColLabel[0]);
-        schedule = new ScheduleSettings("Schedule", input.scheduleId[0],
-                input.dateColLabel[0]);
-        emailContent = new EmailContentSettings("Email Content", 
-                input.emailContentId[0], input.subjectColLabel[0],
-                input.bodyColLabel[0]);
-
-        return sanitizeSettings(main, contacts, schedule, emailContent);
-}
-
 //============== Dropdown Time Generation ==============//
 /**
  * DeliveryTime

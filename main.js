@@ -2,11 +2,14 @@
 //       - No recipients
 //       - Cannot retrieve date of next clinic
 // TODO: Expand to create multiple confirmer cards based on needs?
-// TODO: Add direct links to edit sheets?
-// TODO: Pause confirmer
-// TODO: Delete confirmer
+// TODO: Delete confirmer // if multiple cards
 // TODO: Add feature that allows for consistent sends?
 // TODO: Add feature that allows users to select number of days prior reminder
+
+// TODO: Email error testing
+// TODO: Email error sending date
+// TODO: Sending confirmation email date
+// TODO: Docs
 
 /*
  *      filename:       main.js

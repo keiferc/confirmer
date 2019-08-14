@@ -247,7 +247,7 @@ function sanitizeContacts(raw)
         emailColLabel = cleanInputSetting(raw.emailColLabel, false);
 
         if (id == null)
-                throw "URLs cannot be empty.";
+                throw "Contacts Sheet URL cannot be empty.";
         if (nameColLabel == null || emailColLabel == null)
                 throw "Column Labels cannot be empty.";
 
@@ -273,7 +273,7 @@ function sanitizeSchedule(raw)
         dateColLabel = cleanInputSetting(raw.dateColLabel, false);
 
         if (id == null)
-                throw "URLs cannot be empty.";
+                throw "Schedule Sheet URL cannot be empty.";
         if (dateColLabel == null)
                 throw "Column Labels cannot be empty.";
         
@@ -300,7 +300,7 @@ function sanitizeEmailContent(raw)
 
         
         if (id == null)
-                throw "URLs cannot be empty.";
+                throw "Email Content Sheet URL cannot be empty.";
         if (subjectColLabel == null || bodyColLabel == null)
                 throw "Column Labels cannot be empty.";
         
@@ -433,8 +433,8 @@ function updateSettings(main, contacts, schedule, emailContent, errors)
                 settings.setAll(main, contacts, schedule, emailContent);
                 frequency = main.everyXDays;
                 time = parseHourOfDay(main.hourOfDay);
-                pause = main.pause == "true";
-                calendar.editTimeTrigger(frequency, time);
+                pause = (main.pause == "true");
+                calendar.editTimeTrigger(frequency, time, pause);
                 
                 return updateCard(new SettingsCard().gCard, true);
         }

@@ -50,11 +50,26 @@ StatusCard.prototype.getSections = function ()
 
         sections = [];
 
+        sections.push(this.getMainSection(emailer, calendar));
         sections.push(this.getScheduleSection(emailer, calendar));
         sections.push(this.getEmailSection(emailer, calendar));
         sections.push(this.getRefreshSection());
 
         return sections;
+}
+
+/**
+ * getMainSection
+ *
+ */
+StatusCard.prototype.getMainSection = function 
+(emailer, calendar)
+{
+        var widgets = [];
+
+        widgets.push(this.buildPauseStatusWidget(emailer, calendar));
+
+        return this.buildSection(null, widgets, false);
 }
 
 /**
@@ -115,6 +130,26 @@ StatusCard.prototype.getRefreshSection = function ()
 //////////////////////////////////////////
 // Widget Builders                      //
 //////////////////////////////////////////
+
+StatusCard.prototype.buildPauseStatusWidget = function
+(emailer, calendar)
+{
+        var topLabel, content;
+
+        topLabel = "Confirmer Status";
+        content = "Running";
+
+        try {
+                if (emailer.main.pause == "true")
+                        content = "Paused";
+        } catch(e) {
+                return this.buildTextKeyValWidget(topLabel, null, 
+                        "N/A", false); 
+        }
+
+        return this.buildTextKeyValWidget(topLabel, null, content, false); 
+}
+
 //============== Schedule Section ==============/
 StatusCard.prototype.buildNextEventDateWidget = function
 (emailer, calendar)

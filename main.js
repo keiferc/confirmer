@@ -65,7 +65,7 @@ function main()
         // debug
         // Logger.log(typeof(manager.getMain()));
         // Logger.log(manager.getAll());
-        // Logger.log(manager.getMain());
+        Logger.log(manager.getMain());
         // Logger.log(manager.getContacts());
         // Logger.log(manager.getSchedule());
         // Logger.log(manager.getEmailContent());

@@ -110,7 +110,7 @@ SettingsManager.prototype.getEmailContent = function ()
  */
 SettingsManager.prototype.setDefault = function ()
 {
-        this.setMain("9am", 1, true);
+        this.setMain("9am", 1, true, true);
         this.setContacts("Contacts", null, "e.g. Contact Names", 
                 "e.g. Emails");
         this.setSchedule("Schedule", null, "e.g. Event Date");
@@ -142,13 +142,14 @@ SettingsManager.prototype.setAll = function
  *
  * @param       {String} hourOfDay
  * @param       {Number} everyXDays
+ * @param       {boolean} pause
  * @param       {Boolean} sendToSelf
  */
 SettingsManager.prototype.setMain = function
-(hourOfDay, everyXDays, sendToSelf)
+(hourOfDay, everyXDays, pause, sendToSelf)
 {
         this.getGASO().setProperty("main", 
-                new MainSettings(hourOfDay, everyXDays, sendToSelf));
+                new MainSettings(hourOfDay, everyXDays, pause, sendToSelf));
 }
 
 /**
@@ -205,10 +206,11 @@ SettingsManager.prototype.setEmailContent = function
  * 
  * @param       {String} hourOfDay
  * @param       {Number} everyXDays
+ * @param       {boolean} pause
  * @param       {Boolean} sendToSelf
  * @param       {MainSettings}
  */
-function MainSettings(hourOfDay, everyXDays, sendToSelf)
+function MainSettings(hourOfDay, everyXDays, pause, sendToSelf)
 {
         // Format: [1-12][am|pm]; 9am
         this.hourOfDay = cleanInputSetting(hourOfDay, false); 
@@ -216,6 +218,7 @@ function MainSettings(hourOfDay, everyXDays, sendToSelf)
         // Used for push refresh frequency
         this.everyXDays = cleanInputSetting(everyXDays, false);
 
+        this.pause = cleanInputSetting(pause, false);
         this.sendToSelf = cleanInputSetting(sendToSelf, false);
 }
 

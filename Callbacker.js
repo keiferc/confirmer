@@ -73,8 +73,8 @@ function submitButton(response)
                 return printError("Error: Unable to retrieve " + 
                                 "submitted form inputs.");
 
-        main = new MainSettings(input.hourOfDay[0], 1,
-                input.sendToSelf != undefined);
+        main = new MainSettings(input.hourOfDay[0], 1, 
+                input.pause != undefined, input.sendToSelf != undefined);
         contacts = new ContactsSettings("Contacts", input.contactsId[0],
                 input.nameColLabel[0], input.emailColLabel[0]);
         schedule = new ScheduleSettings("Schedule", input.scheduleId[0],

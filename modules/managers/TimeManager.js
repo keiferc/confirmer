@@ -38,21 +38,21 @@ function TimeManager() {};
  */
 TimeManager.prototype.getNextDate = function ()
 {
-        var schedule, parser, next_dates, current_date, i;
+        var schedule, parser, nextDates, currentDate, i;
         
         schedule = new SettingsManager().getSchedule();
         parser = new GSheetParser(schedule.scheduleId);
-        next_dates = parser.getColumn(schedule.dateColLabel);
-        current_date = new Date();
+        nextDates = parser.getColumn(schedule.dateColLabel);
+        currentDate = new Date();
 
-        for (i in next_dates) {
-                if (next_dates[i] >= current_date)
-                        return next_dates[i];
+        for (i in nextDates) {
+                if (nextDates[i] >= currentDate)
+                        return nextDates[i];
         }
 
         throw "Error: Unable to retrieve next scheduled date. Please check" + 
               "that there is an event scheduled after today's date: " + 
-              this.formatDate(current_Date) + ".";
+              this.formatDate(currentDate) + ".";
 }
 
 TimeManager.prototype.getSendingDate = function ()

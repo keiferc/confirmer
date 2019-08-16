@@ -27,16 +27,8 @@ function TimeManager() {};
 //////////////////////////////////////////
 // Getters                              //
 //////////////////////////////////////////
-//TODO
-// Getters should retrieve from EmailStatusSettings
-/**
- * getNextDate
- *
- * Retrieves next scheduled date from sheet
- *
- * @returns     {Date}
- */
-TimeManager.prototype.getNextDate = function ()
+//Used for setting emailStatus
+TimeManager.prototype.setNextDate = function ()
 {
         var schedule, parser, nextDates, currentDate, i;
         
@@ -50,19 +42,56 @@ TimeManager.prototype.getNextDate = function ()
                         return nextDates[i];
         }
 
-        throw "Error: Unable to retrieve next scheduled date. Please check" + 
-              "that there is an event scheduled after today's date: " + 
-              this.formatDate(currentDate) + ".";
+        return null;
 }
 
+//TODO
+// Getters should retrieve from EmailStatusSettings
+/**
+ * getNextDate
+ *
+ * Retrieves next scheduled date from sheet
+ *
+ * @returns     {Date}
+ */
+TimeManager.prototype.getNextDate = function ()
+{
+        // var schedule, parser, nextDates, currentDate, i;
+        
+        // schedule = new SettingsManager().getSchedule();
+        // parser = new GSheetParser(schedule.scheduleId);
+        // nextDates = parser.getColumn(schedule.dateColLabel);
+        // currentDate = new Date();
+
+        // for (i in nextDates) {
+        //         if (nextDates[i] >= currentDate)
+        //                 return nextDates[i];
+        // }
+
+        var emailStatus = new SettingsManager().getEmailStatus();
+
+        if (!isEmpty(emailStatus.nextDate))
+                return emailStatus.nextDate;
+
+        throw "Unable to retrieve next scheduled date. Please check " + 
+              "that there is an event scheduled after today's date: " + 
+              this.formatDate(new Date()) + ".";
+}
+
+// TODO : test return type == date
 TimeManager.prototype.getSendingDate = function ()
 {
-        return new Date(new Date().setDate(this.getNextDate().getDate() - 3));
+        return new Date(new Date().setDate(
+                new SettingsManager().getEmailStatus().sendingDate.getDate()
+        ));
 }
 
+// TODO: test return type == date
 TimeManager.prototype.getWarningDate = function ()
 {
-        return new Date(new Date().setDate(this.getNextDate().getDate() - 7));
+        return new Date(new Date().setDate(
+                new SettingsManager().getEmailStatus().warningDate.getDate()
+        ));
 }
 
 //////////////////////////////////////////
@@ -70,9 +99,13 @@ TimeManager.prototype.getWarningDate = function ()
 //////////////////////////////////////////
 // TODO: Figure out how users should customize this
 TimeManager.prototype.setDate = function
-(days)
+(nextDate, days)
 {
-        return new Date(new Date().setDate(this.getNextDate().getDate() - days));
+        if (isEmpty(nextDate))
+                return null;
+
+        return new Date(new Date().setDate(nextDate.getDate() - 
+                days));
 }
 
 //////////////////////////////////////////

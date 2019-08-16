@@ -6,6 +6,7 @@
 // TODO: Add feature that allows for consistent sends?
 // TODO: Add feature that allows users to select number of days prior reminder
 
+// TODO: Test emailStatus changes
 // TODO: Send warning when number of participants < given
 // TODO: Email error testing
 // TODO: Email error sending date
@@ -61,9 +62,15 @@ function main()
         settingsManager = new SettingsManager();
 
         // debug -- force reset to default 
-        // manager.setDefault();
-
-        settings = settingsManager.getAll();
+        // settingsManager.setDefault();
+        try {
+                settings = settingsManager.getAll();
+        } catch(e) {
+                if (JSON.stringify(settings) == "{}") 
+                        settingsManager.setDefault();
+                else
+                        throw e;
+        }
 
         //debug -- reset to first init
         // if (JSON.stringify(settings) != "{}") {
@@ -71,15 +78,10 @@ function main()
         //         settings = manager.getAll();
         // }
 
-        // Initializes default settings for first install
-        if (JSON.stringify(settings) == "{}") {
-                settingsManager.setDefault();
-        }
-
         // debug
         // Logger.log(typeof(settingsManager.getMain()));
-        // Logger.log(settingsManager.getAll());
-        Logger.log(settingsManager.getMain());
+        Logger.log(settingsManager.getAll());
+        // Logger.log(settingsManager.getMain());
         // Logger.log(settingsManager.getContacts());
         // Logger.log(settingsManager.getSchedule());
         // Logger.log(settingsManager.getEmailContent());

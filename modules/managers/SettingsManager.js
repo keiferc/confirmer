@@ -133,7 +133,6 @@ SettingsManager.prototype.setDefault = function ()
 /**
  * setAll 
  *
- * @param       {EmailStatusSettings} emailStatus
  * @param       {MainSettings} main
  * @param       {ContactsSettings} contacts
  * @param       {ScheduleSettings} schedule
@@ -143,7 +142,6 @@ SettingsManager.prototype.setAll = function
 (main, contacts, schedule, emailContent)
 {
         this.getGASO().setProperties({
-                emailStatus: emailStatus,
                 main: main,
                 contacts: contacts,
                 schedule: schedule,
@@ -316,25 +314,20 @@ function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
 // Helpers                              //
 //////////////////////////////////////////
 // TODO
-SettingsManager.prototype.updateEmailStatus = function
-(rawEmailStatus, schedule)
+SettingsManager.prototype.updateEmailStatus = function 
+(sendingBuffer, warningBuffer)
 {
         var calendar, nextDate, sendingDate, warningDate, sentWarning,
                 confirmed;
 
         calendar = new TimeManager();
-        sentWarning = rawEmailStatus.sentWarning;
-        confirmed = rawEmailStatus.confirmed;
+        sentWarning = this.getEmailStatus().sentWarning;
+        confirmed = this.getEmailStatus().confirmed;
+        nextDate = calendar.setNextDate();
 
-        try {
-                nextDate = calendar.setNextDate();
-        } catch (e) {
-                // debug
-                throw e;
-        }
+        sendingDate = calendar.setDate(nextDate, sendingBuffer);
+        warningDate = calendar.setDate(nextDate, warningBuffer);
 
-        sendingDate = calendar.setDate(3);
-        warningDate = calendar.setDate(7);
-
-        // new settings manager?
+        this.setEmailStatus(nextDate, sendingDate, warningDate, 
+                sentWarning, confirmed);
 }

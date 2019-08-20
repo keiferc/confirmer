@@ -15,6 +15,7 @@
 // TODO: Testing confirmation email sending time
 // TODO: Docs
 // TODO: Optimization
+//      Note: changes to nextDate occur on time trigger
 // TODO: finish EmailStatus -- see callbacker
 //       submitButton --> try { emailStatus.nextDate = nextDate from schedule }
 //                      fail -->  
@@ -125,6 +126,46 @@ function confirm()
                 settings.getSchedule(), settings.getEmailContent());
         today = new Date();
 
-        // TODO        
-        emailer.email();
+        // TODO      
+        //update email status
+        // if ready to send && recipientsReady
+                emailer.email();
+                // set confirmed = true (change to false on update)
+                // set sentWarning = false
+}
+
+function readyToSend(settings, calendar, emailer, today)
+{
+        var status, nextDate;
+
+        status = settings.getEmailStatus();
+
+        if (!calendar.nextDateExists() && calendar.sent(status.sentWarning))
+                return false;
+        
+        try {
+                nextDate = calendar.getNextDate();
+        } catch(e) {
+                status.sentWarning = true;
+                emailer.emailError("from readyToSend:" + e);
+                return false;
+        }
+
+        if (calendar.sent(status.confirmed))
+                return false;
+        
+        if (today.getTime() == nextDate.getTime())
+                return true;
+
+        // debug
+        Logger.log("readyToSend");
+        Logger.log("typeof date:" + typeof(nextDate));
+        Logger.log("date: " + calendar.formatDate(nextDate));
+        
+        return false;
+}
+
+function dateReady(calendar, status)
+{
+
 }

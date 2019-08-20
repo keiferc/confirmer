@@ -164,9 +164,9 @@ Emailer.prototype.getRecipients = function
 
         if (isEmpty(recipients))
                 throw "Error: No persons scheduled for the next event. " + 
-                       "Please check that there is someone scheduled for " +
-                       "the event on " + new TimeManager().formatDate(date) +
-                       ".";
+                      "Please check that there is someone scheduled for " +
+                      "the event on " + new TimeManager().formatDate(date) +
+                      ".";
         
         return recipients;
 }

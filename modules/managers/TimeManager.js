@@ -56,22 +56,10 @@ TimeManager.prototype.setNextDate = function ()
  */
 TimeManager.prototype.getNextDate = function ()
 {
-        // var schedule, parser, nextDates, currentDate, i;
-        
-        // schedule = new SettingsManager().getSchedule();
-        // parser = new GSheetParser(schedule.scheduleId);
-        // nextDates = parser.getColumn(schedule.dateColLabel);
-        // currentDate = new Date();
-
-        // for (i in nextDates) {
-        //         if (nextDates[i] >= currentDate)
-        //                 return nextDates[i];
-        // }
-
         var emailStatus = new SettingsManager().getEmailStatus();
 
         if (!isEmpty(emailStatus.nextDate))
-                return emailStatus.nextDate;
+                return new Date(decodeURIComponent(emailStatus.nextDate));
 
         throw "Unable to retrieve next scheduled date. Please check " + 
               "that there is an event scheduled after today's date: " + 
@@ -111,22 +99,48 @@ TimeManager.prototype.setDate = function
 //////////////////////////////////////////
 // Helpers                              //
 //////////////////////////////////////////
-
-// TODO
-TimeManager.prototype.checkDate = function 
-(emailer)
+TimeManager.prototype.nextDateExists = function ()
 {
-        var today, nextDate, sendingDate, warningDate;
-        today = new Date();
-
         try {
-                nextDate = this.getNextDate();
-        } catch(e) {
-                emailer.emailError(e);
+                this.getNextDate();
+        } catch (e) {
+                return false;
         }
 
-        sendingDate = this.getSendingDate();
-        warningDate = this.getWarningDate();
+        return true;
+}
+
+// TODO
+// TimeManager.prototype.checkDate = function 
+// (emailer)
+// {
+//         var emailStatus, today, nextDate, sendingDate, warningDate;
+
+//         emailStatus = new SettingsManager().getEmailStatus();
+//         today = new Date();
+
+//         try {
+//                 nextDate = this.getNextDate();
+//         } catch(e) {
+//                 if (!this.sentWarning(emailStatus.sentWarning)) {
+//                         emailStatus.sentWarning = true;
+//                         emailer.emailError(e);
+//                 }
+//         }
+
+//         // sendingDate = this.getSendingDate();
+//         // warningDate = this.getWarningDate();
+// }
+
+TimeManager.prototype.sent = function 
+(warning)
+{
+        if (isEmpty(warning) || warning === "false")
+                return false;
+        if (warning === "true")
+                return true;
+        
+        throw "Error: Unable to parse Email Status warning.";
 }
 
 /**

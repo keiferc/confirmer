@@ -127,8 +127,10 @@ function confirm()
                 settings.getSchedule(), settings.getEmailContent());
         today = new Date();
 
-        // TODO: finish recipients check     
+        // TODO: finish recipients check
+        // TODO: delete warning buffer
         settings.updateEmailStatus(3, 7);
+
         if (readyToSend(status, calendar, emailer, today) &&
             recipientsReady()) {
                 emailer.email();
@@ -139,30 +141,42 @@ function confirm()
 
 function readyToSend(status, calendar, emailer, today)
 {
-        var sendingDate;
+        var sendingDate, error;
 
-        if (!calendar.nextDateExists() && calendar.sent(status.sentWarning))
-                return false;
-        
+        error = "Unable to retrieve next scheduled date. Please check " + 
+                "that there is an event scheduled after today's date: " + 
+                this.formatDate(new Date()) + ". ";
+
         try {
                 sendingDate = calendar.getSendingDate();
         } catch(e) {
-                status.sentWarning = true;
-                emailer.emailError(e);
+                if (!calendar.sent(status.sentWarning)) {
+                        emailer.emailError(error + e);
+                        status.sentWarning = true;
+                }
                 return false;
         }
 
         if (calendar.sent(status.confirmed))
                 return false;
-        
         if (calendar.sameDay(today, sendingDate) || today > sendingDate)
                 return true;
         
         return false;
 }
 
-function recipientsReady()
+// TOTEST
+function recipientsReady(status, calendar, emailer)
 {
-        // TODO
+        try {
+                emailer.getRecipients(calendar.getNextDate())
+        } catch(e) {
+                if (!calendar.sent(status.sentWarning)) {
+                        emailer.emailError(error + e);
+                        status.sentWarning = true;
+                }
+                return false; 
+        }
+        
         return true;
 }

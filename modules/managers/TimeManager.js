@@ -38,7 +38,9 @@ TimeManager.prototype.setNextDate = function ()
         currentDate = new Date();
 
         for (i in nextDates) {
-                if (nextDates[i] >= currentDate)
+                if ((typeof(nextDates[i]) == typeof(currentDate)) &&
+                    ((this.sameDay(nextDates[i], currentDate)) || 
+                    (nextDates[i] > currentDate)))
                         return nextDates[i];
         }
 
@@ -66,19 +68,17 @@ TimeManager.prototype.getNextDate = function ()
               this.formatDate(new Date()) + ".";
 }
 
-// TODO : test return type == date
 TimeManager.prototype.getSendingDate = function ()
 {
-        return new Date(new Date().setDate(
-                new SettingsManager().getEmailStatus().sendingDate.getDate()
+        return new Date(decodeURIComponent(
+                new SettingsManager().getEmailStatus().sendingDate
         ));
 }
 
-// TODO: test return type == date
 TimeManager.prototype.getWarningDate = function ()
 {
-        return new Date(new Date().setDate(
-                new SettingsManager().getEmailStatus().warningDate.getDate()
+        return new Date(decodeURIComponent(
+                new SettingsManager().getEmailStatus().warningDate
         ));
 }
 
@@ -99,6 +99,15 @@ TimeManager.prototype.setDate = function
 //////////////////////////////////////////
 // Helpers                              //
 //////////////////////////////////////////
+TimeManager.prototype.sameDay = function
+(date1, date2)
+{
+        return date1.getUTCDate() === date2.getUTCDate() &&
+                date1.getUTCDay() === date2.getUTCDay() &&
+                date1.getUTCMonth() === date2.getUTCMonth() &&
+                date1.getUTCFullYear() === date2.getUTCFullYear();
+}
+
 TimeManager.prototype.nextDateExists = function ()
 {
         try {

@@ -136,7 +136,10 @@ function confirm()
 
 function readyToSend(settings, calendar, emailer, today)
 {
-        var status, nextDate;
+        var status, sendingDate;
+        
+        // debug: TODELETE
+        today = new Date();
 
         status = settings.getEmailStatus();
 
@@ -144,7 +147,7 @@ function readyToSend(settings, calendar, emailer, today)
                 return false;
         
         try {
-                nextDate = calendar.getNextDate();
+                sendingDate = calendar.getSendingDate();
         } catch(e) {
                 status.sentWarning = true;
                 emailer.emailError("from readyToSend:" + e);
@@ -154,18 +157,8 @@ function readyToSend(settings, calendar, emailer, today)
         if (calendar.sent(status.confirmed))
                 return false;
         
-        if (today.getTime() == nextDate.getTime())
+        if (calendar.sameDay(today, sendingDate) || today > sendingDate)
                 return true;
-
-        // debug
-        Logger.log("readyToSend");
-        Logger.log("typeof date:" + typeof(nextDate));
-        Logger.log("date: " + calendar.formatDate(nextDate));
         
         return false;
-}
-
-function dateReady(calendar, status)
-{
-
 }

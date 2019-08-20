@@ -313,7 +313,7 @@ function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
 //////////////////////////////////////////
 // Helpers                              //
 //////////////////////////////////////////
-// TODO
+// TODO: Test
 SettingsManager.prototype.updateEmailStatus = function 
 (sendingBuffer, warningBuffer)
 {

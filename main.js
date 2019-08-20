@@ -118,30 +118,28 @@ function buildDeck()
  */
 function confirm()
 {
-        var settings, calendar, emailer, today, nextDate;
+        var settings, status, calendar, emailer, today, nextDate;
 
         settings = new SettingsManager();
+        status = settings.getEmailStatus();
         calendar = new TimeManager();
         emailer = new Emailer(settings.getMain(), settings.getContacts(),
                 settings.getSchedule(), settings.getEmailContent());
         today = new Date();
 
-        // TODO      
-        //update email status
-        // if ready to send && recipientsReady
+        // TODO: finish recipients check     
+        settings.updateEmailStatus(3, 7);
+        if (readyToSend(status, calendar, emailer, today) &&
+            recipientsReady()) {
                 emailer.email();
-                // set confirmed = true (change to false on update)
-                // set sentWarning = false
+                status.confirmed = true;
+                status.sentWarning = false;
+            }
 }
 
-function readyToSend(settings, calendar, emailer, today)
+function readyToSend(status, calendar, emailer, today)
 {
-        var status, sendingDate;
-        
-        // debug: TODELETE
-        today = new Date();
-
-        status = settings.getEmailStatus();
+        var sendingDate;
 
         if (!calendar.nextDateExists() && calendar.sent(status.sentWarning))
                 return false;
@@ -150,7 +148,7 @@ function readyToSend(settings, calendar, emailer, today)
                 sendingDate = calendar.getSendingDate();
         } catch(e) {
                 status.sentWarning = true;
-                emailer.emailError("from readyToSend:" + e);
+                emailer.emailError(e);
                 return false;
         }
 
@@ -161,4 +159,10 @@ function readyToSend(settings, calendar, emailer, today)
                 return true;
         
         return false;
+}
+
+function recipientsReady()
+{
+        // TODO
+        return true;
 }

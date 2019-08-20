@@ -317,13 +317,22 @@ function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
 SettingsManager.prototype.updateEmailStatus = function 
 (sendingBuffer, warningBuffer)
 {
-        var calendar, nextDate, sendingDate, warningDate, sentWarning,
-                confirmed;
+        var calendar, status, currDate, nextDate, sendingDate, warningDate, 
+                sentWarning, confirmed;
 
         calendar = new TimeManager();
-        sentWarning = this.getEmailStatus().sentWarning;
-        confirmed = this.getEmailStatus().confirmed;
+        status = this.getEmailStatus();
+        sentWarning = status.sentWarning;
+        confirmed = status.confirmed;
         nextDate = calendar.setNextDate();
+
+        if (!isEmpty(status.nextDate)) {
+                currDate = calendar.getNextDate();
+
+                if (confirmed == "true" && 
+                    !calendar.sameDay(nextDate, currDate))
+                        confirmed = false;
+        }
 
         sendingDate = calendar.setDate(nextDate, sendingBuffer);
         warningDate = calendar.setDate(nextDate, warningBuffer);

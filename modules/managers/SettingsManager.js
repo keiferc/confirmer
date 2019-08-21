@@ -313,7 +313,6 @@ function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
 //////////////////////////////////////////
 // Helpers                              //
 //////////////////////////////////////////
-// TODO: Test
 SettingsManager.prototype.updateEmailStatus = function 
 (sendingBuffer, warningBuffer)
 {
@@ -329,8 +328,9 @@ SettingsManager.prototype.updateEmailStatus = function
         if (!isEmpty(status.nextDate)) {
                 currDate = calendar.getNextDate();
 
-                if (confirmed == "true" && 
-                    !calendar.sameDay(nextDate, currDate))
+                if (confirmed === "true" &&
+                    ((isEmpty(nextDate) || isEmpty(currDate)) ||
+                    (!calendar.sameDay(nextDate, currDate))))
                         confirmed = false;
         }
 
@@ -341,22 +341,23 @@ SettingsManager.prototype.updateEmailStatus = function
                 sentWarning, confirmed);
 }
 
-SettingsManager.prototype.setConfirmed = function
-(status, bool)
+SettingsManager.prototype.setSentStatus = function
+(sentWarning, sentConfirmed)
 {
+        var status, warning, confirmed;
+
+        status = this.getEmailStatus();
+        warning = sentWarning;
+        confirmed = sentConfirmed;
+
+        if (isEmpty(warning))
+                warning = status.sentWarning;
+        if (isEmpty(confirmed))
+                confirmed = status.confirmed;
+
         this.setEmailStatus(
                 decodeURIComponent(status.nextDate), 
                 decodeURIComponent(status.sendingDate),
                 decodeURIComponent(status.warningDate), 
-                status.sentWarning, bool);
-}
-
-SettingsManager.prototype.setSentWarning = function
-(status, bool)
-{
-        this.setEmailStatus(                
-                decodeURIComponent(status.nextDate), 
-                decodeURIComponent(status.sendingDate),
-                decodeURIComponent(status.warningDate),
-                bool, status.confirmed);
+                warning, confirmed);
 }

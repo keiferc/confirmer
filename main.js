@@ -1,28 +1,20 @@
-// TODO: If error, send email to self containing error message
-//       - No recipients
-//       - Cannot retrieve date of next clinic
 // TODO: Expand to create multiple confirmer cards based on needs?
-// TODO: Delete confirmer // if multiple cards
-// TODO: Add feature that allows for consistent sends?
+//      - Delete confirmer // if multiple cards
+// TODO: Add feature that allows for consistent sends? e.g. weekly
 // TODO: Add feature that allows users to select number of days prior reminder
-
-// TODO: Test emailStatus changes
 // TODO: Send warning when number of participants < given
-// TODO: Email error testing
-// TODO: Email error sending date
-// TODO: Sending confirmation email date
+
+// TODO: Find solution to setting client-side timezone
+//      - Currently sees Google's servers as the client. May need user to explicitly
+//        set timezone
 // TODO: Testing confirmation email sending date
 // TODO: Testing confirmation email sending time
 // TODO: Docs
 // TODO: Optimization
 //      Note: changes to nextDate occur on time trigger
-// TODO: finish EmailStatus -- see callbacker
-//       submitButton --> try { emailStatus.nextDate = nextDate from schedule }
-//                      fail -->  
-//                   success --> 
-//                             >
-//       which module should manage EmailStatus
-//       optimization strategies
+// TODO: Implement suggested search - trie
+// TODO: Auto-sort sheets for user?
+// TODO: Parse retrieved recipients for duplicates?
 
 /*
  *      filename:       main.js
@@ -123,15 +115,15 @@ function confirm()
         today = getToday();
 
         // TODO: delete warning buffer
-        // TODO: test "confirmed" reset with new date
-        // TODO: test function "confirm"
         settings.updateEmailStatus(3, 7);
 
-        if (readyToSend(settings, status, calendar, emailer, today) &&
-            recipientsReady(settings, status, calendar, emailer)) {
-                emailer.email();
-                settings.setConfirmed(status, true);
-                settings.setSentWarning(settings.getEmailStatus(), false);
+        if (readyToSend(settings, status, calendar, emailer, today)) {
+
+                // Second conditional in block prevents double error messaging
+                if (recipientsReady(settings, status, calendar, emailer)) {
+                        emailer.email();
+                        settings.setSentStatus(false, true);
+                }
         }
 }
 
@@ -144,7 +136,7 @@ function readyToSend(settings, status, calendar, emailer, today)
         } catch(e) {
                 if (!calendar.sent(status.sentWarning)) {
                         emailer.emailError(e);
-                        settings.setSentWarning(status, true);
+                        settings.setSentStatus(true, null);
                 }
                 return false;
         }
@@ -160,11 +152,11 @@ function readyToSend(settings, status, calendar, emailer, today)
 function recipientsReady(settings, status, calendar, emailer)
 {
         try {
-                emailer.getScheduled(calendar.getNextDate())
+                emailer.getRecipients(calendar.getNextDate())
         } catch(e) {
                 if (!calendar.sent(status.sentWarning)) {
                         emailer.emailError(e);
-                        settings.setSentWarning(status, true);
+                        settings.setSentStatus(true, null);
                 }
                 return false; 
         }

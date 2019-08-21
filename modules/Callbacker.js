@@ -72,11 +72,6 @@ function submitButton(response)
         if (isEmpty(input))
                 return printError("Error: Unable to retrieve " + 
                                 "submitted form inputs.");
-        
-        // debug
-        Logger.log("response: " + JSON.stringify(input));
-        // Note: change input.sentWarning etc. to input.sentWarning[0]
-        // after implementing 
 
         main = new MainSettings(input.hourOfDay[0], 1, 
                 input.pause != undefined, input.sendToSelf != undefined);

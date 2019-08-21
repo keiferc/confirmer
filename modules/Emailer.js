@@ -158,7 +158,8 @@ Emailer.prototype.getRecipients = function
         recipients = this.getRecipientsHelper(contacts, scheduled, 
                 settings.sendToSelf == "true");
 
-        if (isEmpty(recipients))
+        if (isEmpty(recipients) || 
+            recipients === Session.getEffectiveUser().toString())
                 throw "No persons scheduled for the next event. " + 
                       "Please check that there is someone scheduled for " +
                       "the event on " + new TimeManager().formatDate(date) +
@@ -185,8 +186,10 @@ Emailer.prototype.getRecipientsHelper = function
 
         emails = "";
 
-        for (i = 0; i < scheduled.length; i++)
-                emails += contacts[scheduled[i]] + ",";
+        for (i = 0; i < scheduled.length; i++) {
+                if (!isEmpty(contacts[scheduled[i]]))
+                        emails += contacts[scheduled[i]] + ",";
+        }
 
         if (sendToSelf)
                 emails += Session.getEffectiveUser();

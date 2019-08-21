@@ -122,8 +122,9 @@ function confirm()
         emailer = new Emailer(settings);
         today = getToday();
 
-        // TODO: finish recipients check
         // TODO: delete warning buffer
+        // TODO: test "confirmed" reset with new date
+        // TODO: test function "confirm"
         settings.updateEmailStatus(3, 7);
 
         if (readyToSend(settings, status, calendar, emailer, today) &&
@@ -156,7 +157,6 @@ function readyToSend(settings, status, calendar, emailer, today)
         return false;
 }
 
-// TOTEST
 function recipientsReady(settings, status, calendar, emailer)
 {
         try {

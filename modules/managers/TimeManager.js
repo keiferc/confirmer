@@ -35,7 +35,7 @@ TimeManager.prototype.setNextDate = function ()
         schedule = new SettingsManager().getSchedule();
         parser = new GSheetParser(schedule.scheduleId);
         nextDates = parser.getColumn(schedule.dateColLabel);
-        currentDate = new Date();
+        currentDate = getToday();
 
         for (i in nextDates) {
                 if ((typeof(nextDates[i]) == typeof(currentDate)) &&
@@ -65,20 +65,29 @@ TimeManager.prototype.getNextDate = function ()
 
         throw "Unable to retrieve next scheduled date. Please check " + 
               "that there is an event scheduled after today's date: " + 
-              this.formatDate(new Date()) + ".";
+              this.formatDate(getToday()) + ".";
 }
 
+//TODO: Abstract it ^
 TimeManager.prototype.getSendingDate = function ()
 {
-        return new Date(decodeURIComponent(
-                new SettingsManager().getEmailStatus().sendingDate
-        ));
+        var rawDate = new SettingsManager().getEmailStatus().sendingDate;
+
+        if (!isEmpty(rawDate))
+                return new Date(decodeURIComponent(rawDate));
+
+        throw "Unable to retrieve next scheduled date. Please check " + 
+              "that there is an event scheduled after today's date: " + 
+              this.formatDate(getToday()) + ".";
 }
 
+//TODELETE
 TimeManager.prototype.getWarningDate = function ()
 {
+        var rawDate = new SettingsManager().getEmailStatus().warningDate;
+
         return new Date(decodeURIComponent(
-                new SettingsManager().getEmailStatus().warningDate
+                rawDate
         ));
 }
 
@@ -119,28 +128,6 @@ TimeManager.prototype.nextDateExists = function ()
         return true;
 }
 
-// TODO
-// TimeManager.prototype.checkDate = function 
-// (emailer)
-// {
-//         var emailStatus, today, nextDate, sendingDate, warningDate;
-
-//         emailStatus = new SettingsManager().getEmailStatus();
-//         today = new Date();
-
-//         try {
-//                 nextDate = this.getNextDate();
-//         } catch(e) {
-//                 if (!this.sentWarning(emailStatus.sentWarning)) {
-//                         emailStatus.sentWarning = true;
-//                         emailer.emailError(e);
-//                 }
-//         }
-
-//         // sendingDate = this.getSendingDate();
-//         // warningDate = this.getWarningDate();
-// }
-
 TimeManager.prototype.sent = function 
 (warning)
 {
@@ -162,11 +149,13 @@ TimeManager.prototype.sent = function
 TimeManager.prototype.formatDate = function 
 (date)
 {
+        //TODO: customize time zone
         var date_format = {
                 weekday: "short",
                 year: "numeric",
                 month: "short",
-                day: "numeric"
+                day: "numeric",
+                timeZone: "America/New_York"
         };
 
         return date.toLocaleDateString("en-US", date_format);
@@ -190,8 +179,8 @@ TimeManager.prototype.startTimeTrigger = function
         ScriptApp.newTrigger("confirm")
                 .timeBased()
                 //.everyDays(frequency)
-                .everyHours(frequency) // debug
-                //.everyMinutes(frequency) // debug
+                //.everyHours(frequency) // debug
+                .everyMinutes(frequency) // debug
                 //.atHour(time)
                 .inTimezone("America/New_York")
                 .create();

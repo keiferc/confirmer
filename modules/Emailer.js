@@ -42,10 +42,12 @@
  * @returns     {Emailer}: Object instance for handling emailing processes
  */
 function Emailer(main, contacts, schedule, emailContent) {
-        this.main = main;
-        this.contacts = contacts;
-        this.schedule = schedule;
-        this.emailContent = emailContent;
+        var parser = new GasoParser();
+
+        this.main = parser.toJSO(main);
+        this.contacts = parser.toJSO(contacts);
+        this.schedule = parser.toJSO(schedule);
+        this.emailContent = parser.toJSO(emailContent);
 }
 
 //////////////////////////////////////////
@@ -65,8 +67,6 @@ Emailer.prototype.email = function ()
         try {
                 date = calendar.getNextDate();
         } catch(e) {
-                // TODO: Nothing scheduled
-                // debug
                 this.emailError("Date retrieval error. " + e);
                 throw e;
         }
@@ -74,8 +74,6 @@ Emailer.prototype.email = function ()
         try {
                 recipients = this.getRecipients(date);
         } catch(e) {
-                // TODO: No one scheduled. Add a checker
-                // debug
                 this.emailError("Recipient retrieval error. " + e);
                 throw e;
         }
@@ -163,7 +161,7 @@ Emailer.prototype.getRecipients = function
                 settings.sendToSelf == "true");
 
         if (isEmpty(recipients))
-                throw "Error: No persons scheduled for the next event. " + 
+                throw "No persons scheduled for the next event. " + 
                       "Please check that there is someone scheduled for " +
                       "the event on " + new TimeManager().formatDate(date) +
                       ".";
@@ -243,7 +241,8 @@ Emailer.prototype.getScheduled = function
                 .getRow(date);
 
         if (isEmpty(scheduled))
-                throw "Error: No persons scheduled for the next event.";
+                throw "No persons scheduled for the next event. " +
+                      "Please check the schedule for participants.";
 
         return scheduled;
 }
@@ -263,7 +262,7 @@ Emailer.prototype.emailError = function
 {
         MailApp.sendEmail({
                 bcc: Session.getEffectiveUser(),
-                subject: "[Confirmer Add-on] Email Sending Error",
+                subject: "[Confirmer Add-on] Heads Up!",
                 htmlBody: message
         });
 }

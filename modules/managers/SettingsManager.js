@@ -340,3 +340,23 @@ SettingsManager.prototype.updateEmailStatus = function
         this.setEmailStatus(nextDate, sendingDate, warningDate, 
                 sentWarning, confirmed);
 }
+
+SettingsManager.prototype.setConfirmed = function
+(status, bool)
+{
+        this.setEmailStatus(
+                decodeURIComponent(status.nextDate), 
+                decodeURIComponent(status.sendingDate),
+                decodeURIComponent(status.warningDate), 
+                status.sentWarning, bool);
+}
+
+SettingsManager.prototype.setSentWarning = function
+(status, bool)
+{
+        this.setEmailStatus(                
+                decodeURIComponent(status.nextDate), 
+                decodeURIComponent(status.sendingDate),
+                decodeURIComponent(status.warningDate),
+                bool, status.confirmed);
+}

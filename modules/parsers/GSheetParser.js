@@ -36,7 +36,8 @@ function GSheetParser(ssId)
                 throw "Error: Unable to open the given Google Sheet \"" +
                       GSHEET_URL_FORMAT + ssId + "\". Please check if " +
                       "the given URL is spelled correctly and if you " +
-                      "have permission to access the given Google Sheet.";
+                      "have permission to access the given Google Sheet. " +
+                      "Google's Error Message: " + e;
         }
 }
 

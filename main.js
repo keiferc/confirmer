@@ -64,6 +64,7 @@ function main()
 
         // debug -- force reset to default 
         // settingsManager.setDefault();
+
         try {
                 settings = settingsManager.getAll();
         } catch(e) {
@@ -118,41 +119,37 @@ function buildDeck()
  */
 function confirm()
 {
-        var settings, status, calendar, emailer, today, nextDate;
+        var settings, status, calendar, emailer, today;
 
         settings = new SettingsManager();
         status = settings.getEmailStatus();
         calendar = new TimeManager();
         emailer = new Emailer(settings.getMain(), settings.getContacts(),
                 settings.getSchedule(), settings.getEmailContent());
-        today = new Date();
+        today = getToday();
 
         // TODO: finish recipients check
         // TODO: delete warning buffer
         settings.updateEmailStatus(3, 7);
 
-        if (readyToSend(status, calendar, emailer, today) &&
-            recipientsReady()) {
+        if (readyToSend(settings, status, calendar, emailer, today) &&
+            recipientsReady(settings, status, calendar, emailer)) {
                 emailer.email();
-                status.confirmed = true;
-                status.sentWarning = false;
-            }
+                settings.setConfirmed(status, true);
+                settings.setSentWarning(status, false);
+        }
 }
 
-function readyToSend(status, calendar, emailer, today)
+function readyToSend(settings, status, calendar, emailer, today)
 {
-        var sendingDate, error;
-
-        error = "Unable to retrieve next scheduled date. Please check " + 
-                "that there is an event scheduled after today's date: " + 
-                this.formatDate(new Date()) + ". ";
+        var sendingDate;
 
         try {
                 sendingDate = calendar.getSendingDate();
         } catch(e) {
                 if (!calendar.sent(status.sentWarning)) {
-                        emailer.emailError(error + e);
-                        status.sentWarning = true;
+                        emailer.emailError(e);
+                        settings.setSentWarning(status, true);
                 }
                 return false;
         }
@@ -166,14 +163,14 @@ function readyToSend(status, calendar, emailer, today)
 }
 
 // TOTEST
-function recipientsReady(status, calendar, emailer)
+function recipientsReady(settings, status, calendar, emailer)
 {
         try {
-                emailer.getRecipients(calendar.getNextDate())
+                emailer.getScheduled(calendar.getNextDate())
         } catch(e) {
                 if (!calendar.sent(status.sentWarning)) {
-                        emailer.emailError(error + e);
-                        status.sentWarning = true;
+                        emailer.emailError(e);
+                        settings.setSentWarning(status, true);
                 }
                 return false; 
         }

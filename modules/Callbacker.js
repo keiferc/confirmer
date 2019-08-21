@@ -541,3 +541,15 @@ function parseHourOfDay(hourOfDay)
 
         throw message;
 }
+
+function getToday() {
+        var date, offset, hours;
+
+        date = new Date();
+        offset = date.getTimezoneOffset() / 60;
+        hours = date.getHours();
+
+        date.setHours(hours - offset);
+
+        return date;
+}

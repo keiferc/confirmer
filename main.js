@@ -6,18 +6,19 @@
 //      - Send warning when number of participants < given
 //      - Implement suggested searches for column names - trie?
 //      - Auto-sort sheets for users? - Too much removal of autonomy?
+//      - Users manually set timezone
+//              - JS relies on client's timezone. Add-on sees Google as the
+//                client
 
 // Battle Plan ---------------
-// TODO: Find solution to setting client-side timezone
-//      - Currently sees Google's servers as the client. May need user to explicitly
-//        set timezone
-// TODO: Testing confirmation email sending time [IN PROGRESS]
+// TODO [IN PROGRESS]: Testing confirmation email sending time
 //      -  note: based on time trigger
-// TODO: Docs [IN PROGRESS]
-// TODO: Optimization
+// TODO [IN PROGRESS]: Docs
+// TODO [IN PROGRESS]: Optimization
 //      Note: changes to nextDate occur on time trigger
 // TODO: Minimize permissions
 // TODO: README
+// TODO: Deploy
 
 /*
  *      filename:       main.js

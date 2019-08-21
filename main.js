@@ -14,7 +14,6 @@
 //      Note: changes to nextDate occur on time trigger
 // TODO: Implement suggested search - trie
 // TODO: Auto-sort sheets for user?
-// TODO: Parse retrieved recipients for duplicates?
 
 /*
  *      filename:       main.js
@@ -106,7 +105,7 @@ function buildDeck()
  */
 function confirm()
 {
-        var settings, status, calendar, emailer, today;
+        var settings, status, calendar, emailer, today, sendingDate;
 
         settings = new SettingsManager();
         status = settings.getEmailStatus();
@@ -118,9 +117,12 @@ function confirm()
         settings.updateEmailStatus(3, 7);
 
         if (readyToSend(settings, status, calendar, emailer, today)) {
+                sendingDate = calendar.getSendingDate();
 
                 // Second conditional in block prevents double error messaging
-                if (recipientsReady(settings, status, calendar, emailer)) {
+                if (recipientsReady(settings, status, calendar, emailer) &&
+                    (calendar.sameDay(today, sendingDate) || 
+                     today > sendingDate)) {
                         emailer.email();
                         settings.setSentStatus(false, true);
                 }
@@ -129,10 +131,8 @@ function confirm()
 
 function readyToSend(settings, status, calendar, emailer, today)
 {
-        var sendingDate;
-
         try {
-                sendingDate = calendar.getSendingDate();
+                calendar.getSendingDate();
         } catch(e) {
                 if (!calendar.sent(status.sentWarning)) {
                         emailer.emailError(e);
@@ -143,10 +143,8 @@ function readyToSend(settings, status, calendar, emailer, today)
 
         if (calendar.sent(status.confirmed))
                 return false;
-        if (calendar.sameDay(today, sendingDate) || today > sendingDate)
-                return true;
         
-        return false;
+        return true;
 }
 
 function recipientsReady(settings, status, calendar, emailer)

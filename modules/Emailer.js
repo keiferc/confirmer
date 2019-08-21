@@ -182,12 +182,14 @@ Emailer.prototype.getRecipients = function
 Emailer.prototype.getRecipientsHelper = function
 (contacts, scheduled, sendToSelf) 
 {
-        var emails, i;
+        var emails, retrieved, i;
 
         emails = "";
 
         for (i = 0; i < scheduled.length; i++) {
-                if (!isEmpty(contacts[scheduled[i]]))
+                retrieved = contacts[scheduled[i]];
+
+                if (!isEmpty(retrieved) && (emails.indexOf(retrieved) === -1))
                         emails += contacts[scheduled[i]] + ",";
         }
 

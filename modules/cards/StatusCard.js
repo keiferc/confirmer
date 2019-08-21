@@ -44,8 +44,7 @@ StatusCard.prototype.getSections = function ()
         var settings, emailer, calendar, sections;
         
         settings = new SettingsManager();
-        emailer = new Emailer(settings.getMain(), settings.getContacts(), 
-                settings.getSchedule(), settings.getEmailContent());
+        emailer = new Emailer(settings);
         calendar = new TimeManager();
 
         sections = [];

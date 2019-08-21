@@ -41,13 +41,11 @@
  *                                                   email content
  * @returns     {Emailer}: Object instance for handling emailing processes
  */
-function Emailer(main, contacts, schedule, emailContent) {
-        var parser = new GasoParser();
-
-        this.main = parser.toJSO(main);
-        this.contacts = parser.toJSO(contacts);
-        this.schedule = parser.toJSO(schedule);
-        this.emailContent = parser.toJSO(emailContent);
+function Emailer(settings) {
+        this.main = settings.getMain();
+        this.contacts = settings.getContacts();
+        this.schedule = settings.getSchedule();
+        this.emailContent = settings.getEmailContent();
 }
 
 //////////////////////////////////////////

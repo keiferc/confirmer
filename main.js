@@ -124,8 +124,7 @@ function confirm()
         settings = new SettingsManager();
         status = settings.getEmailStatus();
         calendar = new TimeManager();
-        emailer = new Emailer(settings.getMain(), settings.getContacts(),
-                settings.getSchedule(), settings.getEmailContent());
+        emailer = new Emailer(settings);
         today = getToday();
 
         // TODO: finish recipients check

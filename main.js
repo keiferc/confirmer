@@ -74,15 +74,10 @@ function main()
                         throw e;
         }
 
-        //debug -- reset to first init
-        // if (JSON.stringify(settings) != "{}") {
-        //         manager.getGASO().deleteAllProperties();
-        //         settings = manager.getAll();
-        // }
-
         // debug
         // Logger.log(typeof(settingsManager.getMain()));
         Logger.log(settingsManager.getAll());
+        Logger.log(settingsManager.getEmailStatus());
         // Logger.log(settingsManager.getMain());
         // Logger.log(settingsManager.getContacts());
         // Logger.log(settingsManager.getSchedule());
@@ -135,7 +130,7 @@ function confirm()
             recipientsReady(settings, status, calendar, emailer)) {
                 emailer.email();
                 settings.setConfirmed(status, true);
-                settings.setSentWarning(status, false);
+                settings.setSentWarning(settings.getEmailStatus(), false);
         }
 }
 

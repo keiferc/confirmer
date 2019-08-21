@@ -1,19 +1,23 @@
-// TODO: Expand to create multiple confirmer cards based on needs?
-//      - Delete confirmer // if multiple cards
-// TODO: Add feature that allows for consistent sends? e.g. weekly
-// TODO: Add feature that allows users to select number of days prior reminder
-// TODO: Send warning when number of participants < given
+// Future features? ----------
+//      - Expand to create multiple confirmer cards based on needs?
+//              - Delete confirmer // if multiple cards
+//      - Add feature that allows for consistent sends? e.g. weekly
+//      - Add feature that allows users to select number of days prior reminder
+//      - Send warning when number of participants < given
+//      - Implement suggested searches for column names - trie?
+//      - Auto-sort sheets for users? - Too much removal of autonomy?
 
+// Battle Plan ---------------
 // TODO: Find solution to setting client-side timezone
 //      - Currently sees Google's servers as the client. May need user to explicitly
 //        set timezone
-// TODO: Testing confirmation email sending date
-// TODO: Testing confirmation email sending time
-// TODO: Docs
+// TODO: Testing confirmation email sending time [IN PROGRESS]
+//      -  note: based on time trigger
+// TODO: Docs [IN PROGRESS]
 // TODO: Optimization
 //      Note: changes to nextDate occur on time trigger
-// TODO: Implement suggested search - trie
-// TODO: Auto-sort sheets for user?
+// TODO: Minimize permissions
+// TODO: README
 
 /*
  *      filename:       main.js

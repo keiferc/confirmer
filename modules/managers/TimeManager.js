@@ -178,10 +178,10 @@ TimeManager.prototype.startTimeTrigger = function
 {
         ScriptApp.newTrigger("confirm")
                 .timeBased()
-                //.everyDays(frequency)
+                .everyDays(frequency)
                 //.everyHours(frequency) // debug
-                .everyMinutes(frequency) // debug
-                //.atHour(time)
+                //.everyMinutes(frequency) // debug
+                .atHour(time)
                 .inTimezone("America/New_York")
                 .create();
 }

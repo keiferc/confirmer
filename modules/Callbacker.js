@@ -329,8 +329,8 @@ function sanitizeEmailContent(raw)
  */
 function isEmpty(input)
 {
-        return input == null || isNaN(input) ||
-               input.toString() === "" || input.toString() == "null" ||
+        return input == null || input.toString() === "" || 
+               input.toString() == "null" || 
                input.toString() == "undefined";
 }
 

@@ -35,12 +35,15 @@ SettingsCard.prototype = Object.create(Card.prototype);
  */
 SettingsCard.prototype.getSections = function ()
 {
-        var sections = [];
+        var settings, sections;
+        
+        settings = new SettingsManager();
+        sections = [];
 
-        sections.push(this.getMainSection());
-        sections.push(this.getContactsSection());
-        sections.push(this.getScheduleSection());
-        sections.push(this.getEmailContentSection());
+        sections.push(this.getMainSection(settings));
+        sections.push(this.getContactsSection(settings));
+        sections.push(this.getScheduleSection(settings));
+        sections.push(this.getEmailContentSection(settings));
         sections.push(this.getSubmitSection());
 
         return sections;
@@ -51,16 +54,17 @@ SettingsCard.prototype.getSections = function ()
  *
  * @returns     {CardSection}
  */
-SettingsCard.prototype.getMainSection = function ()
+SettingsCard.prototype.getMainSection = function 
+(settings)
 {
-        var settings, widgets;
+        var main, widgets;
         
-        settings = new SettingsManager().getMain();
+        main = settings.getMain();
         widgets = [];
 
-        widgets.push(this.buildPauseWidget(settings));
-        widgets.push(this.buildSendToSelfWidget(settings));
-        widgets.push(this.buildHourOfDayWidget(settings));
+        widgets.push(this.buildPauseWidget(main));
+        widgets.push(this.buildSendToSelfWidget(main));
+        widgets.push(this.buildHourOfDayWidget(main));
 
         return this.buildSection(null, widgets, false);
 }
@@ -70,20 +74,21 @@ SettingsCard.prototype.getMainSection = function ()
  *
  * @returns     {CardSection}
  */
-SettingsCard.prototype.getContactsSection = function ()
+SettingsCard.prototype.getContactsSection = function 
+(settings)
 {
-        var settings, header, widgets;
+        var contacts, header, widgets;
 
-        settings = new SettingsManager().getContacts();
+        contacts = settings.getContacts();
         header = this.formatHeader("Contacts", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildUrlWidget(settings, "contactsId", 
-                "Contacts List"));
-        widgets.push(this.buildColLabelWidget(settings, "nameColLabel", 
-                "Names"));
-        widgets.push(this.buildColLabelWidget(settings, "emailColLabel", 
-                "Emails"));
+        widgets.push(this.buildUrlWidget(contacts, 
+                "contactsId", "Contacts List"));
+        widgets.push(this.buildColLabelWidget(contacts, 
+                "nameColLabel", "Names"));
+        widgets.push(this.buildColLabelWidget(contacts, 
+                "emailColLabel", "Emails"));
 
         return this.buildSection(header, widgets, true);
 }
@@ -93,17 +98,19 @@ SettingsCard.prototype.getContactsSection = function ()
  *
  * @returns     {CardSection}
  */
-SettingsCard.prototype.getScheduleSection = function ()
+SettingsCard.prototype.getScheduleSection = function 
+(settings)
 {
-        var settings, header, widgets;
+        var schedule, header, widgets;
 
-        settings = new SettingsManager().getSchedule();
+        schedule = settings.getSchedule();
         header = this.formatHeader("Schedule", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildUrlWidget(settings, "scheduleId", "Schedule"));
-        widgets.push(this.buildColLabelWidget(settings, "dateColLabel", 
-                "Date"));
+        widgets.push(this.buildUrlWidget(schedule, 
+                "scheduleId", "Schedule"));
+        widgets.push(this.buildColLabelWidget(schedule, 
+                "dateColLabel", "Date"));
 
         return this.buildSection(header, widgets, true);
 }
@@ -113,20 +120,21 @@ SettingsCard.prototype.getScheduleSection = function ()
  *
  * @returns     {CardSection}
  */
-SettingsCard.prototype.getEmailContentSection = function ()
+SettingsCard.prototype.getEmailContentSection = function 
+(settings)
 {
-        var settings, header, widgets;
+        var emailContent, header, widgets;
 
-        settings = new SettingsManager().getEmailContent();
+        emailContent = settings.getEmailContent();
         header = this.formatHeader("Email Content", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildUrlWidget(settings, "emailContentId", 
-                "Email Content"));
-        widgets.push(this.buildColLabelWidget(settings, "subjectColLabel",
-                "Email Subject"));
-        widgets.push(this.buildColLabelWidget(settings, "bodyColLabel",
-                "Email Body"));
+        widgets.push(this.buildUrlWidget(emailContent, 
+                "emailContentId", "Email Content"));
+        widgets.push(this.buildColLabelWidget(emailContent, 
+                "subjectColLabel", "Email Subject"));
+        widgets.push(this.buildColLabelWidget(emailContent, 
+                "bodyColLabel", "Email Body"));
 
         return this.buildSection(header, widgets, true);
 }
@@ -160,12 +168,13 @@ SettingsCard.prototype.getSubmitSection = function ()
  * buildPauseWidget
  */
 SettingsCard.prototype.buildPauseWidget = function
-(sectionSettings)
+(main)
 {
         var key, label, selected;
+
         key = "pause";
         label = "Pause email confirmations?";
-        selected = sectionSettings.pause == "true";
+        selected = (main.pause == "true");
 
         return this.buildSwitchWidget(key, label, selected, null);
 }
@@ -173,17 +182,17 @@ SettingsCard.prototype.buildPauseWidget = function
 /**
  * buildSendToSelfWidget
  *
- * @param       {Object} sectionSettings: section-specific settings object
+ * @param       {Object} main: section-specific settings object
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildSendToSelfWidget = function 
-(sectionSettings)
+(main)
 {
         var key, label, selected;
 
         key = "sendToSelf";
         label = "Send a copy of email to self?";
-        selected = sectionSettings.sendToSelf == "true";
+        selected = (main.sendToSelf == "true");
 
         return this.buildSwitchWidget(key, label, selected, null);
 }
@@ -191,17 +200,17 @@ SettingsCard.prototype.buildSendToSelfWidget = function
 /**
  * buildHourOfDayWidget
  *
- * @param       {Object} sectionSettings: section-specific settings object
+ * @param       {Object} main: section-specific settings object
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildHourOfDayWidget = function 
-(sectionSettings)
+(main)
 {
         var key, label, options;
 
         key = "hourOfDay";
         label = "Email Delivery Time";
-        options = this.getTimes(sectionSettings[key]), 
+        options = this.getTimes(main[key]), 
         callback = null;
 
         return this.buildDropdownWidget(key, label, options, null);

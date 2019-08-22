@@ -1,5 +1,6 @@
 config.js
 .clasp.json
+.claspignore
 .vscode
 *.min.js
 test/

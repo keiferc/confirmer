@@ -42,7 +42,7 @@ function GasoParser() {}
 GasoParser.prototype.toJSO = function
 (gaso)
 {
-        var json = gaso.replace(/=/g, '":"')
+        return JSON.parse(gaso.replace(/=/g, '":"')
                 .replace(/,\s/g, '","')
                 .replace(/\{/g, '"{"')
                 .replace(/\}/g, '"}"')
@@ -50,7 +50,5 @@ GasoParser.prototype.toJSO = function
                 .replace(/\]/g, '"]"')
                 .replace(/^"\{/g, "{")
                 .replace(/\}"$/g, "}")
-                .replace(/""/g, '"');
-
-        return JSON.parse(json);
+                .replace(/""/g, '"'));
 }

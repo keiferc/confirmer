@@ -50,8 +50,9 @@ SettingsManager.prototype.getAll = function ()
  */
 SettingsManager.prototype.getEmailStatus = function ()
 {
-        if (isEmpty(this.getAll().emailStatus))
+        if (isEmpty(this.getAll().emailStatus)) {
                 throw "Error: 'Email Status' settings are undefined.";
+        }
         
         return new GasoParser().toJSO(this.getAll().emailStatus);
 }

@@ -71,10 +71,10 @@ function submitButton(response)
 
         if (isEmpty(input))
                 return printError("Error: Unable to retrieve " + 
-                                "submitted form inputs.");
+                                  "submitted form inputs.");
 
         main = new MainSettings(input.hourOfDay[0], 1, 
-                input.pause != undefined, input.sendToSelf != undefined);
+                !isEmpty(input.pause), !isEmpty(input.sendToSelf));
         contacts = new ContactsSettings("Contacts", input.contactsId[0],
                 input.nameColLabel[0], input.emailColLabel[0]);
         schedule = new ScheduleSettings("Schedule", input.scheduleId[0],
@@ -320,16 +320,18 @@ function sanitizeEmailContent(raw)
  * isEmpty
  *
  * Helper function that handles multiple return types from Google.
- * Returns true if the value is "empty" or null.
+ * Returns true if the value is "empty" or null / undefined or NaN.
+ *
+ * Note: (null == undefined) === true
  *
  * @param       {any} input: Input to be evaluated
  * @returns     {boolean}: True if input is empty / null
  */
 function isEmpty(input)
 {
-        return input == null || input == undefined || 
-        input.toString() === "" || input.toString() == "null" ||
-        input.toString() == "undefined";
+        return input == null || isNaN(input) ||
+               input.toString() === "" || input.toString() == "null" ||
+               input.toString() == "undefined";
 }
 
 /**
@@ -436,7 +438,7 @@ function updateSettings(main, contacts, schedule, emailContent, errors)
 
                 frequency = main.everyXDays;
                 time = parseHourOfDay(main.hourOfDay);
-                pause = (main.pause == "true");
+                pause = parseBool(main.pause);
                 calendar.editTimeTrigger(frequency, time, pause);
                 
                 return updateCard(new SettingsCard().gCard, true);
@@ -537,7 +539,18 @@ function parseHourOfDay(hourOfDay)
         throw message;
 }
 
-function getToday() {
+function parseBool(bool)
+{
+        if (isEmpty(bool) || bool === "false")
+                return false;
+        if (bool === "true")
+                return true;
+        
+        throw "Error: Unable to boolean string.";
+}
+
+function getToday() 
+{
         var date, offset, hours;
 
         date = new Date();

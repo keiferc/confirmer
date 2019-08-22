@@ -174,7 +174,7 @@ SettingsCard.prototype.buildPauseWidget = function
 
         key = "pause";
         label = "Pause email confirmations?";
-        selected = (main.pause == "true");
+        selected = parseBool(main.pause);
 
         return this.buildSwitchWidget(key, label, selected, null);
 }
@@ -192,7 +192,7 @@ SettingsCard.prototype.buildSendToSelfWidget = function
 
         key = "sendToSelf";
         label = "Send a copy of email to self?";
-        selected = (main.sendToSelf == "true");
+        selected = parseBool(main.sendToSelf);
 
         return this.buildSwitchWidget(key, label, selected, null);
 }

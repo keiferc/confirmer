@@ -156,7 +156,7 @@ Emailer.prototype.getRecipients = function
         scheduled = this.getScheduled(date);
 
         recipients = this.getRecipientsHelper(contacts, scheduled, 
-                settings.sendToSelf == "true");
+                parseBool(settings.sendToSelf));
 
         if (isEmpty(recipients) || 
             recipients === Session.getEffectiveUser().toString())

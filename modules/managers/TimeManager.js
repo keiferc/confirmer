@@ -5,12 +5,7 @@
  *      date:           29 July 2019
  *      description:    This module contains handles all time-related
  *                      processes involved with the Confirmer GMail
- *                      add-on
- *
- *      note:           This module is to be in a Google Script
- *                      and thus uses constructor functions
- *                      instead of Classes (due to GAS' lack of class
- *                      compatibility)
+ *                      add-on.
  */
 
 // TODO: Handle time-zones
@@ -27,7 +22,6 @@ function TimeManager() {};
 //////////////////////////////////////////
 // Getters                              //
 //////////////////////////////////////////
-//Used for setting emailStatus
 TimeManager.prototype.setNextDate = function ()
 {
         var schedule, parser, nextDates, currentDate, i;
@@ -47,8 +41,6 @@ TimeManager.prototype.setNextDate = function ()
         return null;
 }
 
-//TODO
-// Getters should retrieve from EmailStatusSettings
 /**
  * getNextDate
  *
@@ -58,27 +50,28 @@ TimeManager.prototype.setNextDate = function ()
  */
 TimeManager.prototype.getNextDate = function ()
 {
-        var emailStatus = new SettingsManager().getEmailStatus();
-
-        if (!isEmpty(emailStatus.nextDate))
-                return new Date(decodeURIComponent(emailStatus.nextDate));
-
-        throw "Unable to retrieve next scheduled date. Please check " + 
-              "that there is an event scheduled after today's date: " + 
-              this.formatDate(getToday()) + ".";
+        return this.getDateHelper(
+                new SettingsManager().getEmailStatus().nextDate
+        )
 }
 
-//TODO: Abstract it ^
 TimeManager.prototype.getSendingDate = function ()
 {
-        var rawDate = new SettingsManager().getEmailStatus().sendingDate;
+        return this.getDateHelper(
+                new SettingsManager().getEmailStatus().sendingDate
+        );
+}
 
+// rawDate: percent encoded string
+TimeManager.prototype.getDateHelper = function 
+(rawDate)
+{
         if (!isEmpty(rawDate))
                 return new Date(decodeURIComponent(rawDate));
 
         throw "Unable to retrieve next scheduled date. Please check " + 
               "that there is an event scheduled after today's date: " + 
-              this.formatDate(getToday()) + ".";
+              this.formatDate(getToday()) + ".";  
 }
 
 //////////////////////////////////////////
@@ -91,8 +84,9 @@ TimeManager.prototype.setDate = function
         if (isEmpty(nextDate))
                 return null;
 
-        return new Date(new Date().setDate(nextDate.getDate() - 
-                days));
+        return new Date(new Date().setDate(
+                nextDate.getDate() - days
+        ));
 }
 
 //////////////////////////////////////////
@@ -101,32 +95,10 @@ TimeManager.prototype.setDate = function
 TimeManager.prototype.sameDay = function
 (date1, date2)
 {
-        return date1.getUTCDate() === date2.getUTCDate() &&
-                date1.getUTCDay() === date2.getUTCDay() &&
-                date1.getUTCMonth() === date2.getUTCMonth() &&
-                date1.getUTCFullYear() === date2.getUTCFullYear();
-}
-
-TimeManager.prototype.nextDateExists = function ()
-{
-        try {
-                this.getNextDate();
-        } catch (e) {
-                return false;
-        }
-
-        return true;
-}
-
-TimeManager.prototype.sent = function 
-(warning)
-{
-        if (isEmpty(warning) || warning === "false")
-                return false;
-        if (warning === "true")
-                return true;
-        
-        throw "Error: Unable to parse Email Status warning.";
+        return (date1.getUTCDate() === date2.getUTCDate()) &&
+               (date1.getUTCDay() === date2.getUTCDay()) &&
+               (date1.getUTCMonth() === date2.getUTCMonth()) &&
+               (date1.getUTCFullYear() === date2.getUTCFullYear());
 }
 
 /**

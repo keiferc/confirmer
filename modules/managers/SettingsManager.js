@@ -5,11 +5,6 @@
  *      date:           29 July 2019
  *      description:    This module contains an object that manages
  *                      the settings of the Confirmer GMail add-on
- *
- *      note:           This module is to be in a Google Script
- *                      and thus uses constructor functions 
- *                      instead of Classes (due to GAS' lack of class
- *                      compatibility)
  */
 
 /**
@@ -55,8 +50,8 @@ SettingsManager.prototype.getAll = function ()
  */
 SettingsManager.prototype.getEmailStatus = function ()
 {
-        if (this.getAll().emailStatus == undefined)
-                throw "Error: 'Email Status' settings are undefined";
+        if (isEmpty(this.getAll().emailStatus))
+                throw "Error: 'Email Status' settings are undefined.";
         
         return new GasoParser().toJSO(this.getAll().emailStatus);
 }
@@ -68,8 +63,8 @@ SettingsManager.prototype.getEmailStatus = function ()
  */
 SettingsManager.prototype.getMain = function ()
 {
-        if (this.getAll().main == undefined)
-                throw "Error: Saved 'Main' settings are undefined.";
+        if (isEmpty(this.getAll().main))
+                throw "Error: 'Main' settings are undefined.";
 
         return new GasoParser().toJSO(this.getAll().main);
 }
@@ -81,8 +76,8 @@ SettingsManager.prototype.getMain = function ()
  */
 SettingsManager.prototype.getContacts = function ()
 {
-        if (this.getAll().contacts == undefined) 
-                throw "Error: Saved 'Contacts' settings are undefined.";
+        if (isEmpty(this.getAll().contacts)) 
+                throw "Error: 'Contacts' settings are undefined.";
 
         return new GasoParser().toJSO(this.getAll().contacts);
 }
@@ -94,8 +89,8 @@ SettingsManager.prototype.getContacts = function ()
  */
 SettingsManager.prototype.getSchedule = function ()
 {
-        if (this.getAll().schedule == undefined)
-                throw "Error: Saved 'Schedule' settings are undefined";
+        if (isEmpty(this.getAll().schedule))
+                throw "Error: 'Schedule' settings are undefined.";
 
         return new GasoParser().toJSO(this.getAll().schedule);
 }
@@ -107,8 +102,8 @@ SettingsManager.prototype.getSchedule = function ()
  */
 SettingsManager.prototype.getEmailContent = function ()
 {
-        if (this.getAll().emailContent == undefined)
-                throw "Error: Saved 'Email Content' settings are undefined";
+        if (isEmpty(this.getAll().emailContent))
+                throw "Error: 'Email Content' settings are undefined.";
 
         return new GasoParser().toJSO(this.getAll().emailContent);
 }
@@ -323,7 +318,7 @@ SettingsManager.prototype.updateEmailStatus = function
         if (!isEmpty(status.nextDate)) {
                 currDate = calendar.getNextDate();
 
-                if (confirmed === "true" &&
+                if (parseBool(confirmed) &&
                     ((isEmpty(nextDate) || isEmpty(currDate)) ||
                     (!calendar.sameDay(nextDate, currDate))))
                         confirmed = false;

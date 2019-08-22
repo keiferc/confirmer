@@ -139,14 +139,14 @@ function readyToSend(settings, status, calendar, emailer, today)
         try {
                 calendar.getSendingDate();
         } catch(e) {
-                if (!calendar.sent(status.sentWarning)) {
+                if (!parseBool(status.sentWarning)) {
                         emailer.emailError(e);
                         settings.setSentStatus(true, null);
                 }
                 return false;
         }
 
-        if (calendar.sent(status.confirmed))
+        if (parseBool(status.confirmed))
                 return false;
         
         return true;
@@ -157,7 +157,7 @@ function recipientsReady(settings, status, calendar, emailer)
         try {
                 emailer.getRecipients(calendar.getNextDate())
         } catch(e) {
-                if (!calendar.sent(status.sentWarning)) {
+                if (!parseBool(status.sentWarning)) {
                         emailer.emailError(e);
                         settings.setSentStatus(true, null);
                 }

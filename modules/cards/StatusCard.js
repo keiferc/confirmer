@@ -145,7 +145,7 @@ StatusCard.prototype.buildPauseStatusWidget = function
         content = "Running";
 
         try {
-                if (emailer.main.pause == "true")
+                if (parseBool(emailer.main.pause))
                         content = "Paused";
         } catch(e) {
                 return this.buildTextKeyValWidget(topLabel, null, 

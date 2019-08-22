@@ -1,6 +1,8 @@
 config.js
 .clasp.json
 .vscode
+*.min.js
 test/
+temp/
 node_modules/
 package-lock.json

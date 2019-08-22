@@ -49,8 +49,8 @@ StatusCard.prototype.getSections = function ()
 
         sections = [];
 
-        sections.push(this.getMainSection(emailer, calendar));
-        sections.push(this.getScheduleSection(emailer, calendar));
+        sections.push(this.getMainSection(emailer));
+        sections.push(this.getScheduleSection(calendar));
         sections.push(this.getEmailSection(emailer, calendar));
         sections.push(this.getRefreshSection());
 
@@ -62,11 +62,11 @@ StatusCard.prototype.getSections = function ()
  *
  */
 StatusCard.prototype.getMainSection = function 
-(emailer, calendar)
+(emailer)
 {
         var widgets = [];
 
-        widgets.push(this.buildPauseStatusWidget(emailer, calendar));
+        widgets.push(this.buildPauseStatusWidget(emailer));
 
         return this.buildSection(null, widgets, false);
 }
@@ -75,15 +75,15 @@ StatusCard.prototype.getMainSection = function
  * getScheduleSection
  */
 StatusCard.prototype.getScheduleSection = function
-(emailer, calendar)
+(calendar)
 {
         var header, widgets;
 
         header = this.formatHeader("Schedule", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildNextEventDateWidget(emailer, calendar));
-        widgets.push(this.buildSendingDateWidget(emailer, calendar));
+        widgets.push(this.buildNextEventDateWidget(calendar));
+        widgets.push(this.buildSendingDateWidget(calendar));
 
         return this.buildSection(header, widgets, false);
 }
@@ -99,7 +99,7 @@ StatusCard.prototype.getEmailSection = function
         header = this.formatHeader("Email", PRIMARY_COLOR);
         widgets = [];
 
-        widgets.push(this.buildSenderWidget(emailer, calendar));
+        widgets.push(this.buildSenderWidget());
         widgets.push(this.buildBccWidget(emailer, calendar));
         widgets.push(this.buildSubjectWidget(emailer, calendar));
         widgets.push(this.buildBodyWidget(emailer, calendar));
@@ -130,8 +130,14 @@ StatusCard.prototype.getRefreshSection = function ()
 // Widget Builders                      //
 //////////////////////////////////////////
 //============== Main Section ==============/
+/**
+ * buildPauseStatusWidget
+ *
+ * @param       {Emailer} emailer: 
+ * @returns     {Widget}
+ */
 StatusCard.prototype.buildPauseStatusWidget = function
-(emailer, calendar)
+(emailer)
 {
         var topLabel, content;
 
@@ -151,7 +157,7 @@ StatusCard.prototype.buildPauseStatusWidget = function
 
 //============== Schedule Section ==============/
 StatusCard.prototype.buildNextEventDateWidget = function
-(emailer, calendar)
+(calendar)
 {
         var topLabel, content;
 
@@ -168,7 +174,7 @@ StatusCard.prototype.buildNextEventDateWidget = function
 }
 
 StatusCard.prototype.buildSendingDateWidget = function
-(emailer, calendar)
+(calendar)
 {
         var topLabel, content;
 
@@ -185,8 +191,7 @@ StatusCard.prototype.buildSendingDateWidget = function
 }
 
 //============== Email Section ==============/
-StatusCard.prototype.buildSenderWidget = function
-(emailer)
+StatusCard.prototype.buildSenderWidget = function ()
 {
         var topLabel, content;
 

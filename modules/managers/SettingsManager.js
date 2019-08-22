@@ -123,11 +123,11 @@ SettingsManager.prototype.setDefault = function ()
 {
         this.setEmailStatus(null, null, null, false, false);
         this.setMain("9am", 1, true, true);
-        this.setContacts("Contacts", null, "e.g. Contact Names", 
-                "e.g. Emails");
+        this.setContacts("Contacts", null, 
+                "e.g. Contact Names", "e.g. Emails");
         this.setSchedule("Schedule", null, "e.g. Event Date");
-        this.setEmailContent("Email Content",null, "e.g. Subject Line", 
-                "e.g. Email Body");
+        this.setEmailContent("Email Content",null, 
+                "e.g. Subject Line", "e.g. Email Body");
 }
 
 /**
@@ -330,7 +330,6 @@ SettingsManager.prototype.updateEmailStatus = function
         }
 
         sendingDate = calendar.setDate(nextDate, sendingBuffer);
-
         this.setEmailStatus(nextDate, sendingDate, sentWarning, confirmed);
 }
 

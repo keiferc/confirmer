@@ -432,7 +432,7 @@ function updateSettings(main, contacts, schedule, emailContent, errors)
 
         if (errors.length == 0) {
                 settings.setAll(main, contacts, schedule, emailContent);
-                settings.updateEmailStatus(3, 7); // TODO get user input
+                settings.updateEmailStatus(3); // TODO: get user input
 
                 frequency = main.everyXDays;
                 time = parseHourOfDay(main.hourOfDay);

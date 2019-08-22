@@ -154,15 +154,14 @@ SettingsManager.prototype.setAll = function
  * 
  * @param       {Date} nextDate
  * @param       {Date} sendingDate
- * @param       {Date} warningDate
  * @param       {boolean} sentWarning
  * @param       {boolean} confirmed
  */
 SettingsManager.prototype.setEmailStatus = function
-(nextDate, sendingDate, warningDate, sentWarning, confirmed)
+(nextDate, sendingDate, sentWarning, confirmed)
 {
         this.getGASO().setProperty("emailStatus",
-                new EmailStatusSettings(nextDate, sendingDate, warningDate,
+                new EmailStatusSettings(nextDate, sendingDate, 
                         sentWarning, confirmed));
 }
 
@@ -178,7 +177,8 @@ SettingsManager.prototype.setMain = function
 (hourOfDay, everyXDays, pause, sendToSelf)
 {
         this.getGASO().setProperty("main", 
-                new MainSettings(hourOfDay, everyXDays, pause, sendToSelf));
+                new MainSettings(hourOfDay, everyXDays, 
+                        pause, sendToSelf));
 }
 
 /**
@@ -193,8 +193,8 @@ SettingsManager.prototype.setContacts = function
 (header, id, nameColLabel, emailColLabel)
 {
         this.getGASO().setProperty("contacts",
-                new ContactsSettings(header, id, nameColLabel, 
-                        emailColLabel));
+                new ContactsSettings(header, id, 
+                        nameColLabel, emailColLabel));
 }
 
 /**
@@ -223,19 +223,17 @@ SettingsManager.prototype.setEmailContent = function
 (header, id, subjectColLabel, bodyColLabel)
 {
         this.getGASO().setProperty("emailContent",
-                new EmailContentSettings(header, id, subjectColLabel, 
-                        bodyColLabel));
+                new EmailContentSettings(header, id, 
+                        subjectColLabel, bodyColLabel));
 }
 
 //////////////////////////////////////////
 // Object Constructors                  //
 //////////////////////////////////////////
-function EmailStatusSettings(nextDate, sendingDate, warningDate, 
-        sentWarning, confirmed)
+function EmailStatusSettings(nextDate, sendingDate, sentWarning, confirmed)
 {
         this.nextDate = cleanInputSetting(nextDate, false);
         this.sendingDate = cleanInputSetting(sendingDate, false);
-        this.warningDate = cleanInputSetting(warningDate, false);
         this.sentWarning = cleanInputSetting(sentWarning, false);
         this.confirmed = cleanInputSetting(confirmed, false);
 }
@@ -251,12 +249,9 @@ function EmailStatusSettings(nextDate, sendingDate, warningDate,
  */
 function MainSettings(hourOfDay, everyXDays, pause, sendToSelf)
 {
-        // Format: [1-12][am|pm]; 9am
+        // hourOfDay format: [1-12][am|pm]; e.g. 9am
         this.hourOfDay = cleanInputSetting(hourOfDay, false); 
-
-        // Used for push refresh frequency
         this.everyXDays = cleanInputSetting(everyXDays, false);
-
         this.pause = cleanInputSetting(pause, false);
         this.sendToSelf = cleanInputSetting(sendToSelf, false);
 }
@@ -314,10 +309,10 @@ function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
 // Helpers                              //
 //////////////////////////////////////////
 SettingsManager.prototype.updateEmailStatus = function 
-(sendingBuffer, warningBuffer)
+(sendingBuffer)
 {
-        var calendar, status, currDate, nextDate, sendingDate, warningDate, 
-                sentWarning, confirmed;
+        var calendar, status, currDate, nextDate, 
+                sendingDate, sentWarning, confirmed;
 
         calendar = new TimeManager();
         status = this.getEmailStatus();
@@ -335,10 +330,8 @@ SettingsManager.prototype.updateEmailStatus = function
         }
 
         sendingDate = calendar.setDate(nextDate, sendingBuffer);
-        warningDate = calendar.setDate(nextDate, warningBuffer);
 
-        this.setEmailStatus(nextDate, sendingDate, warningDate, 
-                sentWarning, confirmed);
+        this.setEmailStatus(nextDate, sendingDate, sentWarning, confirmed);
 }
 
 SettingsManager.prototype.setSentStatus = function
@@ -358,6 +351,5 @@ SettingsManager.prototype.setSentStatus = function
         this.setEmailStatus(
                 decodeURIComponent(status.nextDate), 
                 decodeURIComponent(status.sendingDate),
-                decodeURIComponent(status.warningDate), 
                 warning, confirmed);
 }

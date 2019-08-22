@@ -81,16 +81,6 @@ TimeManager.prototype.getSendingDate = function ()
               this.formatDate(getToday()) + ".";
 }
 
-//TODELETE
-TimeManager.prototype.getWarningDate = function ()
-{
-        var rawDate = new SettingsManager().getEmailStatus().warningDate;
-
-        return new Date(decodeURIComponent(
-                rawDate
-        ));
-}
-
 //////////////////////////////////////////
 // Setters                              //
 //////////////////////////////////////////

@@ -118,8 +118,8 @@ function confirm()
         emailer = new Emailer(settings);
         today = getToday();
 
-        // TODO: delete warning buffer
-        settings.updateEmailStatus(3, 7);
+        // TODO: custom user input
+        settings.updateEmailStatus(3);
 
         if (readyToSend(settings, status, calendar, emailer, today)) {
                 sendingDate = calendar.getSendingDate();

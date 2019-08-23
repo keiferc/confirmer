@@ -2,7 +2,7 @@
  *      filename:       GSheetParser.js
  *      author:         @KeiferC
  *      version:        0.0.1
- *      date:           29 July 2019
+ *      date:           23 August 2019
  *      description:    This module contains an object that parses Google 
  *                      Sheets.
  */
@@ -18,12 +18,13 @@
  * GSheetParser::getColumnIndex(string)
  * GSheetParser::getColumn(string)
  * GSheetParser::getRow(string)
+ *
  ------------------------------------------------------------*/
  
 /**
  * GSheetParser
  *
- * Object constructor for parsing the Google Spreadsheet of the given ID
+ * Object constructor for parsing the Google Spreadsheet of the given ID.
  *
  * @param       {String} ssId: Google Spreadsheet ID
  * @returns     {GSheetParser}: Object that parses the given Google Spreadsheet 
@@ -123,7 +124,7 @@ GSheetParser.prototype.getColumn = function
  * Returns an array of values of the row containing the given string.
  * Ignores empty cells.
  *
- * @param       {String} rowLabel: String representing row
+ * @param       {string} rowLabel: String representing row
  * @returns     {Array}: Array of row values
  */
 GSheetParser.prototype.getRow = function

@@ -2,14 +2,43 @@
  *      filename:       TimeManager.js
  *      author:         @KeiferC
  *      version:        0.0.1
- *      date:           29 July 2019
+ *      date:           23 August 2019
  *      description:    This module contains handles all time-related
  *                      processes involved with the Confirmer GMail
  *                      add-on.
  */
 
+/*------------------------------------------------------------
+ *                         Functions
+ *------------------------------------------------------------
+ * ---- Object Constructor ---- 
+ * TimeManager::TimeManager()
+ *
+ * ---- Getters ----
+ * TimeManager::getNextDate()
+ * TimeManager::getSendingDate()
+ *
+ * ---- Setters ----
+ * TimeManager::setDate(Date, number)
+ * TimeManager::setNextDate()
+ *
+ * ---- Helpers ---- 
+ * TimeManager::getDateHelper(string)
+ * TimeManager::sameDay(Date, Date)
+ * TimeManager::formatDate(Date)
+ *
+ * ---- Time Trigger Management ----
+ * TimeManager::startTimeTrigger(number, number)
+ * TimeManager::stopTimeTrigger()
+ * TimeManager::editTimeTrigger(number, number, boolean)
+ *
+ ------------------------------------------------------------*/
+
 /**
  * TimeManager
+ *
+ * Object constructor for TimeManager object. Handles all time-related
+ * processes for the add-on.
  *
  * @returns     {Object}
  */
@@ -18,29 +47,11 @@ function TimeManager() {}
 //////////////////////////////////////////
 // Getters                              //
 //////////////////////////////////////////
-TimeManager.prototype.setNextDate = function ()
-{
-        var schedule, parser, nextDates, currentDate, i;
-        
-        schedule = new SettingsManager().getSchedule(); 
-        parser = new GSheetParser(schedule.scheduleId); 
-        nextDates = parser.getColumn(schedule.dateColLabel);
-        currentDate = getToday(); 
-
-        for (i in nextDates) {
-                if ((typeof(nextDates[i]) == typeof(currentDate)) &&
-                    ((this.sameDay(nextDates[i], currentDate)) || 
-                    (nextDates[i] > currentDate)))
-                        return nextDates[i];
-        }
-
-        return null;
-}
-
 /**
  * getNextDate
  *
- * Retrieves next scheduled date from sheet
+ * Retrieves saved next scheduled date from EmailStatus. 
+ * Calls nextDateHelper.
  *
  * @returns     {Date}
  */
@@ -51,6 +62,13 @@ TimeManager.prototype.getNextDate = function ()
         )
 }
 
+/**
+ * getSendingDate
+ *
+ * Returns saved next email sending date. Calls nextDateHelper.
+ *
+ * @returns {Date}
+ */
 TimeManager.prototype.getSendingDate = function ()
 {
         return this.getDateHelper(
@@ -58,21 +76,18 @@ TimeManager.prototype.getSendingDate = function ()
         );
 }
 
-// rawDate: percent encoded string
-TimeManager.prototype.getDateHelper = function 
-(rawDate)
-{
-        if (!isEmpty(rawDate)) 
-                return new Date(decodeURIComponent(rawDate));
-
-        throw "Unable to retrieve next scheduled date. Please check " + 
-              "that there is an event scheduled after today's date: " + 
-              this.formatDate(getToday()) + "."; 
-}
-
 //////////////////////////////////////////
 // Setters                              //
 //////////////////////////////////////////
+/**
+ * setDate
+ *
+ * Returns a date `days` before the given `nextDate`.
+ *
+ * @param       {Date} nextDate
+ * @param       {number} days
+ * @returns     {Date|null}
+ */
 TimeManager.prototype.setDate = function
 (nextDate, days)
 {
@@ -84,9 +99,65 @@ TimeManager.prototype.setDate = function
         ));
 }
 
+/**
+ * setNextDate
+ *
+ * Returns next listed valid event date from Google Sheet. Returns null
+ * if not found.
+ *
+ * @returns     {Date|null}
+ */
+TimeManager.prototype.setNextDate = function ()
+{
+        var schedule, parser, nextDates, currentDate, i;
+        
+        schedule = new SettingsManager().getSchedule(); 
+        parser = new GSheetParser(schedule.scheduleId); 
+        nextDates = parser.getColumn(schedule.dateColLabel);
+        currentDate = getToday(); 
+
+        for (i in nextDates) {
+                if ((typeof(nextDates[i]) == typeof(currentDate)) &&
+                ((this.sameDay(nextDates[i], currentDate)) || 
+                (nextDates[i] > currentDate)))
+                        return nextDates[i];
+        }
+
+        return null;
+}
+
 //////////////////////////////////////////
 // Helpers                              //
 //////////////////////////////////////////
+/**
+ * getDateHelper
+ *
+ * Returns a JS Date object from the given percent-encoded string.
+ *
+ * @param       {string} rawDate: Percent-encoded string representing Date
+ * @returns     {Date}
+ */
+TimeManager.prototype.getDateHelper = function 
+(rawDate)
+{
+        if (!isEmpty(rawDate)) 
+                return new Date(decodeURIComponent(rawDate));
+
+        throw "Unable to retrieve next scheduled date. Please check " + 
+        "that there is an event scheduled after today's date: " + 
+        this.formatDate(getToday()) + "."; 
+}
+
+/**
+ * sameDay
+ *
+ * Returns true if the given dates have the same date number,
+ * day-of-the-week, month, and year.
+ *
+ * @param       {Date} date1
+ * @param       {Date} date2
+ * @returns     {boolean}
+ */
 TimeManager.prototype.sameDay = function
 (date1, date2)
 {
@@ -99,9 +170,10 @@ TimeManager.prototype.sameDay = function
 /**
  * formatDate
  *
- * Returns the given date in the app's format
+ * Returns the given date in the app's format.
  *
  * @param       {Date} date 
+ * @returns     {string}
  */
 TimeManager.prototype.formatDate = function 
 (date)
@@ -123,10 +195,11 @@ TimeManager.prototype.formatDate = function
 /**
  * startTimeTrigger 
  *
- * Starts the Google Apps Script time trigger
+ * Starts the Google Apps Script time trigger. Calls sendConfirm 
+ * as callback function.
  *
- * @param       {Number} frequency 
- * @param       {Number} time 
+ * @param       {number} frequency: How often to run sendConfirm
+ * @param       {number} time: At what time to run sendConfirm
  */
 TimeManager.prototype.startTimeTrigger = function 
 (frequency, time)

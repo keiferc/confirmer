@@ -7,8 +7,6 @@
  *                      and globals (e.g. onclick action responses).
  */
 
-// TODO: Docs
-
 /*------------------------------------------------------------
  *                         Functions
  *------------------------------------------------------------
@@ -379,7 +377,7 @@ function isValidUrl(input)
 }
 
 /**
- * isGSheetUrl // TODO: more tests. Get more sheet urls
+ * isGSheetUrl
  *
  * Returns true if the given string is a valid Google Sheets URL.
  *
@@ -434,7 +432,7 @@ function updateSettings(main, contacts, schedule, emailContent, errors)
 
         if (errors.length == 0) {
                 settings.setAll(main, contacts, schedule, emailContent);
-                settings.updateEmailStatus(3); // TODO: get user input
+                settings.updateEmailStatus(3);
 
                 frequency = main.everyXDays;
                 time = parseHourOfDay(main.hourOfDay);

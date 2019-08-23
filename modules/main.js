@@ -9,6 +9,8 @@
 //      - Users manually set timezone
 //              - JS relies on client's timezone. Add-on sees Google as the
 //                client
+//              - userTimezone.id — the user's timezone identifier
+//                      - e.g. America/New_York.
 
 // Battle Plan ---------------
 // TODO [IN PROGRESS]: Docs
@@ -56,9 +58,6 @@ function main()
 
         settingsManager = new SettingsManager();
 
-        // debug -- force reset to default 
-        // settingsManager.setDefault();
-
         try {
                 settings = settingsManager.getAll();
         } catch(e) {
@@ -67,15 +66,6 @@ function main()
                 else
                         throw e;
         }
-
-        // debug
-        // Logger.log(typeof(settingsManager.getMain()));
-        Logger.log(settingsManager.getAll());
-        Logger.log(settingsManager.getEmailStatus());
-        // Logger.log(settingsManager.getMain());
-        // Logger.log(settingsManager.getContacts());
-        // Logger.log(settingsManager.getSchedule());
-        // Logger.log(settingsManager.getEmailContent());
 
         return buildDeck();
 }
@@ -116,7 +106,6 @@ function confirm()
         emailer = new Emailer(settings);
         today = getToday();
 
-        // TODO: custom user input
         settings.updateEmailStatus(3);
 
         if (readyToSend(settings, status, calendar, emailer, today)) {

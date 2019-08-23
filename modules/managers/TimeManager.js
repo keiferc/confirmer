@@ -8,10 +8,6 @@
  *                      add-on.
  */
 
-// TODO: Handle time-zones
-// userTimezone.id—The user's timezone identifier. 
-// For example, America/New_York.
-
 /**
  * TimeManager
  *
@@ -77,7 +73,6 @@ TimeManager.prototype.getDateHelper = function
 //////////////////////////////////////////
 // Setters                              //
 //////////////////////////////////////////
-// TODO: Figure out how users should customize this
 TimeManager.prototype.setDate = function
 (nextDate, days)
 {
@@ -111,7 +106,6 @@ TimeManager.prototype.sameDay = function
 TimeManager.prototype.formatDate = function 
 (date)
 {
-        //TODO: customize time zone
         var date_format = {
                 weekday: "short",
                 year: "numeric",
@@ -126,7 +120,6 @@ TimeManager.prototype.formatDate = function
 //////////////////////////////////////////
 // Time Trigger Management              //
 //////////////////////////////////////////
-// debugging
 /**
  * startTimeTrigger 
  *
@@ -141,8 +134,6 @@ TimeManager.prototype.startTimeTrigger = function
         ScriptApp.newTrigger("confirm")
                 .timeBased()
                 .everyDays(frequency)
-                //.everyHours(frequency) // debug
-                //.everyMinutes(frequency) // debug
                 .atHour(time)
                 .inTimezone("America/New_York")
                 .create();

@@ -78,8 +78,8 @@ Emailer.prototype.email = function ()
 
         // Compose email
         date = calendar.formatDate(date);
-        subject = this.generateSubject(date); //pass parser?
-        message = this.generateEmailBody(date); //pass parser?
+        subject = this.generateSubject(date);
+        message = this.generateEmailBody(date);
 
         // Send email
         MailApp.sendEmail({

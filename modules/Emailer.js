@@ -2,7 +2,7 @@
  *      filename:       Emailer.js
  *      author:         @KeiferC
  *      version:        0.0.1
- *      date:           29 July 2019
+ *      date:           23 August 2019
  *      description:    This module manages the emailing processes involved 
  *                      with the Confirmer GMail add-on.
  */
@@ -11,8 +11,7 @@
  *                         Functions
  *------------------------------------------------------------
  * ---- Object Constructor ----
- * Emailer::Emailer(MainSettings, ContactsSettings, 
- *      ScheduleSettings, EmailContentSettings)
+ * Emailer::Emailer(SettingsManager)
  *
  * ---- Email Composition ----
  * Emailer::email()
@@ -21,12 +20,13 @@
  * 
  * ---- Contacts Retrieval ----
  * Emailer::getRecipients(Date)
- * Emailer::getRecipientsHelper(Object, Array , Boolean)
+ * Emailer::getRecipientsHelper(Object, Array, boolean)
  * Emailer::getContacts()
  * Emailer::getScheduled(Date)
  *
  * ---- Helpers ----
  * Emailer::emailError(string)
+ *
  ------------------------------------------------------------*/
 
 /**
@@ -50,7 +50,7 @@ function Emailer(settings) {
 /**
  * email
  *
- * Composes and sends add-on emails.
+ * Composes and sends add-on confirmation emails.
  */
 Emailer.prototype.email = function () 
 {
@@ -88,11 +88,11 @@ Emailer.prototype.email = function ()
 /**
  * generateSubject
  *
- * Formats the subject line from the given spreadsheet,
- * column label, and formatted date
+ * Formats the subject line from the given spreadsheet, column label, 
+ * and formatted date
  *
  * @param       {Date} date: JS Date object
- * @returns     {String}: Formatted subject line for email
+ * @returns     {string}: Formatted subject line for email
  */
 Emailer.prototype.generateSubject = function
 (date)
@@ -106,11 +106,11 @@ Emailer.prototype.generateSubject = function
 /**
  * generateEmailBody
  *
- * Formats the email body from the given spreadsheet,
- * column label, and formatted date.
+ * Formats the email body from the given spreadsheet, column label, and 
+ * formatted date.
  *
  * @param       {Date} date: JS Date object
- * @returns     {String}: Formatted message body for email
+ * @returns     {string}: Formatted message body for email
  */
 Emailer.prototype.generateEmailBody = function 
 (date)
@@ -146,8 +146,6 @@ Emailer.prototype.getRecipients = function
 {
         var contacts, settings, scheduled, recipients;
 
-        // TODO: reduce constructor calls from here. check for dependencies
-
         contacts = this.getContacts();
         settings = new SettingsManager().getMain(); 
         scheduled = this.getScheduled(date);
@@ -173,8 +171,8 @@ Emailer.prototype.getRecipients = function
  *
  * @param       {Object} contacts: Object - { name : email_address }
  * @param       {Array} scheduled: Array of names of scheduled people
- * @param       {Boolean} sendToSelf: True if to send a copy of email to self
- * @returns     {String}: Comma-delineated string of email addresses
+ * @param       {boolean} sendToSelf: True if to send a copy of email to self
+ * @returns     {string}: Comma-delineated string of email addresses
  */
 Emailer.prototype.getRecipientsHelper = function
 (contacts, scheduled, sendToSelf) 
@@ -228,8 +226,8 @@ Emailer.prototype.getContacts = function ()
 /**
  * getScheduled
  *
- * Returns an array of scheduled people who signed up for
- * the given scheduled date.
+ * Returns an array of scheduled people who signed up for the given 
+ * scheduled date.
  *
  * @param       {Date} date: JS Date object
  * @returns     {Array}: Array of people scheduled for given event date

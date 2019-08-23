@@ -28,10 +28,10 @@ function StatusCard()
         iconUrl = "https://i.postimg.cc/mtjhvkm4/status.png";
         iconAltText = "Status Icon";
 
-        Card.call(this, header, iconUrl, iconAltText, this.getSections());
+        Card.call(this, header, iconUrl, iconAltText, this.getSections()); 
 }
 
-StatusCard.prototype = Object.create(Card.prototype);
+StatusCard.prototype = Object.create(Card.prototype); 
 
 //////////////////////////////////////////
 // Section Builders                     //
@@ -43,9 +43,9 @@ StatusCard.prototype.getSections = function ()
 {
         var settings, emailer, calendar, sections;
         
-        settings = new SettingsManager();
-        emailer = new Emailer(settings);
-        calendar = new TimeManager();
+        settings = new SettingsManager(); 
+        emailer = new Emailer(settings); 
+        calendar = new TimeManager(); 
 
         sections = [];
 
@@ -79,7 +79,7 @@ StatusCard.prototype.getScheduleSection = function
 {
         var header, widgets;
 
-        header = this.formatHeader("Schedule", PRIMARY_COLOR);
+        header = this.formatHeader("Schedule", PRIMARY_COLOR); 
         widgets = [];
 
         widgets.push(this.buildNextEventDateWidget(calendar));
@@ -96,7 +96,7 @@ StatusCard.prototype.getEmailSection = function
 {
         var header, widgets;
 
-        header = this.formatHeader("Email", PRIMARY_COLOR);
+        header = this.formatHeader("Email", PRIMARY_COLOR); 
         widgets = [];
 
         widgets.push(this.buildSenderWidget());
@@ -112,14 +112,14 @@ StatusCard.prototype.getEmailSection = function
  */
 StatusCard.prototype.getRefreshSection = function ()
 {
-        var action = CardService.newAction()
+        var action = CardService.newAction() 
                 .setFunctionName("refreshStatus");
 
         return this.buildSection(null, 
-                [CardService.newTextButton()
+                [CardService.newTextButton() 
                         .setText("Refresh")
                         .setTextButtonStyle(
-                                CardService.TextButtonStyle.FILLED
+                                CardService.TextButtonStyle.FILLED 
                         )
                         .setOnClickAction(action)
                 ],
@@ -145,7 +145,7 @@ StatusCard.prototype.buildPauseStatusWidget = function
         content = "Running";
 
         try {
-                if (parseBool(emailer.main.pause))
+                if (parseBool(emailer.main.pause)) 
                         content = "Paused";
         } catch(e) {
                 return this.buildTextKeyValWidget(topLabel, null, 
@@ -196,7 +196,7 @@ StatusCard.prototype.buildSenderWidget = function ()
         var topLabel, content;
 
         topLabel = "Sender";
-        content = Session.getEffectiveUser().toString();
+        content = Session.getEffectiveUser().toString(); 
 
         return this.buildTextKeyValWidget(topLabel, null, content, false);
 }
@@ -223,7 +223,7 @@ StatusCard.prototype.buildBccWidget = function
 StatusCard.prototype.buildSubjectWidget = function 
 (emailer, calendar)
 {
-        var topLabel, content;
+        var topLabel, content, date;
 
         topLabel = "Subject";
 
@@ -241,6 +241,8 @@ StatusCard.prototype.buildSubjectWidget = function
 StatusCard.prototype.buildBodyWidget = function
 (emailer, calendar)
 {
+        var topLabel, content, date;
+
         topLabel = "Message";
 
         try {

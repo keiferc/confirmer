@@ -1,30 +1,8 @@
-// Future features? ----------
-//      - Expand to create multiple confirmer cards based on needs?
-//              - Delete confirmer // if multiple cards
-//      - Add feature that allows for consistent sends? e.g. weekly
-//      - Add feature that allows users to select number of days prior reminder
-//      - Send warning when number of participants < given
-//      - Implement suggested searches for column names - trie?
-//      - Auto-sort sheets for users? - Too much removal of autonomy?
-//      - Users manually set timezone
-//              - JS relies on client's timezone. Add-on sees Google as the
-//                client
-//              - userTimezone.id — the user's timezone identifier
-//                      - e.g. America/New_York.
-
-// Battle Plan ---------------
-// TODO [IN PROGRESS]: Docs
-// TODO [IN PROGRESS]: Optimization
-//      Note: changes to nextDate occur on time trigger
-// TODO: Minimize permissions
-// TODO: README
-// TODO: Deploy
-
 /*
  *      filename:       main.js
  *      author:         @KeiferC
  *      version:        0.0.1
- *      date:           12 August 2019
+ *      date:           23 August 2019
  *      description:    This module handles the response to the Confirmer
  *                      Gmail add-on's contextual trigger as well as the 
  *                      main emailing process.
@@ -52,11 +30,11 @@
  *
  * @returns     {Array}: Array of Google Cards
  */
-function main()
+function main() 
 {
         var settingsManager, settings;
 
-        settingsManager = new SettingsManager();
+        settingsManager = new SettingsManager(); 
 
         try {
                 settings = settingsManager.getAll();
@@ -84,27 +62,27 @@ function buildDeck()
 {
         var cardDeck = [];
 
-        cardDeck.push(new StatusCard().gCard);
-        cardDeck.push(new SettingsCard().gCard);
+        cardDeck.push(new StatusCard().gCard); 
+        cardDeck.push(new SettingsCard().gCard); 
 
         return cardDeck;
 }
 
 /**
- * confirm
+ * sendConfirm
  *
  * Callback function for Google time-based trigger. Used to control the
- * add-on's emailing process
+ * add-on's emailing process.
  */
-function confirm()
+function sendConfirm() 
 {
         var settings, status, calendar, emailer, today, sendingDate;
 
-        settings = new SettingsManager();
+        settings = new SettingsManager(); 
         status = settings.getEmailStatus();
-        calendar = new TimeManager();
-        emailer = new Emailer(settings);
-        today = getToday();
+        calendar = new TimeManager(); 
+        emailer = new Emailer(settings); 
+        today = getToday(); 
 
         settings.updateEmailStatus(3);
 
@@ -121,19 +99,19 @@ function confirm()
         }
 }
 
-function readyToSend(settings, status, calendar, emailer, today)
+function readyToSend(settings, status, calendar, emailer)
 {
         try {
                 calendar.getSendingDate();
         } catch(e) {
-                if (!parseBool(status.sentWarning)) {
+                if (!parseBool(status.sentWarning)) { 
                         emailer.emailError(e);
                         settings.setSentStatus(true, null);
                 }
                 return false;
         }
 
-        if (parseBool(status.confirmed))
+        if (parseBool(status.confirmed)) 
                 return false;
         
         return true;
@@ -144,7 +122,7 @@ function recipientsReady(settings, status, calendar, emailer)
         try {
                 emailer.getRecipients(calendar.getNextDate())
         } catch(e) {
-                if (!parseBool(status.sentWarning)) {
+                if (!parseBool(status.sentWarning)) { 
                         emailer.emailError(e);
                         settings.setSentStatus(true, null);
                 }

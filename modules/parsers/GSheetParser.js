@@ -31,10 +31,10 @@
 function GSheetParser(ssId)
 {
         try {
-                this.ss = SpreadsheetApp.openById(ssId);
+                this.ss = SpreadsheetApp.openById(ssId); 
         } catch(e) {
                 throw "Error: Unable to open the given Google Sheet \"" +
-                      GSHEET_URL_FORMAT + ssId + "\". Please check if " +
+                      GSHEET_URL_FORMAT + ssId + "\". Please check if " + 
                       "the given URL is spelled correctly and if you " +
                       "have permission to access the given Google Sheet. " +
                       "Google's Error Message: " + e;

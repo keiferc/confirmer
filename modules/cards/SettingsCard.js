@@ -20,10 +20,10 @@ function SettingsCard()
         iconUrl = "https://i.postimg.cc/87CsNGY6/settings.png"
         iconAltText = "Settings Icon";
 
-        Card.call(this, header, iconUrl, iconAltText, this.getSections());
+        Card.call(this, header, iconUrl, iconAltText, this.getSections()); 
 }
 
-SettingsCard.prototype = Object.create(Card.prototype);
+SettingsCard.prototype = Object.create(Card.prototype); 
 
 //////////////////////////////////////////
 // Section Builders                     //
@@ -37,7 +37,7 @@ SettingsCard.prototype.getSections = function ()
 {
         var settings, sections;
         
-        settings = new SettingsManager();
+        settings = new SettingsManager(); 
         sections = [];
 
         sections.push(this.getMainSection(settings));
@@ -80,7 +80,7 @@ SettingsCard.prototype.getContactsSection = function
         var contacts, header, widgets;
 
         contacts = settings.getContacts();
-        header = this.formatHeader("Contacts", PRIMARY_COLOR);
+        header = this.formatHeader("Contacts", PRIMARY_COLOR); 
         widgets = [];
 
         widgets.push(this.buildUrlWidget(contacts, 
@@ -104,7 +104,7 @@ SettingsCard.prototype.getScheduleSection = function
         var schedule, header, widgets;
 
         schedule = settings.getSchedule();
-        header = this.formatHeader("Schedule", PRIMARY_COLOR);
+        header = this.formatHeader("Schedule", PRIMARY_COLOR); 
         widgets = [];
 
         widgets.push(this.buildUrlWidget(schedule, 
@@ -126,7 +126,7 @@ SettingsCard.prototype.getEmailContentSection = function
         var emailContent, header, widgets;
 
         emailContent = settings.getEmailContent();
-        header = this.formatHeader("Email Content", PRIMARY_COLOR);
+        header = this.formatHeader("Email Content", PRIMARY_COLOR); 
         widgets = [];
 
         widgets.push(this.buildUrlWidget(emailContent, 
@@ -146,14 +146,14 @@ SettingsCard.prototype.getEmailContentSection = function
  */
 SettingsCard.prototype.getSubmitSection = function ()
 {
-        var action = CardService.newAction()
+        var action = CardService.newAction() 
                 .setFunctionName("submitButton");
 
         return this.buildSection(null, 
-                [CardService.newTextButton()
+                [CardService.newTextButton() 
                         .setText("Save Settings")
                         .setTextButtonStyle(
-                                CardService.TextButtonStyle.FILLED
+                                CardService.TextButtonStyle.FILLED 
                         )
                         .setOnClickAction(action)
                 ],
@@ -174,7 +174,7 @@ SettingsCard.prototype.buildPauseWidget = function
 
         key = "pause";
         label = "Pause email confirmations?";
-        selected = parseBool(main.pause);
+        selected = parseBool(main.pause); 
 
         return this.buildSwitchWidget(key, label, selected, null);
 }
@@ -192,7 +192,7 @@ SettingsCard.prototype.buildSendToSelfWidget = function
 
         key = "sendToSelf";
         label = "Send a copy of email to self?";
-        selected = parseBool(main.sendToSelf);
+        selected = parseBool(main.sendToSelf); 
 
         return this.buildSwitchWidget(key, label, selected, null);
 }
@@ -210,8 +210,7 @@ SettingsCard.prototype.buildHourOfDayWidget = function
 
         key = "hourOfDay";
         label = "Email Delivery Time";
-        options = this.getTimes(main[key]), 
-        callback = null;
+        options = this.getTimes(main[key]);
 
         return this.buildDropdownWidget(key, label, options, null);
 }
@@ -233,10 +232,10 @@ SettingsCard.prototype.buildUrlWidget = function
         label = "Google Sheets URL - " + sheetTitle;
         value = sectionSettings[key];
 
-        if (isEmpty(value))
+        if (isEmpty(value)) 
                 value = null;
         else
-                value = GSHEET_URL_FORMAT + value;
+                value = GSHEET_URL_FORMAT + value; 
 
         return this.buildTextInputWidget(key, label, null, value, null);
 }
@@ -257,7 +256,7 @@ SettingsCard.prototype.buildColLabelWidget = function
         label = "Column Label - " + columnLabel;
         value = decodeURIComponent(sectionSettings[key]);
 
-        if (isEmpty(value))
+        if (isEmpty(value)) 
                 value = null;
 
         return this.buildTextInputWidget(key, label, null, value, null);
@@ -308,7 +307,7 @@ SettingsCard.prototype.DeliveryTime = function
 SettingsCard.prototype.getTimes = function
 (selected)
 {
-        var times, amArr, pmArr;
+        var times, amArr, pmArr, i;
 
         times = [];
         amArr = [];

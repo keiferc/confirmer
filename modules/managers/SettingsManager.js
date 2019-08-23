@@ -30,7 +30,7 @@ function SettingsManager() {}
  */
 SettingsManager.prototype.getGASO = function ()
 {
-        return PropertiesService.getUserProperties();
+        return PropertiesService.getUserProperties(); 
 }
 
 /**
@@ -50,11 +50,10 @@ SettingsManager.prototype.getAll = function ()
  */
 SettingsManager.prototype.getEmailStatus = function ()
 {
-        if (isEmpty(this.getAll().emailStatus)) {
+        if (isEmpty(this.getAll().emailStatus))
                 throw "Error: 'Email Status' settings are undefined.";
-        }
         
-        return new GasoParser().toJSO(this.getAll().emailStatus);
+        return new GasoParser().toJSO(this.getAll().emailStatus); 
 }
 
 /**
@@ -64,10 +63,10 @@ SettingsManager.prototype.getEmailStatus = function ()
  */
 SettingsManager.prototype.getMain = function ()
 {
-        if (isEmpty(this.getAll().main))
+        if (isEmpty(this.getAll().main)) 
                 throw "Error: 'Main' settings are undefined.";
 
-        return new GasoParser().toJSO(this.getAll().main);
+        return new GasoParser().toJSO(this.getAll().main); 
 }
 
 /**
@@ -80,7 +79,7 @@ SettingsManager.prototype.getContacts = function ()
         if (isEmpty(this.getAll().contacts)) 
                 throw "Error: 'Contacts' settings are undefined.";
 
-        return new GasoParser().toJSO(this.getAll().contacts);
+        return new GasoParser().toJSO(this.getAll().contacts); 
 }
 
 /**
@@ -90,10 +89,10 @@ SettingsManager.prototype.getContacts = function ()
  */
 SettingsManager.prototype.getSchedule = function ()
 {
-        if (isEmpty(this.getAll().schedule))
+        if (isEmpty(this.getAll().schedule)) 
                 throw "Error: 'Schedule' settings are undefined.";
 
-        return new GasoParser().toJSO(this.getAll().schedule);
+        return new GasoParser().toJSO(this.getAll().schedule); 
 }
 
 /**
@@ -103,10 +102,10 @@ SettingsManager.prototype.getSchedule = function ()
  */
 SettingsManager.prototype.getEmailContent = function ()
 {
-        if (isEmpty(this.getAll().emailContent))
+        if (isEmpty(this.getAll().emailContent)) 
                 throw "Error: 'Email Content' settings are undefined.";
 
-        return new GasoParser().toJSO(this.getAll().emailContent);
+        return new GasoParser().toJSO(this.getAll().emailContent); 
 }
 
 //////////////////////////////////////////
@@ -228,10 +227,10 @@ SettingsManager.prototype.setEmailContent = function
 //////////////////////////////////////////
 function EmailStatusSettings(nextDate, sendingDate, sentWarning, confirmed)
 {
-        this.nextDate = cleanInputSetting(nextDate, false);
-        this.sendingDate = cleanInputSetting(sendingDate, false);
-        this.sentWarning = cleanInputSetting(sentWarning, false);
-        this.confirmed = cleanInputSetting(confirmed, false);
+        this.nextDate = cleanInputSetting(nextDate, false); 
+        this.sendingDate = cleanInputSetting(sendingDate, false); 
+        this.sentWarning = cleanInputSetting(sentWarning, false); 
+        this.confirmed = cleanInputSetting(confirmed, false); 
 }
 
 /**
@@ -247,9 +246,9 @@ function MainSettings(hourOfDay, everyXDays, pause, sendToSelf)
 {
         // hourOfDay format: [1-12][am|pm]; e.g. 9am
         this.hourOfDay = cleanInputSetting(hourOfDay, false); 
-        this.everyXDays = cleanInputSetting(everyXDays, false);
-        this.pause = cleanInputSetting(pause, false);
-        this.sendToSelf = cleanInputSetting(sendToSelf, false);
+        this.everyXDays = cleanInputSetting(everyXDays, false); 
+        this.pause = cleanInputSetting(pause, false); 
+        this.sendToSelf = cleanInputSetting(sendToSelf, false); 
 }
 
 /**
@@ -310,17 +309,17 @@ SettingsManager.prototype.updateEmailStatus = function
         var calendar, status, currDate, nextDate, 
                 sendingDate, sentWarning, confirmed;
 
-        calendar = new TimeManager();
+        calendar = new TimeManager(); 
         status = this.getEmailStatus();
         sentWarning = status.sentWarning;
         confirmed = status.confirmed;
         nextDate = calendar.setNextDate();
 
-        if (!isEmpty(status.nextDate)) {
+        if (!isEmpty(status.nextDate)) { 
                 currDate = calendar.getNextDate();
 
-                if (parseBool(confirmed) &&
-                    ((isEmpty(nextDate) || isEmpty(currDate)) ||
+                if (parseBool(confirmed) && 
+                    ((isEmpty(nextDate) || isEmpty(currDate)) || 
                     (!calendar.sameDay(nextDate, currDate))))
                         confirmed = false;
         }
@@ -338,9 +337,9 @@ SettingsManager.prototype.setSentStatus = function
         warning = sentWarning;
         confirmed = sentConfirmed;
 
-        if (isEmpty(warning))
+        if (isEmpty(warning)) 
                 warning = status.sentWarning;
-        if (isEmpty(confirmed))
+        if (isEmpty(confirmed)) 
                 confirmed = status.confirmed;
 
         this.setEmailStatus(

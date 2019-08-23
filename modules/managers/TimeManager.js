@@ -13,7 +13,7 @@
  *
  * @returns     {Object}
  */
-function TimeManager() {};
+function TimeManager() {}
 
 //////////////////////////////////////////
 // Getters                              //
@@ -22,10 +22,10 @@ TimeManager.prototype.setNextDate = function ()
 {
         var schedule, parser, nextDates, currentDate, i;
         
-        schedule = new SettingsManager().getSchedule();
-        parser = new GSheetParser(schedule.scheduleId);
+        schedule = new SettingsManager().getSchedule(); 
+        parser = new GSheetParser(schedule.scheduleId); 
         nextDates = parser.getColumn(schedule.dateColLabel);
-        currentDate = getToday();
+        currentDate = getToday(); 
 
         for (i in nextDates) {
                 if ((typeof(nextDates[i]) == typeof(currentDate)) &&
@@ -47,14 +47,14 @@ TimeManager.prototype.setNextDate = function ()
 TimeManager.prototype.getNextDate = function ()
 {
         return this.getDateHelper(
-                new SettingsManager().getEmailStatus().nextDate
+                new SettingsManager().getEmailStatus().nextDate 
         )
 }
 
 TimeManager.prototype.getSendingDate = function ()
 {
         return this.getDateHelper(
-                new SettingsManager().getEmailStatus().sendingDate
+                new SettingsManager().getEmailStatus().sendingDate 
         );
 }
 
@@ -62,12 +62,12 @@ TimeManager.prototype.getSendingDate = function ()
 TimeManager.prototype.getDateHelper = function 
 (rawDate)
 {
-        if (!isEmpty(rawDate))
+        if (!isEmpty(rawDate)) 
                 return new Date(decodeURIComponent(rawDate));
 
         throw "Unable to retrieve next scheduled date. Please check " + 
               "that there is an event scheduled after today's date: " + 
-              this.formatDate(getToday()) + ".";  
+              this.formatDate(getToday()) + "."; 
 }
 
 //////////////////////////////////////////
@@ -76,7 +76,7 @@ TimeManager.prototype.getDateHelper = function
 TimeManager.prototype.setDate = function
 (nextDate, days)
 {
-        if (isEmpty(nextDate))
+        if (isEmpty(nextDate)) 
                 return null;
 
         return new Date(new Date().setDate(
@@ -131,7 +131,7 @@ TimeManager.prototype.formatDate = function
 TimeManager.prototype.startTimeTrigger = function 
 (frequency, time)
 {
-        ScriptApp.newTrigger("confirm")
+        ScriptApp.newTrigger("sendConfirm") 
                 .timeBased()
                 .everyDays(frequency)
                 .atHour(time)
@@ -148,12 +148,12 @@ TimeManager.prototype.stopTimeTrigger = function ()
 {
         var triggers, i;
 
-        triggers = ScriptApp.getProjectTriggers();
+        triggers = ScriptApp.getProjectTriggers(); 
 
         for (i = 0; i < triggers.length; i++) {
                 if (triggers[i].getTriggerSource() == 
-                    ScriptApp.TriggerSource.CLOCK)
-                        ScriptApp.deleteTrigger(triggers[i]);
+                    ScriptApp.TriggerSource.CLOCK) 
+                        ScriptApp.deleteTrigger(triggers[i]); 
         }
 }
 

@@ -68,8 +68,8 @@ Card.prototype.build = function
 {
         var card, i;
         
-        card = CardService.newCardBuilder()
-                .setHeader(CardService.newCardHeader()
+        card = CardService.newCardBuilder() 
+                .setHeader(CardService.newCardHeader() 
                         .setTitle(header)
                         .setImageUrl(iconUrl)
                         .setImageAltText(alt)
@@ -96,7 +96,7 @@ Card.prototype.buildSection = function
 {
         var section, i;
         
-        section = CardService.newCardSection()
+        section = CardService.newCardSection() 
                 .setCollapsible(collapsible);
 
         if (header != null)
@@ -124,7 +124,7 @@ Card.prototype.buildSection = function
 Card.prototype.buildTextInputWidget = function
 (key, label, hint, value, callback)
 {
-       var widget = CardService.newTextInput()
+       var widget = CardService.newTextInput() 
                         .setFieldName(key)
                         .setTitle(label);
         
@@ -154,7 +154,7 @@ Card.prototype.buildSwitchWidget = function
 {
         var widget, switcher;
 
-        switcher = CardService.newSwitch()
+        switcher = CardService.newSwitch() 
                 .setFieldName(key)
                 .setValue(true)
                 .setSelected(selected);
@@ -162,7 +162,7 @@ Card.prototype.buildSwitchWidget = function
         if (callback != null)
                 switcher.setOnChangeAction(callback);
         
-        widget = CardService.newKeyValue()
+        widget = CardService.newKeyValue() 
                 .setContent(label)
                 .setSwitch(switcher);
         
@@ -185,8 +185,8 @@ Card.prototype.buildDropdownWidget = function
 {
         var widget, i;
 
-        widget = CardService.newSelectionInput()
-                .setType(CardService.SelectionInputType.DROPDOWN)
+        widget = CardService.newSelectionInput() 
+                .setType(CardService.SelectionInputType.DROPDOWN) 
                 .setFieldName(key)
                 .addItem("Choose", null, false);
         
@@ -216,14 +216,14 @@ Card.prototype.buildDropdownWidget = function
 Card.prototype.buildTextKeyValWidget = function
 (topLabel, bottomLabel, content, multiline)
 {
-        var widget = CardService.newKeyValue()
+        var widget = CardService.newKeyValue() 
                 .setContent(content)
                 .setMultiline(multiline);
         
         if (topLabel != null)
                 widget.setTopLabel(topLabel);
         if (bottomLabel != null)
-                widget.setBottomLabel(Label);
+                widget.setBottomLabel(bottomLabel);
         
         return widget;
 }
@@ -239,7 +239,7 @@ Card.prototype.buildTextKeyValWidget = function
 Card.prototype.buildTextParagraphWidget = function 
 (text)
 {
-        return CardService.newTextParagraph().setText(text);
+        return CardService.newTextParagraph().setText(text); 
 }
 
 //////////////////////////////////////////

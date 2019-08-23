@@ -34,11 +34,7 @@
  *
  * Custom object constructor handling emailing processes.
  *
- * @param       {MainSettings} main: SettingsManager obj for main
- * @param       {ContactsSettings} contacts: SettingsManager obj for contacts
- * @param       {ScheduleSettings} schedule: SettingsManager obj for schedules
- * @param       {EmailContentSettings} emailContent: SettingsManager obj for
- *                                                   email content
+ * @param       {SettingsManager} settings
  * @returns     {Emailer}: Object instance for handling emailing processes
  */
 function Emailer(settings) {
@@ -60,7 +56,7 @@ Emailer.prototype.email = function ()
 {
         var calendar, date, recipients, subject, message;
 
-        calendar = new TimeManager();
+        calendar = new TimeManager(); 
 
         try {
                 date = calendar.getNextDate();
@@ -82,9 +78,9 @@ Emailer.prototype.email = function ()
         message = this.generateEmailBody(date);
 
         // Send email
-        MailApp.sendEmail({
+        MailApp.sendEmail({ 
                 bcc: recipients,
-                subject: "TEST" + subject,
+                subject: subject,
                 htmlBody: message
         });
 }
@@ -101,7 +97,7 @@ Emailer.prototype.email = function ()
 Emailer.prototype.generateSubject = function
 (date)
 {
-        var parser = new GSheetParser(this.emailContent.emailContentId);
+        var parser = new GSheetParser(this.emailContent.emailContentId); 
 
         return  "[" + date + "]: " +
                 parser.getColumn(this.emailContent.subjectColLabel)[0];
@@ -121,17 +117,16 @@ Emailer.prototype.generateEmailBody = function
 {
         var parser, body, signature;
         
-        parser = new GSheetParser(this.emailContent.emailContentId);
+        parser = new GSheetParser(this.emailContent.emailContentId); 
         body = parser.getColumn(this.emailContent.bodyColLabel)[0];
-        signature = Gmail.Users.Settings.SendAs.list("me").sendAs.filter(
+        signature = Gmail.Users.Settings.SendAs.list("me").sendAs.filter( 
                 function (account) {
                         if (account.isDefault)
                                 return true
                 })[0].signature;
 
-        return  "Dear Volunteers,<br><br>" + 
-                date + " is our next immigration clinic. " + 
-                body + "<br><br>" + signature;
+        return "Dear Volunteers,<br><br>" + 
+               date + " " + body + "<br><br>" + signature;
 }
 
 //////////////////////////////////////////
@@ -154,17 +149,17 @@ Emailer.prototype.getRecipients = function
         // TODO: reduce constructor calls from here. check for dependencies
 
         contacts = this.getContacts();
-        settings = new SettingsManager().getMain();
+        settings = new SettingsManager().getMain(); 
         scheduled = this.getScheduled(date);
 
         recipients = this.getRecipientsHelper(contacts, scheduled, 
-                parseBool(settings.sendToSelf));
+                parseBool(settings.sendToSelf)); 
 
         if (isEmpty(recipients) || 
-            recipients === Session.getEffectiveUser().toString())
+            recipients === Session.getEffectiveUser().toString()) 
                 throw "No persons scheduled for the next event. " + 
                       "Please check that there is someone scheduled for " +
-                      "the event on " + new TimeManager().formatDate(date) +
+                      "the event on " + new TimeManager().formatDate(date) + 
                       ".";
         
         return recipients;
@@ -191,12 +186,12 @@ Emailer.prototype.getRecipientsHelper = function
         for (i = 0; i < scheduled.length; i++) {
                 retrieved = contacts[scheduled[i]];
 
-                if (!isEmpty(retrieved) && (emails.indexOf(retrieved) === -1))
+                if (!isEmpty(retrieved) && (emails.indexOf(retrieved) === -1)) 
                         emails += contacts[scheduled[i]] + ",";
         }
 
         if (sendToSelf)
-                emails += Session.getEffectiveUser();
+                emails += Session.getEffectiveUser(); 
         else
                 emails = emails.replace(/(^\s*,)|(,\s*$)/g, "");
 
@@ -214,7 +209,7 @@ Emailer.prototype.getContacts = function ()
 {
         var parser, namesArr, emailsArr, contacts, i;
 
-        parser = new GSheetParser(this.contacts.contactsId);
+        parser = new GSheetParser(this.contacts.contactsId); 
         namesArr = parser.getColumn(this.contacts.nameColLabel);
         emailsArr = parser.getColumn(this.contacts.emailColLabel);
         contacts = {};
@@ -242,10 +237,10 @@ Emailer.prototype.getContacts = function ()
 Emailer.prototype.getScheduled = function
 (date) 
 {
-        var scheduled = new GSheetParser(this.schedule.scheduleId)
+        var scheduled = new GSheetParser(this.schedule.scheduleId) 
                 .getRow(date);
 
-        if (isEmpty(scheduled))
+        if (isEmpty(scheduled)) 
                 throw "Error: Retrieved row is empty.";
 
         return scheduled;
@@ -264,8 +259,8 @@ Emailer.prototype.getScheduled = function
 Emailer.prototype.emailError = function
 (message)
 {
-        MailApp.sendEmail({
-                bcc: Session.getEffectiveUser(),
+        MailApp.sendEmail({ 
+                bcc: Session.getEffectiveUser(), 
                 subject: "[Confirmer Add-on] Heads Up!",
                 htmlBody: message
         });

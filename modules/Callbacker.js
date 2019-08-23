@@ -45,8 +45,7 @@
 //////////////////////////////////////////
 // Globals                              //
 //////////////////////////////////////////
-var PRIMARY_COLOR = "#267cb5";
-var SECONDARY_COLOR = "#267cb5";
+var PRIMARY_COLOR = "#267cb5"; 
 var GSHEET_URL_FORMAT = "docs.google.com/spreadsheets/d/";
 
 //////////////////////////////////////////
@@ -61,7 +60,7 @@ var GSHEET_URL_FORMAT = "docs.google.com/spreadsheets/d/";
  * @param       {Google Apps Script Object} response: returned from Google
  * @returns     {Google ActionResponse}: Action for callback to run
  */
-function submitButton(response)
+function submitButton(response) 
 {
         var input, main, contacts, schedule, emailContent;
 
@@ -73,9 +72,9 @@ function submitButton(response)
 
         main = new MainSettings(input.hourOfDay[0], 1, 
                 !isEmpty(input.pause), !isEmpty(input.sendToSelf));
-        contacts = new ContactsSettings("Contacts", input.contactsId[0],
+        contacts = new ContactsSettings("Contacts", input.contactsId[0], 
                 input.nameColLabel[0], input.emailColLabel[0]);
-        schedule = new ScheduleSettings("Schedule", input.scheduleId[0],
+        schedule = new ScheduleSettings("Schedule", input.scheduleId[0], 
                 input.dateColLabel[0]);
         emailContent = new EmailContentSettings("Email Content", 
                 input.emailContentId[0], input.subjectColLabel[0],
@@ -89,9 +88,9 @@ function submitButton(response)
  *
  * @param       {Google Apps Script Object} response 
  */
-function refreshStatus(response)
+function refreshStatus() 
 {
-        return updateCard(new StatusCard().gCard, false)
+        return updateCard(new StatusCard().gCard, false); 
 }
 
 //////////////////////////////////////////
@@ -151,7 +150,7 @@ function sanitize(input)
         protocol = /(http(s?):\/\/)|(ftp:\/\/)|(mailto:\/\/)/ig; 
         replacers = [
                 [/(\/?)\.\.(\/?)/ig, "%2E%2E"], // path traversal
-                [/\-{2}/ig, "%2D%2D"], // SQL comments
+                [/-{2}/ig, "%2D%2D"], // SQL comments
                 [/'/ig, "%27"] // single quotes
         ];
 
@@ -224,7 +223,7 @@ function sanitizeSettings(main, rawContacts, rawSchedule, rawEmailContent)
                                 errors.push(e);
                         } finally {
                                 return updateSettings(main, contacts, 
-                                        schedule, emailContent, errors);
+                                        schedule, emailContent, errors); 
                         }
                 }
         }
@@ -254,7 +253,7 @@ function sanitizeContacts(raw)
         parser.getColumnIndex(nameColLabel);
         parser.getColumnIndex(emailColLabel);
 
-        return new ContactsSettings(header, id, nameColLabel, emailColLabel);
+        return new ContactsSettings(header, id, nameColLabel, emailColLabel); 
 }
 
 /**
@@ -276,10 +275,10 @@ function sanitizeSchedule(raw)
         if (dateColLabel == null)
                 throw "Column Labels cannot be empty.";
         
-        parser = getGSheet(id);
-        parser.getColumnIndex(dateColLabel);
+        parser = getGSheet(id); 
+        parser.getColumnIndex(dateColLabel); 
 
-        return new ScheduleSettings(header, id, dateColLabel);
+        return new ScheduleSettings(header, id, dateColLabel); 
 }
 
 /**
@@ -303,9 +302,9 @@ function sanitizeEmailContent(raw)
         if (subjectColLabel == null || bodyColLabel == null)
                 throw "Column Labels cannot be empty.";
         
-        parser = getGSheet(id);
-        parser.getColumnIndex(subjectColLabel);
-        parser.getColumnIndex(bodyColLabel);
+        parser = getGSheet(id); 
+        parser.getColumnIndex(subjectColLabel); 
+        parser.getColumnIndex(bodyColLabel); 
 
         return new EmailContentSettings(header, id, subjectColLabel, 
                 bodyColLabel);
@@ -408,12 +407,12 @@ function getGSheet(id)
         var parser;
         
         try {
-                parser = new GSheetParser(id);
+                parser = new GSheetParser(id); 
         } catch (e) {
                 throw GSHEET_URL_FORMAT + id + 
-                        " is not a retrievable Google Sheet. " +
-                        "Please check that the URL is spelled correctly " +
-                        "and that you have permission to access the Sheet. ";
+                      " is not a retrievable Google Sheet. " +
+                      "Please check that the URL is spelled correctly " +
+                      "and that you have permission to access the Sheet. ";
         }
 
         return parser;
@@ -426,8 +425,8 @@ function updateSettings(main, contacts, schedule, emailContent, errors)
 {
         var settings, calendar, message, frequency, time, pause, i;
 
-        settings = new SettingsManager();
-        calendar = new TimeManager();
+        settings = new SettingsManager(); 
+        calendar = new TimeManager(); 
         message = "";
 
         if (errors.length == 0) {
@@ -439,7 +438,7 @@ function updateSettings(main, contacts, schedule, emailContent, errors)
                 pause = parseBool(main.pause);
                 calendar.editTimeTrigger(frequency, time, pause);
                 
-                return updateCard(new SettingsCard().gCard, true);
+                return updateCard(new SettingsCard().gCard, true); 
         }
 
         for (i = 0; i < errors.length; i++)
@@ -458,12 +457,12 @@ function updateSettings(main, contacts, schedule, emailContent, errors)
  */
 function updateCard(card, pop) 
 {
-        var nav = CardService.newNavigation().updateCard(card);
+        var nav = CardService.newNavigation().updateCard(card); 
 
         if (pop)
                 nav.popToRoot();
 
-        return CardService.newActionResponseBuilder()
+        return CardService.newActionResponseBuilder() 
                 .setStateChanged(true)
                 .setNavigation(nav)
                 .build();
@@ -481,19 +480,19 @@ function printError(error)
 {
         var errorCard, nav;
         
-        errorCard = CardService.newCardBuilder()
-                .setHeader(CardService.newCardHeader()
+        errorCard = CardService.newCardBuilder() 
+                .setHeader(CardService.newCardHeader() 
                         .setTitle("Oops! Something went wrong!")
                 )
-                .addSection(CardService.newCardSection()
-                        .addWidget(CardService.newTextParagraph()
+                .addSection(CardService.newCardSection() 
+                        .addWidget(CardService.newTextParagraph() 
                                         .setText(error))
                 )
                 .build();
 
-        nav = CardService.newNavigation().pushCard(errorCard);
+        nav = CardService.newNavigation().pushCard(errorCard); 
 
-        return CardService.newActionResponseBuilder()
+        return CardService.newActionResponseBuilder() 
                 .setStateChanged(true)
                 .setNavigation(nav)
                 .build();

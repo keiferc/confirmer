@@ -2,7 +2,7 @@
  *      filename:       Callbacker.js
  *      author:         @KeiferC
  *      version:        0.0.1
- *      date:           12 August 2019
+ *      date:           23 August 2019
  *      description:    This module handles all add-on processing callbacks
  *                      and globals (e.g. onclick action responses).
  */
@@ -12,7 +12,7 @@
  *------------------------------------------------------------
  * ---- Callbacks ----
  * submitButton(Google Apps Script Object)
- * refreshStatus(Google Apps Script Object)
+ * refreshStatus()
  *
  * ---- Sanitizers ----
  * cleanInputSetting(any, boolean)
@@ -39,6 +39,8 @@
  * updateCard(Google Card, boolean)
  * printError(string)
  * parseHourOfDay(string)
+ * parseBool(string)
+ * getToday()
  *
  ------------------------------------------------------------*/
 
@@ -54,8 +56,7 @@ var GSHEET_URL_FORMAT = "docs.google.com/spreadsheets/d/";
 /**
  * submitButton
  *
- * Callback function from when settings submit
- * button is activated
+ * Callback function from when settings submit button is activated.
  *
  * @param       {Google Apps Script Object} response: returned from Google
  * @returns     {Google ActionResponse}: Action for callback to run
@@ -86,7 +87,7 @@ function submitButton(response)
 /**
  * refreshStatus
  *
- * @param       {Google Apps Script Object} response 
+ * Updates the StatusCard with current settings.
  */
 function refreshStatus() 
 {
@@ -99,8 +100,11 @@ function refreshStatus()
 /**
  * cleanInputSetting 
  *
+ * Converts saved strings into proper data types, if needed. Passes
+ * URLs to URL sanitizer.
+ *
  * @param       {any} setting 
- * @param       {Boolean} isUrl
+ * @param       {boolean} isUrl
  * @returns     {Object|number|null}
  */
 function cleanInputSetting(setting, isUrl)
@@ -118,7 +122,7 @@ function cleanInputSetting(setting, isUrl)
 /**
  * cleanInputUrl
  *
- * Returns a sanitized version of the given URL
+ * Returns a sanitized version of the given URL.
  *
  * @param       {any} url: Input URL to sanitize
  * @returns     {string}: Sanitized input URL
@@ -139,6 +143,7 @@ function cleanInputUrl(url)
  * Includes percent-encodings of special characters not included 
  * in encodeURIComponent. Used as a first-level sanitizer; outputs 
  * to be passed to content-specific, whitelist-using sanitizers.
+ * Returns a percent-encoded, sanitized string.
  *
  * @param       {string} input: User input to be sanitized
  * @returns     {string} Sanitized user input
@@ -193,6 +198,10 @@ function sanitizeGSheetUrl(url)
 /**
  * sanitizeSettings
  *
+ * Tries to sanitize all given settings on submit. If catches error,
+ * Pushes card onto add-on stack displaying errors and does not save
+ * inputs.
+ *
  * @param       {EmailStatusSettings} emailStatus
  * @param       {MainSettings} main
  * @param       {ContactsSettings} rawContacts
@@ -232,6 +241,8 @@ function sanitizeSettings(main, rawContacts, rawSchedule, rawEmailContent)
 /**
  * sanitizeContacts
  *
+ * Sanitizes ContactsSettings inputs.
+ *
  * @param       {ContactsSettings} raw
  * @returns     {ContactsSettings}
  */
@@ -259,6 +270,8 @@ function sanitizeContacts(raw)
 /**
  * sanitizeSchedule
  *
+ * Sanitizes ScheduleSettings inputs
+ *
  * @param       {ScheduleSettings} raw
  * @returns     {ScheduleSettings}
  */
@@ -283,6 +296,8 @@ function sanitizeSchedule(raw)
 
 /**
  * sanitizeEmailContent
+ *
+ * Sanitizes EmailContentSettings inputs
  *
  * @param       {EmailContentSettings} raw
  * @returns     {EmailContentSettings}
@@ -317,7 +332,7 @@ function sanitizeEmailContent(raw)
  * isEmpty
  *
  * Helper function that handles multiple return types from Google.
- * Returns true if the value is "empty" or null / undefined or NaN.
+ * Returns true if the value is "empty" or null / undefined.
  *
  * Note: (null == undefined) === true
  *
@@ -399,6 +414,8 @@ function isGSheetUrl(url)
 /**
  * getGSheet
  *
+ * Returns a GSheetParser from the given Google Sheet ID, if valid.
+ *
  * @param       {string} id
  * @returns     {GSheetParser}
  */
@@ -421,6 +438,20 @@ function getGSheet(id)
 //////////////////////////////////////////
 // Helpers                              //
 //////////////////////////////////////////
+/**
+ * updateSettings
+ * 
+ * Saves all settings into Google's PropertiesService is no errors occur.
+ * If errors exist, pushes a Google Card on the add-on stack, displaying
+ * errors. 
+ *
+ * @param       {MainSettings} main 
+ * @param       {ContactsSettings} contacts 
+ * @param       {ScheduleSettings} schedule 
+ * @param       {EmailContentSettings} emailContent 
+ * @param       {Array} errors 
+ * @returns     {Google CardService}
+ */
 function updateSettings(main, contacts, schedule, emailContent, errors)
 {
         var settings, calendar, message, frequency, time, pause, i;
@@ -453,6 +484,7 @@ function updateSettings(main, contacts, schedule, emailContent, errors)
  * Conducts an in-place update of the given card.
  *
  * @param       {Google Card} card: Google Card to update
+ * @param       {boolean} pop: If true, jumps user back to root menu
  * @returns     {Google ActionResponse}: ActionResponse that updates Card
  */
 function updateCard(card, pop) 
@@ -501,6 +533,9 @@ function printError(error)
 /**
  * parseHourOfDay 
  *
+ * Returns a number corresponding to the string value of the 
+ * selected hourOfDay from the dropdown menu.
+ *
  * @param       {string} hourOfDay: Attribute of MainSettings
  * @returns     {number}: Integer representing 24 hr clock hour
  */
@@ -536,6 +571,14 @@ function parseHourOfDay(hourOfDay)
         throw message;
 }
 
+/**
+ * parseBool 
+ *
+ * Returns a boolean corresponding to the given boolean string.
+ *
+ * @param       {string} bool 
+ * @returns     {boolean}
+ */
 function parseBool(bool)
 {
         if (isEmpty(bool) || bool === "false")
@@ -546,6 +589,13 @@ function parseBool(bool)
         throw "Error: Unable to boolean string.";
 }
 
+/**
+ * getToday
+ *
+ * Returns today's date, including timezone offset.
+ *
+ * @returns     {Date}
+ */
 function getToday() 
 {
         var date, offset, hours;

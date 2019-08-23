@@ -277,7 +277,7 @@ function sanitizeContacts(raw)
  */
 function sanitizeSchedule(raw)
 {
-        var header, id, dateColLabel;
+        var header, id, dateColLabel, parser;
 
         header = cleanInputSetting(raw.header, false);
         id = cleanInputSetting(raw.scheduleId, true);
@@ -304,7 +304,7 @@ function sanitizeSchedule(raw)
  */
 function sanitizeEmailContent(raw)
 {
-        var header, id, subjectColLabel, bodyColLabel;
+        var header, id, subjectColLabel, bodyColLabel, parser;
 
         header = cleanInputSetting(raw.header, false);
         id = cleanInputSetting(raw.emailContentId, true);

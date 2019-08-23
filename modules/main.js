@@ -11,8 +11,6 @@
 //                client
 
 // Battle Plan ---------------
-// TODO [IN PROGRESS]: Testing confirmation email sending time
-//      -  note: based on time trigger
 // TODO [IN PROGRESS]: Docs
 // TODO [IN PROGRESS]: Optimization
 //      Note: changes to nextDate occur on time trigger

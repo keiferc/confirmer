@@ -78,8 +78,8 @@ Emailer.prototype.email = function ()
 
         // Compose email
         date = calendar.formatDate(date);
-        subject = this.generateSubject(date);
-        message = this.generateEmailBody(date);
+        subject = this.generateSubject(date); //pass parser?
+        message = this.generateEmailBody(date); //pass parser?
 
         // Send email
         MailApp.sendEmail({
@@ -150,6 +150,8 @@ Emailer.prototype.getRecipients = function
 (date)
 {
         var contacts, settings, scheduled, recipients;
+
+        // TODO: reduce constructor calls from here. check for dependencies
 
         contacts = this.getContacts();
         settings = new SettingsManager().getMain();
@@ -244,8 +246,7 @@ Emailer.prototype.getScheduled = function
                 .getRow(date);
 
         if (isEmpty(scheduled))
-                throw "No persons scheduled for the next event. " +
-                      "Please check the schedule for participants.";
+                throw "Error: Retrieved row is empty.";
 
         return scheduled;
 }

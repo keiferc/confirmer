@@ -2,22 +2,51 @@
  *      filename:       SettingsCard.js
  *      author:         @KeiferC
  *      version:        0.0.1
- *      date:           29 July 2019
+ *      date:           23 August 2019
  *      description:    This module contains a Google Card to be used for
  *                      managing the settings of the Confirmer GMail add-on.
  */
 
+/*------------------------------------------------------------
+ *                         Functions
+ *------------------------------------------------------------
+ * ---- Object Constructor ---- 
+ * SettingsCard::SettingsCard()
+ *
+ * ---- Section Builders ----
+ * SettingsCard::getSections()
+ * SettingsCard::getMainSection(SettingsManager)
+ * SettingsCard::getContactsSection(SettingsManager)
+ * SettingsCard::getScheduleSection(SettingsManager)
+ * SettingsCard::getEmailContentSection(SettingsManager)
+ * SettingsCard::getSubmitSection()
+ *
+ * ---- Widget Builders ----
+ * SettingsCard::buildPauseWidget(MainSettings)
+ * SettingsCard::buildSendToSelfWidget(MainSettings)
+ * SettingsCard::buildHourOfDayWidget(MainSettings)
+ * SettingsCard::buildURLWidget(Object, string, string)
+ * SettingsCard::buildColLabelWidget(Object, string, string)
+ *
+ * ---- Widget Helpers ----
+ * SettingsCard::DeliveryTime(number, boolean, string)
+ * SettingsCard::getTimes(string)
+ *
+ ------------------------------------------------------------*/
+
 /**
  * SettingsCard
  *
- * @returns     {Object}
+ * Object constructor inheriting from custom Card object. Handles settings.
+ *
+ * @returns     {SettingsCard}
  */
 function SettingsCard()
 {
         var header, iconUrl, iconAltText;
 
         header = "Settings";
-        iconUrl = "https://i.postimg.cc/87CsNGY6/settings.png"
+        iconUrl = "https://i.postimg.cc/87CsNGY6/settings.png";
         iconAltText = "Settings Icon";
 
         Card.call(this, header, iconUrl, iconAltText, this.getSections()); 
@@ -31,7 +60,9 @@ SettingsCard.prototype = Object.create(Card.prototype);
 /**
  * getSections
  *
- * @returns     {Array}
+ * Returns an array of sections
+ *
+ * @returns     {Array}: Array of Google CardSections
  */
 SettingsCard.prototype.getSections = function ()
 {
@@ -52,6 +83,9 @@ SettingsCard.prototype.getSections = function ()
 /**
  * getMainSection
  *
+ * Builds the main section.
+ *
+ * @param       {SettingsManager} settings
  * @returns     {CardSection}
  */
 SettingsCard.prototype.getMainSection = function 
@@ -72,6 +106,9 @@ SettingsCard.prototype.getMainSection = function
 /**
  * getContactsSection
  *
+ * Builds the contacts section.
+ *
+ * @param       {SettingsManager} settings
  * @returns     {CardSection}
  */
 SettingsCard.prototype.getContactsSection = function 
@@ -96,6 +133,9 @@ SettingsCard.prototype.getContactsSection = function
 /**
  * getScheduleSection
  *
+ * Build the schedule section
+ *
+ * @param       {SettingsManager}
  * @returns     {CardSection}
  */
 SettingsCard.prototype.getScheduleSection = function 
@@ -118,6 +158,9 @@ SettingsCard.prototype.getScheduleSection = function
 /**
  * getEmailContentSection
  *
+ * Builds email content section
+ *
+ * @param       {SettingsManager}
  * @returns     {CardSection}
  */
 SettingsCard.prototype.getEmailContentSection = function 
@@ -141,6 +184,8 @@ SettingsCard.prototype.getEmailContentSection = function
 
 /**
  * getSubmitSection
+ *
+ * Builds submit button for saving settings.
  *
  * @returns     {CardSection}
  */
@@ -166,6 +211,11 @@ SettingsCard.prototype.getSubmitSection = function ()
 //============== Main Section ==============//
 /**
  * buildPauseWidget
+ *
+ * Build pause add-on widget.
+ *
+ * @param       {MainSettings} main
+ * @returns     {Widget}
  */
 SettingsCard.prototype.buildPauseWidget = function
 (main)
@@ -182,7 +232,9 @@ SettingsCard.prototype.buildPauseWidget = function
 /**
  * buildSendToSelfWidget
  *
- * @param       {Object} main: section-specific settings object
+ * Builds send-to-self widget.
+ *
+ * @param       {MainSettings} main
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildSendToSelfWidget = function 
@@ -200,7 +252,9 @@ SettingsCard.prototype.buildSendToSelfWidget = function
 /**
  * buildHourOfDayWidget
  *
- * @param       {Object} main: section-specific settings object
+ * Build hour-of-day widget
+ *
+ * @param       {MainSettings} main
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildHourOfDayWidget = function 
@@ -219,9 +273,11 @@ SettingsCard.prototype.buildHourOfDayWidget = function
 /**
  * buildUrlWidget
  *
+ * Build URL input field widget.
+ *
  * @param       {Object} sectionSettings: section-specific settings object
- * @param       {String} key: section-specific url key
- * @param       {String} sheetTitle: title of sheet
+ * @param       {string} key: section-specific url key
+ * @param       {string} sheetTitle: title of sheet
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildUrlWidget = function
@@ -243,9 +299,11 @@ SettingsCard.prototype.buildUrlWidget = function
 /**
  * buildColumnLabelWidget
  *
+ * Builds column label input field widget.
+ *
  * @param       {Object} sectionSettings: section-specific settings object
- * @param       {String} key: key of input value
- * @param       {String} columnLabel: section-specific column label
+ * @param       {string} key: key of input value
+ * @param       {string} columnLabel: section-specific column label
  * @returns     {Widget}
  */
 SettingsCard.prototype.buildColLabelWidget = function 
@@ -263,15 +321,18 @@ SettingsCard.prototype.buildColLabelWidget = function
 }
 
 //////////////////////////////////////////
-// Settings Widget Helpers              //
+// Widget Helpers                       //
 //////////////////////////////////////////
 //============== Dropdown Time Generation ==============//
 /**
  * DeliveryTime
  *
- * @param       {Number} hour 
- * @param       {Boolean} isAM 
- * @param       {String} selected - key representing selected time
+ * Returns a DeliveryTime object containing values for use in the 
+ * dropdown widget.
+ *
+ * @param       {number} hour 
+ * @param       {boolean} isAM 
+ * @param       {string} selected: Key representing selected time
  * @returns     {DeliveryTime}
  */
 SettingsCard.prototype.DeliveryTime = function 
@@ -301,8 +362,11 @@ SettingsCard.prototype.DeliveryTime = function
 /**
  * getTimes
  *
- * @param       {String} selected: key representing the selected time   
- * @returns     {Array}
+ * Returns an array of DeliveryTime objects containing times for use
+ * in the dropdown widget.
+ *
+ * @param       {string} selected: key representing the selected time   
+ * @returns     {Array}: Array of DeliveryTime objects
  */
 SettingsCard.prototype.getTimes = function
 (selected)

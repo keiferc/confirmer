@@ -2,23 +2,42 @@
  *      filename:       StatusCard.js
  *      author:         @KeiferC
  *      version:        0.0.1
- *      date:           29 July 2019
+ *      date:           23 August 2019
  *      description:    This module contains a Google Card to be used for
  *                      displaying the status of the Confirmer GMail add-on
- *
- *      note:           This module is to be in a Google Script
- *                      and thus uses constructor functions
- *                      instead of Classes (due to GAS' lack of class
- *                      compatibility)
  */
 
-//////////////////////////////////////////
-// Status Card Builders                 //
-//////////////////////////////////////////
+/*------------------------------------------------------------
+ *                         Functions
+ *------------------------------------------------------------
+ * ---- Object Constructor ---- 
+ * StatusCard::StatusCard()
+ *
+ * ---- Section Builders ----
+ * StatusCard::getSections()
+ * StatusCard::getMainSection(Emailer)
+ * StatusCard::getScheduleSection(TimeManager)
+ * StatusCard::getEmailSection(Emailer, TimeManager)
+ * StatusCard::getRefreshSection()
+ *
+ * ---- Widget Builders ----
+ * StatusCard::buildPauseStatusWidget(Emailer)
+ * StatusCard::buildNextEventDateWidget(TimeManager)
+ * StatusCard::buildSendingDateWidget(TimeManager)
+ * StatusCard::buildSenderWidget()
+ * StatusCard::buildBccWidget(Emailer, TimeManager)
+ * StatusCard::buildSubjectWidget(Emailer, TimeManager)
+ * StatusCard::buildBodyWidget(Emailer, TimeManager)
+ *
+ ------------------------------------------------------------*/
+
 /**
  * StatusCard
  *
- * @returns     {Object}
+ * Object constructor inhering from custom Card object. Displays status of
+ * add-on.
+ *
+ * @returns     {StatusCard}
  */
 function StatusCard()
 {
@@ -38,6 +57,10 @@ StatusCard.prototype = Object.create(Card.prototype);
 //////////////////////////////////////////
 /**
  * getSections
+ *
+ * Returns an array of sections.
+ *
+ * @returns     {Array}: Array of Google CardSections
  */
 StatusCard.prototype.getSections = function ()
 {
@@ -60,6 +83,10 @@ StatusCard.prototype.getSections = function ()
 /**
  * getMainSection
  *
+ * Builds the main section.
+ *
+ * @param       {Emailer} emailer
+ * @returns     {CardSection}
  */
 StatusCard.prototype.getMainSection = function 
 (emailer)
@@ -73,6 +100,11 @@ StatusCard.prototype.getMainSection = function
 
 /**
  * getScheduleSection
+ *
+ * Build schedule section
+ *
+ * @param       {TimeManager} calendar
+ * @returns     {CardSection}
  */
 StatusCard.prototype.getScheduleSection = function
 (calendar)
@@ -90,6 +122,12 @@ StatusCard.prototype.getScheduleSection = function
 
 /**
  * getEmailSection
+ *
+ * Build email section
+ *
+ * @param       {Emailer} emailer
+ * @param       {TimeManager} calendar
+ * @returns     {CardSection}
  */
 StatusCard.prototype.getEmailSection = function 
 (emailer, calendar)
@@ -109,6 +147,10 @@ StatusCard.prototype.getEmailSection = function
 
 /**
  * getRefreshSection
+ *
+ * Build refresh button for refreshing status.
+ *
+ * @returns     {CardSection}
  */
 StatusCard.prototype.getRefreshSection = function ()
 {
@@ -133,6 +175,8 @@ StatusCard.prototype.getRefreshSection = function ()
 /**
  * buildPauseStatusWidget
  *
+ * Build pause status widget.
+ *
  * @param       {Emailer} emailer: 
  * @returns     {Widget}
  */
@@ -156,6 +200,14 @@ StatusCard.prototype.buildPauseStatusWidget = function
 }
 
 //============== Schedule Section ==============/
+/**
+ * buildNextEventDateWidget
+ *
+ * Builds next event date status widget.
+ *
+ * @param       {TimeManager} calendar
+ * @returns     {Widget}
+ */
 StatusCard.prototype.buildNextEventDateWidget = function
 (calendar)
 {
@@ -173,6 +225,14 @@ StatusCard.prototype.buildNextEventDateWidget = function
         return this.buildTextKeyValWidget(topLabel, null, content, false);
 }
 
+/**
+ * buildSendingDateWidget
+ *
+ * Builds sending date status widget.
+ *
+ * @param       {TimeManager} calendar
+ * @returns     {Widget}
+ */
 StatusCard.prototype.buildSendingDateWidget = function
 (calendar)
 {
@@ -191,6 +251,13 @@ StatusCard.prototype.buildSendingDateWidget = function
 }
 
 //============== Email Section ==============/
+/**
+ * buildSenderWidget
+ *
+ * Builds sender status widget.
+ *
+ * @returns     {Widget}
+ */
 StatusCard.prototype.buildSenderWidget = function ()
 {
         var topLabel, content;
@@ -201,6 +268,15 @@ StatusCard.prototype.buildSenderWidget = function ()
         return this.buildTextKeyValWidget(topLabel, null, content, false);
 }
 
+/**
+ * buildBccWidget
+ *
+ * Builds BCC status widget.
+ *
+ * @param       {Emailer} emailer
+ * @param       {TimeManager} calendar
+ * @returns     {Widget}
+ */
 StatusCard.prototype.buildBccWidget = function
 (emailer, calendar)
 {
@@ -220,6 +296,15 @@ StatusCard.prototype.buildBccWidget = function
         return this.buildTextKeyValWidget(topLabel, null, content, true);
 }
 
+/**
+ * buildSubjectWidget
+ *
+ * Builds email subject line status widget.
+ *
+ * @param       {Emailer} emailer
+ * @param       {TimeManager} calendar
+ * @returns     {Widget}
+ */
 StatusCard.prototype.buildSubjectWidget = function 
 (emailer, calendar)
 {
@@ -238,6 +323,15 @@ StatusCard.prototype.buildSubjectWidget = function
         return this.buildTextKeyValWidget(topLabel, null, content, true);
 }
 
+/**
+ * buildBodyWidget
+ *
+ * Builds email body content status widget.
+ *
+ * @param       {Emailer} emailer
+ * @param       {TimeManager} calendar
+ * @returns     {Widget}
+ */
 StatusCard.prototype.buildBodyWidget = function
 (emailer, calendar)
 {
@@ -255,5 +349,3 @@ StatusCard.prototype.buildBodyWidget = function
 
         return this.buildTextKeyValWidget(topLabel, null, content, true);
 }
-
-

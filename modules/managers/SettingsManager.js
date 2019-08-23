@@ -2,20 +2,155 @@
  *      filename:       SettingsManager.js
  *      author:         @KeiferC
  *      version:        0.0.1
- *      date:           29 July 2019
+ *      date:           23 August 2019
  *      description:    This module contains an object that manages
  *                      the settings of the Confirmer GMail add-on
  */
 
+/*------------------------------------------------------------
+ *                         Functions
+ *------------------------------------------------------------
+ * ---- Object Constructor ---- 
+ * SettingsManager::SettingsManager()
+ *
+ * ---- Nested Object Constructors ----
+ * SettingsManager::EmailStatusSettings(Date, Date, boolean, boolean)
+ * SettingsManager::MainSettings(string, number, boolean, boolean)
+ * SettingsManager::ContactsSettings(string, string, string, string)
+ * SettingsManager::ScheduleSettings(string, string, string)
+ * SettingsManager::EmailContentSettings(string, string, string, string)
+ *
+ * ---- Getters ----
+ * SettingsManager::getGASO()
+ * SettingsManager::getAll()
+ * SettingsManager::getEmailStatus()
+ * SettingsManager::getMain()
+ * SettingsManager::getContacts()
+ * SettingsManager::getSchedule()
+ * SettingsManager::getEmailContent()
+ *
+ * ---- Setters ----
+ * SettingsManager::setDefault()
+ * SettingsManager::setAll(MainSettings, ContactsSettings, ScheduleSettings,
+ *      EmailContentSettings)
+ * SettingsManager::setEmailStatus(Date, Date, boolean, boolean)
+ * SettingsManager::setMain(string, number, boolean, boolean)
+ * SettingsManager::setContacts(string, string, string, string)
+ * SettingsManager::setSchedule(string, string, string)
+ * SettingsManager::setEmailContent(string, string, string, string)
+ *
+ * ---- Helpers ---- 
+ * SettingsManager::updateEmailStatus(number)
+ * SettingsManager::setSentStatus(boolean|null, boolean|null)
+ *
+ ------------------------------------------------------------*/
+
 /**
  * SettingsManager
  *
- * A class that handles all processes
- * involving add-on settings
+ * Object construct that handles all processes involving add-on settings.
+ * Works with Google's PropertiesService.
  *
- * @returns     {Object}
+ * @returns     {SettingsManager}
  */
 function SettingsManager() {}
+
+//////////////////////////////////////////
+// Nested Object Constructors           //
+//////////////////////////////////////////
+/**
+ * EmailStatusSettings
+ *
+ * Returns an EmailStatusSettings object. 
+ *
+ * @param       {Date} nextDate 
+ * @param       {Date} sendingDate 
+ * @param       {boolean} sentWarning 
+ * @param       {boolean} confirmed 
+ * @returns     {EmailStatusSettings}
+ */
+function EmailStatusSettings(nextDate, sendingDate, sentWarning, confirmed)
+{
+        this.nextDate = cleanInputSetting(nextDate, false); 
+        this.sendingDate = cleanInputSetting(sendingDate, false); 
+        this.sentWarning = cleanInputSetting(sentWarning, false); 
+        this.confirmed = cleanInputSetting(confirmed, false); 
+}
+ 
+/**
+ * MainSettings
+ * 
+ * Returns MainSettings object.
+ *
+ * @param       {string} hourOfDay
+ * @param       {number} everyXDays
+ * @param       {boolean} pause
+ * @param       {boolean} sendToSelf
+ * @param       {MainSettings}
+ */
+function MainSettings(hourOfDay, everyXDays, pause, sendToSelf)
+{
+        // hourOfDay format: [1-12][am|pm]; e.g. 9am
+        this.hourOfDay = cleanInputSetting(hourOfDay, false); 
+        this.everyXDays = cleanInputSetting(everyXDays, false); 
+        this.pause = cleanInputSetting(pause, false); 
+        this.sendToSelf = cleanInputSetting(sendToSelf, false); 
+}
+ 
+/**
+ * ContactsSettings
+ *
+ * Returns ContactsSettings object. Sanitization occurs on submit.
+ *
+ * @param       {string} header
+ * @param       {string} id 
+ * @param       {string} nameColLabel 
+ * @param       {string} emailColLabel 
+ * @returns     {ContactsSettings}
+ */
+function ContactsSettings(header, id, nameColLabel, emailColLabel)
+{
+        this.header = header;
+        this.contactsId = id;
+        this.nameColLabel = nameColLabel;
+        this.emailColLabel = emailColLabel;
+}
+ 
+/**
+ * ScheduleSettings
+ *
+ * Returns ScheduleSettings object. Sanitization occurs on submit.
+ *
+ * @param       {string} header
+ * @param       {string} id 
+ * @param       {string} dateColLabel 
+ * @returns     {ScheduleSettings}
+ */
+function ScheduleSettings(header, id, dateColLabel)
+{
+        this.header = header;
+        this.scheduleId = id;
+        this.dateColLabel = dateColLabel;
+}
+
+/**
+ * EmailContentSettings
+ *
+ * Returns EmailContentSettings object. Sanitization occurs on submit.
+ *
+ * @param       {string} header
+ * @param       {string} id
+ * @param       {string} subjectColLabel
+ * @param       {string} bodyColLabel
+ * @returns     {EmailContentSettings} 
+ */
+function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
+{
+        this.header = header
+        this.emailContentId = id;
+        this.subjectColLabel = subjectColLabel;
+        this.bodyColLabel = bodyColLabel;
+}
 
 //////////////////////////////////////////
 // Getters                              //
@@ -23,8 +158,8 @@ function SettingsManager() {}
 /**
  * getGASO
  *
- * Returns the Google Apps Script Object containing
- * user settings for the Confirmer add-on
+ * Returns the Google Apps Script Object containing user settings for 
+ * the Confirmer add-on
  *
  * @returns     {UserProperties}
  */
@@ -47,6 +182,10 @@ SettingsManager.prototype.getAll = function ()
 
 /**
  * getEmailStatus
+ *
+ * Returns saved EmailStatusSettings.
+ *
+ * @returns     {EmailStatusSettings}
  */
 SettingsManager.prototype.getEmailStatus = function ()
 {
@@ -59,7 +198,9 @@ SettingsManager.prototype.getEmailStatus = function ()
 /**
  * getMain
  *
- * @returns     {Object}
+ * Returns saved MainSettings.
+ *
+ * @returns     {MainSettings}
  */
 SettingsManager.prototype.getMain = function ()
 {
@@ -72,7 +213,9 @@ SettingsManager.prototype.getMain = function ()
 /**
  * getContacts
  *
- * @returns     {Object}
+ * Returns saved ContactsSettings.
+ *
+ * @returns     {ContactsSettings}
  */
 SettingsManager.prototype.getContacts = function ()
 {
@@ -85,7 +228,9 @@ SettingsManager.prototype.getContacts = function ()
 /**
  * getSchedule
  *
- * @returns     {JSON}
+ * Returns saved ScheduleSettings.
+ *
+ * @returns     {ScheduleSettings}
  */
 SettingsManager.prototype.getSchedule = function ()
 {
@@ -98,7 +243,9 @@ SettingsManager.prototype.getSchedule = function ()
 /**
  * getEmailContent
  *
- * @returns     {JSON}
+ * Returns saved EmailContentSettings.
+ *
+ * @returns     {EmailContentSettings}
  */
 SettingsManager.prototype.getEmailContent = function ()
 {
@@ -113,6 +260,8 @@ SettingsManager.prototype.getEmailContent = function ()
 //////////////////////////////////////////
 /**
  * setDefault
+ *
+ * Saves default settings into Google's PropertiesService on first init.
  */
 SettingsManager.prototype.setDefault = function ()
 {
@@ -127,6 +276,8 @@ SettingsManager.prototype.setDefault = function ()
 
 /**
  * setAll 
+ *
+ * Sets all settings objects into Google's PropertiesService.
  *
  * @param       {MainSettings} main
  * @param       {ContactsSettings} contacts
@@ -147,6 +298,8 @@ SettingsManager.prototype.setAll = function
 /**
  * setEmailStatus
  * 
+ * Saves EmailStatusSettings into Google's PropertiesService.
+ *
  * @param       {Date} nextDate
  * @param       {Date} sendingDate
  * @param       {boolean} sentWarning
@@ -163,10 +316,12 @@ SettingsManager.prototype.setEmailStatus = function
 /**
  * setMain
  *
- * @param       {String} hourOfDay
- * @param       {Number} everyXDays
+ * Saves MainSettings into Google's PropertiesService.
+ *
+ * @param       {string} hourOfDay
+ * @param       {number} everyXDays
  * @param       {boolean} pause
- * @param       {Boolean} sendToSelf
+ * @param       {boolean} sendToSelf
  */
 SettingsManager.prototype.setMain = function
 (hourOfDay, everyXDays, pause, sendToSelf)
@@ -179,10 +334,12 @@ SettingsManager.prototype.setMain = function
 /**
  * setContacts
  *
- * @param       {String} header
- * @param       {String} id
- * @param       {String} nameColLabel
- * @param       {String} emailColLabel
+ * Saves ContactsSettings into Google's PropertiesService.
+ *
+ * @param       {string} header
+ * @param       {string} id
+ * @param       {string} nameColLabel
+ * @param       {string} emailColLabel
  */
 SettingsManager.prototype.setContacts = function
 (header, id, nameColLabel, emailColLabel)
@@ -195,9 +352,11 @@ SettingsManager.prototype.setContacts = function
 /**
  * setSchedule
  *
- * @param       {String} header
- * @param       {String} id
- * @param       {String} dateColLabel
+ * Saves ScheduleSettings into Google's PropertiesService.
+ *
+ * @param       {string} header
+ * @param       {string} id
+ * @param       {string} dateColLabel
  */
 SettingsManager.prototype.setSchedule = function
 (header, id, dateColLabel)
@@ -209,10 +368,12 @@ SettingsManager.prototype.setSchedule = function
 /**
  * setEmailContent
  *
- * @param       {String} header
- * @param       {String} id
- * @param       {String} subjectColLabel
- * @param       {String} bodyColLabel
+ * Saves EmailContentSettings into Google's PropertiesService.
+ *
+ * @param       {string} header
+ * @param       {string} id
+ * @param       {string} subjectColLabel
+ * @param       {string} bodyColLabel
  */
 SettingsManager.prototype.setEmailContent = function
 (header, id, subjectColLabel, bodyColLabel)
@@ -223,86 +384,15 @@ SettingsManager.prototype.setEmailContent = function
 }
 
 //////////////////////////////////////////
-// Object Constructors                  //
-//////////////////////////////////////////
-function EmailStatusSettings(nextDate, sendingDate, sentWarning, confirmed)
-{
-        this.nextDate = cleanInputSetting(nextDate, false); 
-        this.sendingDate = cleanInputSetting(sendingDate, false); 
-        this.sentWarning = cleanInputSetting(sentWarning, false); 
-        this.confirmed = cleanInputSetting(confirmed, false); 
-}
-
-/**
- * MainSettings
- * 
- * @param       {String} hourOfDay
- * @param       {Number} everyXDays
- * @param       {boolean} pause
- * @param       {Boolean} sendToSelf
- * @param       {MainSettings}
- */
-function MainSettings(hourOfDay, everyXDays, pause, sendToSelf)
-{
-        // hourOfDay format: [1-12][am|pm]; e.g. 9am
-        this.hourOfDay = cleanInputSetting(hourOfDay, false); 
-        this.everyXDays = cleanInputSetting(everyXDays, false); 
-        this.pause = cleanInputSetting(pause, false); 
-        this.sendToSelf = cleanInputSetting(sendToSelf, false); 
-}
-
-/**
- * ContactsSettings
- *
- * @param       {String} header
- * @param       {String} id 
- * @param       {String} nameColLabel 
- * @param       {String} emailColLabel 
- * @returns     {ContactsSettings}
- */
-function ContactsSettings(header, id, nameColLabel, emailColLabel)
-{
-        this.header = header;
-        this.contactsId = id;
-        this.nameColLabel = nameColLabel;
-        this.emailColLabel = emailColLabel;
-}
-
-/**
- * ScheduleSettings
- *
- * @param       {String} header
- * @param       {String} id 
- * @param       {String} dateColLabel 
- * @returns     {ScheduleSettings}
- */
-function ScheduleSettings(header, id, dateColLabel)
-{
-        this.header = header;
-        this.scheduleId = id;
-        this.dateColLabel = dateColLabel;
-}
-
-/**
- * EmailContentSettings
- *
- * @param       {String} header
- * @param       {String} id
- * @param       {String} subjectColLabel
- * @param       {String} bodyColLabel
- * @returns     {EmailContentSettings} 
- */
-function EmailContentSettings(header, id, subjectColLabel, bodyColLabel)
-{
-        this.header = header
-        this.emailContentId = id;
-        this.subjectColLabel = subjectColLabel;
-        this.bodyColLabel = bodyColLabel;
-}
-
-//////////////////////////////////////////
 // Helpers                              //
 //////////////////////////////////////////
+/**
+ * updateEmailStatus
+ *
+ * Saves updated EmailStatus with date checking.
+ *
+ * @param       {number} sendingBuffer: # of days before event to send email
+ */
 SettingsManager.prototype.updateEmailStatus = function 
 (sendingBuffer)
 {
@@ -328,6 +418,15 @@ SettingsManager.prototype.updateEmailStatus = function
         this.setEmailStatus(nextDate, sendingDate, sentWarning, confirmed);
 }
 
+/**
+ * setSentStatus
+ *
+ * Saves updated sent messages status. If parameter is null,
+ * status does not change from previously saved status.
+ *
+ * @param       {boolean|null} sentWarning
+ * @param       {boolean|null} sentConfirmed
+ */
 SettingsManager.prototype.setSentStatus = function
 (sentWarning, sentConfirmed)
 {

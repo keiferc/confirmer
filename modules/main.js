@@ -13,10 +13,12 @@
  *------------------------------------------------------------
  * ---- Main ---- 
  * main()
+ * sendConfirm()
  *
  * ---- Helpers ----
  * buildDeck()
- * confirm()
+ * readyToSend(SettingsManager, EmailStatusSettings, TimeManager, Emailer)
+ * recipientsReady(SettingsManager, EmailStatusSettings, TimeManager, Emailer)
  *
  ------------------------------------------------------------*/
 
@@ -48,26 +50,6 @@ function main()
         return buildDeck();
 }
 
-//////////////////////////////////////////
-// Helpers                              //
-//////////////////////////////////////////
-/**
- * buildDeck
- *
- * Returns an array of constructed Google Cards
- *
- * @returns     {Array}: Array of Google Cards
- */
-function buildDeck()
-{
-        var cardDeck = [];
-
-        cardDeck.push(new StatusCard().gCard); 
-        cardDeck.push(new SettingsCard().gCard); 
-
-        return cardDeck;
-}
-
 /**
  * sendConfirm
  *
@@ -91,14 +73,48 @@ function sendConfirm()
 
                 // Second conditional in block prevents double error messaging
                 if (recipientsReady(settings, status, calendar, emailer) &&
-                    (calendar.sameDay(today, sendingDate) || 
-                     today > sendingDate)) {
+                (calendar.sameDay(today, sendingDate) || 
+                today > sendingDate)) {
                         emailer.email();
                         settings.setSentStatus(false, true);
                 }
         }
 }
 
+//////////////////////////////////////////
+// Helpers                              //
+//////////////////////////////////////////
+/**
+ * buildDeck
+ *
+ * Returns an array of constructed Google Cards
+ *
+ * @returns     {Array}: Array of Google Cards
+ */
+function buildDeck()
+{
+        var cardDeck = [];
+
+        cardDeck.push(new StatusCard().gCard); 
+        cardDeck.push(new SettingsCard().gCard); 
+
+        return cardDeck;
+}
+
+/**
+ * readyToSend
+ *
+ * Returns true if scheduling is all good to go. Returns false
+ * if something is wrong with the next event date (e.g. missing)
+ * or if the confirmation email has already been sent. Sends an
+ * alert email about the error if it has not already been sent.
+ *
+ * @param       {SettingsManager} settings 
+ * @param       {EmailStatusSettings} status 
+ * @param       {TimeManager} calendar 
+ * @param       {Emailer} emailer 
+ * @returns     {boolean}
+ */
 function readyToSend(settings, status, calendar, emailer)
 {
         try {
@@ -117,6 +133,20 @@ function readyToSend(settings, status, calendar, emailer)
         return true;
 }
 
+/**
+ * recipientsReady
+ *
+ * Returns true if recipients status are good to go. Returns false
+ * if there's an error regarding recipients retrieval (e.g. missing).
+ * Sends an alert email about error if alert has not already been sent.
+ * Called after readyToSend.
+ *
+ * @param       {SettingsManager} settings 
+ * @param       {EmailStatusSettings} status 
+ * @param       {TimeManager} calendar 
+ * @param       {Emailer} emailer 
+ * @returns     {boolean}
+ */
 function recipientsReady(settings, status, calendar, emailer)
 {
         try {

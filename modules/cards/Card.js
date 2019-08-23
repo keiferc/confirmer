@@ -2,7 +2,7 @@
  *      filename:       Card.js
  *      author:         @KeiferC
  *      version:        0.0.1
- *      date:           12 August 2019
+ *      date:           23 August 2019
  *      description:    This module contains a Card object constructor used in 
  *                      the Confirmer GMail add-on.
  */
@@ -21,7 +21,7 @@
  *      Card::buildTextInputWidget(string, string, string, any, Function)
  *      Card::buildSwitchWidget(string, string, boolean, Function)
  *      Card::buildDropDownWidget(string, string, Array, Function)
- *      Card::buildTextKeyValWidget(string, string, string, Boolean)
+ *      Card::buildTextKeyValWidget(string, string, string, boolean)
  *      Card::buildTextParagraphWidget(string)
  *
  * ---- Helpers ----

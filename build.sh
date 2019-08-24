@@ -2,6 +2,7 @@
 
 JS_FILES=$(find modules -name "*.js")
 
+clasp login
 uglifyjs $JS_FILES --compress --mangle --output confirmer.min.js
-rm .claspignore
+rm -f .claspignore
 clasp push

@@ -1,4 +1,10 @@
 #! /bin/sh
 
+# Set up dependencies
+sudo npm install -g npm
+sudo npm install uglify-js -g
+sudo npm install @google/clasp -g
+
+# Set up Google Apps Script
 clasp login
 clasp create --title "Confirmer"

@@ -26,10 +26,7 @@ version](#installation-of-current-stable-version), you may safely ignore the
 following.
 
 - `git`
-- `sh` / `bash` / `zsh`
-- [NPM](https://www.npmjs.com/get-npm): `npm install n -g`
-- [UglifyJS2](https://github.com/mishoo/UglifyJS2): `npm install uglify-js -g`
-- [Google Clasp](https://github.com/google/clasp): `npm i @google/clasp -g`
+- [`npm`](https://www.npmjs.com/get-npm)
 
 
 ## For End-Users
@@ -41,44 +38,76 @@ following.
 > Note: This installation tutorial assumes a fundamental understanding of working
 >       with the command-line (e.g. an understanding of directory traversals).
 
-0. Open a command-line shell (Linux / Mac OSX: Terminal. Windows: Powershell).
+0. __Open a command-line shell (Linux / Mac OSX: Terminal. Windows: Powershell).__
+
     - Install `git` if it is not installed. The tutorial can be found
       [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
-    - Install NPM if it is not installed The tutorial can be found
+    - Install `npm` if it is not installed The tutorial can be found
       [here](https://www.npmjs.com/get-npm).
-    - Install UglifyJS2 if it is not installed. The tutorial can be found 
-      [here](https://github.com/mishoo/UglifyJS2).
-    - Install clasp if it is not installed. The tutorial can be found 
-      [here](https://github.com/google/clasp).
 
-1. Run the following commands:
+1. __Set up your add-on's environment with the following commands:__
+
 ```bash
 foo@bar:~$ git init
 foo@bar:~$ git clone https://github.com/KeiferC/Confirmer.git
 foo@bar:~$ cd Confirmer
-foo@bar:~$ ./scripts/build
+foo@bar:~$ ./scripts/config
 ```
+  - When prompted on your shell, type your computer password and press the
+    enter / return key. The installation requires admin privileges to install
+    UglifyJS and `clasp`.
 
-2. Google will open a web browser and will ask you to login to your Google
-   Account in order to allow `clasp` to access your account. Select "allow" 
-   when prompted.
+    ```bash
+    # For example
+    foo@bar:~$ ./script/config
+    password: # Enter password here
+    ```
 
-   ![CLASP permissions prompt](./media/end-user/step2.png)
+  - Google will open a web browser and will ask you to login to your Google
+    Account in order to allow `clasp` to access your account. Click "allow" 
+    when prompted.
 
-5. Select `standalone` on your shell when prompted by clasp.
+    ![CLASP permissions prompt](./media/end-user/step2.png)
+
+   - When prompted by `clasp` on your shell, select `standalone` and press
+     the enter / return key.
+
+     ```bash
+     # For example
+     ...
+
+     Authorization successful.
+
+     Default credentials saved to: ~/.clasprc.json
+     ? Create which script? (Use arrow keys)
+     > standalone
+     docs
+     slides
+     forms
+     webapp
+     api
+     ```
+
+2. __Run the following command to build and upload the add-on to your Google 
+  Account:__
+
 ```bash
-? Create which script? (Use arrow keys)
-> standalone
-  docs
-  slides
-  forms
-  webapp
-  api
+foo@bar:~$ ./script/build
 ```
-6. Deploy your add-on with the following command:
+
+  - When prompted by `clasp` on your shell, type `y` and press the enter / 
+    return key.
+
+    ```bash
+    # For example
+    ? Manifest file has been updated. Do you want to push and overwrite? (y/N) y
+    ``` 
+
+3. __Deploy your add-on with the following command:__
 ```bash
 foo@bar:~$ clasp deploy --versionNumber 1 --description "First deployment"
 ```
+
 7. Log in to [Google Script](https://script.google.com/). Click on "My
    Projects" on the left sidebar. 
 

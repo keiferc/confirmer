@@ -1,0 +1,4 @@
+#! /bin/sh
+
+clasp login
+clasp create --title "Confirmer"

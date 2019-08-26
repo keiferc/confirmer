@@ -20,7 +20,26 @@ from Google Sheets (e.g. schedules, contact info, email content).
 
 
 ## Requirements
-- Google Account
+- A Gmail account.
+- A Google Sheet containing the names and emails of event participants. (Note: 
+  All names and emails are randomly generated) 
+
+  For example:
+
+  ![Example contacts Google Sheet](./media/sheets/contacts.png)
+
+- A Google Sheet containing a list of event dates and the names of their 
+  corresponding participants.
+
+  For example:
+
+  ![Example schedule Google Sheet](./media/sheets/schedule.png)
+
+- A Google Sheet containing the confirmation email subject line and body.
+
+  For example:
+
+  ![Example email Google Sheet](./media/sheets/email-content.png)
 
 The following requirements are only necessary for developers and for end-users 
 who prefer [installing from Github](#install-from-github). If you are 

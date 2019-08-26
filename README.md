@@ -7,38 +7,56 @@ from Google Sheets (e.g. schedules, contact info, email content).
 [Requirements](#requirements)
 
 [For End-Users](#for-end---users)
-- [Installation of Current Stable 
-  Version](#installation-of-current-stable-version)
-- [Installation from Github](#installation-from-github)
+- [Install Current Stable 
+  Version](#install-current-stable-version)
+- [Install from Github](#install-from-github)
 - [How to Use Confirmer?](#how-to-use-confirmer)
 
 [For Developers](#for-developers)
-- [Installation](#installation)
+- [Install Build](#install-build)
 - [Planned Features](#planned-features)
+
+[Common Questions](#common-issues)
 
 
 ## Requirements
 - Google Account
 
 The following requirements are only necessary for developers and for end-users 
-who prefer installing from Github. If you are installing the [current stable 
-version](#installation-of-current-stable-version), you may safely ignore the 
-following.
+who prefer [installing from Github](#install-from-github). If you are 
+installing the [current stable version](#install-current-stable-version), you 
+may safely ignore the following.
 
 - `git`
 - [`npm`](https://www.npmjs.com/get-npm)
 
 
 ## For End-Users
-### Installation of Current Stable Version
-// TODO
+### Install Current Stable Version
+0. __Copy the following deployment ID: // TODO.__
+1. __Login to your [Gmail account](https://mail.google.com)__.
+2. __Click on the gear icon on the upper right of the Gmail window and 
+   click on "Settings".__
 
-### Installation from Github
+   ![Gmail settings dropdown](./media/stable/step2.png)
 
-> Note: This installation tutorial assumes a fundamental understanding of working
->       with the command-line (e.g. an understanding of directory traversals).
+3. __Click on the "Add-ons" tab and select the checkbox labeled "Enable
+   developer add-ons for my account".__
 
-0. __Open a command-line shell (Linux / Mac OSX: Terminal. Windows: Powershell).__
+   ![Screenshot of add-ons tab](./media/stable/step3.png)
+
+4. __Click on "Enable" on the bottom-right of the prompted dialogue__.
+   
+   ![Screenshot of developer add-ons prompt](./media/stable/step4.png)
+
+5. __Paste the copied deployment ID into the input field labeled "Developer
+   add-ons:" and click on "Install".__
+
+   ![Deployment ID input field](./media/stable/step5.png)
+
+### Install from Github
+0. __Open a command-line shell (Linux / Mac OSX: Terminal. Windows: 
+   Powershell).__
 
     - Install `git` if it is not installed. The tutorial can be found
       [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
@@ -67,7 +85,7 @@ foo@bar:~$ ./scripts/config
     Account in order to allow `clasp` to access your account. Click "allow" 
     when prompted.
 
-    ![CLASP permissions prompt](./media/end-user/step2.png)
+    ![CLASP permissions prompt](./media/end-user/step1.png)
 
    - When prompted by `clasp` on your shell, select `standalone` and press
      the enter / return key.
@@ -89,7 +107,7 @@ foo@bar:~$ ./scripts/config
      ```
 
 2. __Run the following command to build and upload the add-on to your Google 
-  Account:__
+   Account:__
 
 ```bash
 foo@bar:~$ ./script/build
@@ -104,33 +122,23 @@ foo@bar:~$ ./script/build
     ``` 
 
 3. __Deploy your add-on with the following command:__
+
 ```bash
-foo@bar:~$ clasp deploy --versionNumber 1 --description "First deployment"
+foo@bar:~$ clasp deploy --description "First deployment"
 ```
 
-7. Log in to [Google Script](https://script.google.com/). Click on "My
-   Projects" on the left sidebar. 
+4. __Copy the ID returned from running the command in Step 3.__
 
-![Screenshot of Step 7 of the installation](./media/end-user/step7.png)
+```bash
+# For example
+foo@bar:~$ clasp deploy --description "First deployment"
+Created version 1.
+- <ID_TO_COPY> @1. # e.g. - LG2HY_8vlxARfEDlSIOK6 @1.
+                   # Copy: LG2HY_8vlxARfEDlSIOK6
+```
 
-8. Click on "Confirmer", which should lead you to the following page.
-
-![Screenshot of Step 8 of the installation](./media/end-user/step8.png)
-
-9. Click on "Open Project" on the right sidebar, which should lead you to the
-   following page.
-
-![Screenshot of Step 9 of the installation](./media/end-user/step9.png)
-
-10. Click on "Publish", then click on "Deploy from manifest...".
-
-![Screenshot of Step 10 of the installation](./media/end-user/step10.png)
-
-11. Click on the red "Create" button.
-
-![Screenshot of Step 11 of the installation](./media/end-user/step11.png)
-
-12. 
+5. __Continue at [Step 1 of "Install Current Stable 
+   Version"](#install-current-stable-version).__
 
 ### How to Use Confirmer?
 // TODO
@@ -149,9 +157,10 @@ foo@bar~$ ./scripts/develop
 
 # To deploy add-on
 foo@bar:~$ ./scripts/build
-foo@bar:~$ clasp deploy --versionNumber <N> --description "<MESSAGE>" 
-           # <N>:       Version number (> 0)
+foo@bar:~$ clasp deploy --description "<MESSAGE>" 
            # <MESSAGE>: Version description
+
+# To test, follow instructions from Step 1 of "Install
 ```
 
 ### Planned Features
@@ -187,3 +196,53 @@ features of the Google API are implemented:
   limitations on `appscript.json` triggers.
 - Improve add-on's aesthetic design. Currently not possible due to styling
   limitations of the Google CardService API.
+
+## Common Questions
+__What do the add-on's requested permissions mean?__
+
+TODO
+
+__What data is collected?__
+
+TODO
+
+__How is the collected data used?__
+
+TODO
+
+__How is the collected data shared?__
+
+TODO
+
+__If I don't copy the add-on's deployment ID, where else can I find the ID?__
+
+Log in to [Google Script](https://script.google.com/). Click on "My Projects"
+on the left sidebar. 
+
+![Google Apps Script projects page](./media/find-id/step1.png)
+
+Click on "Confirmer", which should lead you to the following page.
+
+![Confirmer add-on dashboard](./media/find-id/step2.png)
+
+Click on "Open Project" on the right sidebar, which should lead you to the
+following page.
+
+![Google Apps Script editor page](./media/find-id/step3.png)
+
+Click on "Publish", then click on "Deploy from manifest...".
+
+![Screenshot of publish tab](./media/find-id/step4.png)
+
+Click on "Get ID" on the right of the Gmail icon for the row labeled 
+"__First deployment__ Version 1".
+
+![Deployments dialogue](./media/find-id/step5.png)
+
+The deployment ID can be found after the label "__Deployment ID:__".
+
+![Deployment ID](./media/find-id/step6.png)
+
+
+
+

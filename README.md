@@ -34,7 +34,7 @@ may safely ignore the following.
 ## For End-Users
 ### Install Current Stable Version
 0. __Copy the following deployment ID: 
-   `AKfycbxuZEp2apN_MmLJZPeni-SPxup85PBG3tpln9XQbg`
+   `AKfycbzHEVQSEShWUm3c9-DN4eKQoY9iUine13VT9Yas7TQ`
     - Note: The deployment ID only works for boston.gov accounts.
 1. __Login to your [Gmail account](https://mail.google.com)__.
 2. __Click on the gear icon on the upper right of the Gmail window and 
@@ -152,9 +152,43 @@ Created version 1.
 
    ![Confirmer add-on authorization](./media/usage/step1.png)
 
-2. __When prompted by Google, click "Allow"__.
+2. __When prompted by Google, click "Allow".__
 
    ![Confirmer permissions access](./media/usage/step2.png)
+
+3. __Once the add-on loads, click on "Settings".__
+
+   ![Confirmer main menu](./media/usage/step3.png)
+
+4. __Fill out all empty fields in the settings page. Configure all
+   other options at your own discretion.__
+
+   ![Confirmer settings page](./media/usage/step4.png)
+
+   - Example: To fill out the "Contacts" section...
+     - a. Open the Google Sheet containing the contact info. (Note: all
+       names and email addresses in the example are randomly generated.)
+
+       ![Contact Google Sheet](./media/usage/step4-1.png)
+   
+     - b. Copy the Google Sheet URL and paste it in the add-on field
+       labeled "Google Sheets URL - Contacts List".
+
+       ![Contacts URL input](./media/usage/step4-2.png)
+
+     - c. Copy the column label representing names and paste it in the
+       add-on field labeled "Column Label - Names".
+
+       ![Contacts names input](./media/usage/step4-3.png)
+
+     - d. Copy the column label representing emails and paste it in the
+       add-on field labeled "Column Label - Emails".
+
+       ![Contacts emails input](./media/usage/step4-4.png)
+
+5. __Click "SAVE SETTINGS".__ 
+
+__Congratulations, your add-on is up and running!__
 
 
 ## For Developers
@@ -173,7 +207,7 @@ foo@bar:~$ ./scripts/build
 foo@bar:~$ clasp deploy --description "<MESSAGE>" 
            # <MESSAGE>: Version description
 
-# To test, follow instructions from Step 1 of "Install
+# To test, follow instructions from Step 1 of "Install Current Stable Version"
 ```
 
 ### Planned Features
@@ -226,6 +260,13 @@ TODO
 __How is the collected data shared?__
 
 TODO
+
+__I am having trouble deploying the add-on. What can I do?__
+
+You may receive the following error message when deploying the add-on:
+`Gmail add-ons may not request the https://www.googleapis.com/auth/script.scriptapp scope`. The error occurs because Gmail's add-on API 
+currently has limits regarding its activation beyond the scope of opening
+a message. As a workaround, you can simply use the Version 0 deployment ID.
 
 __If I don't copy the add-on's deployment ID, where else can I find the ID?__
 

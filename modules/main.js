@@ -36,11 +36,8 @@ function main()
 {
         var settingsManager = new SettingsManager(); 
 
-        try {
-                settingsManager.getAll();
-        } catch(e) {
+        if (JSON.stringify(settingsManager.getAll()) == "{}")
                 settingsManager.setDefault();
-        }
 
         return buildDeck();
 }

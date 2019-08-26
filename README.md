@@ -33,7 +33,8 @@ may safely ignore the following.
 
 ## For End-Users
 ### Install Current Stable Version
-0. __Copy the following deployment ID: // TODO.__
+0. __Copy the following deployment ID: 
+   `AKfycbxuZEp2apN_MmLJZPeni-SPxup85PBG3tpln9XQbg`
     - Note: The deployment ID only works for boston.gov accounts.
 1. __Login to your [Gmail account](https://mail.google.com)__.
 2. __Click on the gear icon on the upper right of the Gmail window and 
@@ -150,6 +151,10 @@ Created version 1.
    add-on.__
 
    ![Confirmer add-on authorization](./media/usage/step1.png)
+
+2. __When prompted by Google, click "Allow"__.
+
+   ![Confirmer permissions access](./media/usage/step2.png)
 
 
 ## For Developers

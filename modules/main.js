@@ -41,7 +41,7 @@ function main()
         try {
                 settings = settingsManager.getAll();
         } catch(e) {
-                if (JSON.stringify(settings) == "{}") 
+                if (isEmpty(settings)) 
                         settingsManager.setDefault();
                 else
                         throw e;

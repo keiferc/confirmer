@@ -119,11 +119,17 @@ Emailer.prototype.generateEmailBody = function
         
         parser = new GSheetParser(this.emailContent.emailContentId); 
         body = parser.getColumn(this.emailContent.bodyColLabel)[0];
-        signature = Gmail.Users.Settings.SendAs.list("me").sendAs.filter( 
-                function (account) {
-                        if (account.isDefault)
-                                return true
-                })[0].signature;
+
+        try {
+                signature = Gmail.Users.Settings.SendAs.list("me")
+                        .sendAs.filter( 
+                                function (account) {
+                                        if (account.isDefault)
+                                                return true
+                                })[0].signature;
+        } catch(e) {
+                signature = "";
+        }
 
         return "Dear Volunteers,<br><br>" + 
                date + " " + body + "<br><br>" + signature;

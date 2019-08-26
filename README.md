@@ -33,7 +33,7 @@ may safely ignore the following.
 
 ## For End-Users
 ### Install Current Stable Version
-0. __Copy the following deployment ID: 
+0. __Copy the following deployment ID:__ 
    `AKfycbzHEVQSEShWUm3c9-DN4eKQoY9iUine13VT9Yas7TQ`
     - Note: The deployment ID only works for boston.gov accounts.
 1. __Login to your [Gmail account](https://mail.google.com)__.

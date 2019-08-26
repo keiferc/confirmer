@@ -247,19 +247,48 @@ features of the Google API are implemented:
 ## Common Questions
 __What do the add-on's requested permissions mean?__
 
-TODO
+`https://www.googleapis.com/auth/script.locale`: Allows the add-on to access
+your timezone. Is used to send emails at specified hours using your timezone.
+
+`https://www.googleapis.com/auth/script.send_mail`: Allows the add-on to send
+emails on your behalf.
+
+`https://www.googleapis.com/auth/script.scriptapp`: Allows the add-on to run
+when you're not using Gmail. This is used to send confirmation emails without
+needing you to login.
+
+`https://www.googleapis.com/auth/userinfo.email`: Allows the add-on to access
+your email address. This is used when the user specifies the add-on to send
+a copy of the confirmation email to themselves.
+
+`https://www.googleapis.com/auth/spreadsheets`: Allows the add-on to access 
+your Google Sheets. This is used to retrieve the information specified in the
+add-on settings.
+
+`https://www.googleapis.com/auth/gmail.addons.execute`: Allows the add-on to
+run in your Gmail account.
+
+`https://www.googleapis.com/auth/gmail.readonly`: Allows the add-on to access
+your email signature. Is used to add your signature to the email composition,
+when possible.
 
 __What data is collected?__
 
-TODO
+In order for the add-on to run, the add-on saves all settings values (e.g. 
+provided Google Sheet URLs). To prioritize user privacy (at the cost of speed),
+the add-on does __not__ save any content within the Google Sheets corresponding
+to the provided URLs.
 
 __How is the collected data used?__
 
-TODO
+The data is only used to run the add-on's necessary functions.
 
 __How is the collected data shared?__
 
-TODO
+The data is only saved to Google's servers and is isolated to your own Google 
+Account. In other words, only Google has access to the collected data (e.g. 
+Google Sheet URLs). Therefore, this add-on is subject to Gmail's data sharing 
+policy.
 
 __I am having trouble deploying the add-on. What can I do?__
 

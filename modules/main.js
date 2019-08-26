@@ -34,17 +34,12 @@
  */
 function main() 
 {
-        var settingsManager, settings;
-
-        settingsManager = new SettingsManager(); 
+        var settingsManager = new SettingsManager(); 
 
         try {
-                settings = settingsManager.getAll();
+                settingsManager.getAll();
         } catch(e) {
-                if (isEmpty(settings)) 
-                        settingsManager.setDefault();
-                else
-                        throw e;
+                settingsManager.setDefault();
         }
 
         return buildDeck();

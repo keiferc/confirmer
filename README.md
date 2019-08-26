@@ -1,7 +1,9 @@
 # Confirmer
 
-A Gmail add-on that manages recurring confirmation emails. Pulls information
-from Google Sheets (e.g. schedules, contact info, email content).
+A Gmail add-on that manages recurring confirmation emails. The add-on
+retrieves information from provided Google Sheets in order to automatically
+send confirmation emails to participants who've signed up for specific
+event dates.
 
 ### Contents
 [Requirements](#requirements)

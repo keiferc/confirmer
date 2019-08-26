@@ -211,8 +211,8 @@ foo@bar:~$ clasp deploy --description "<MESSAGE>"
 ```
 
 ### Planned Features
-Feel free to contribute. __Please prioritize security and accessibility.__ 
-Below is a list of planned features to implement:
+Feel free to contribute. __Please prioritize security, accessibility, and 
+users' privacy.__ Below is a list of planned features to implement:
 
 - Change structure to create multiple confirmer based on universal actions. 
   Allows users to set up multiple Confirmer cards.
@@ -243,6 +243,8 @@ features of the Google API are implemented:
   limitations on `appscript.json` triggers.
 - Improve add-on's aesthetic design. Currently not possible due to styling
   limitations of the Google CardService API.
+- Deploy add-on versions. Currently not possible due to limitations on Google's
+  Gmail add-on API triggers.
 
 ## Common Questions
 __What do the add-on's requested permissions mean?__

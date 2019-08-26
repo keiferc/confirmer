@@ -2,6 +2,7 @@ config.js
 .clasp.json
 .claspignore
 .vscode
+.DS_Store
 *.min.js
 test/
 temp/

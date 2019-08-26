@@ -34,6 +34,7 @@ may safely ignore the following.
 ## For End-Users
 ### Install Current Stable Version
 0. __Copy the following deployment ID: // TODO.__
+    - Note: The deployment ID only works for boston.gov accounts.
 1. __Login to your [Gmail account](https://mail.google.com)__.
 2. __Click on the gear icon on the upper right of the Gmail window and 
    click on "Settings".__
@@ -141,7 +142,14 @@ Created version 1.
    Version"](#install-current-stable-version).__
 
 ### How to Use Confirmer?
-// TODO
+0. __Click on the Confirmer add-on's icon in the side panel on the right.__
+
+   ![Confirmer add-on icon](./media/usage/step0.png)
+
+1. __Open an email message. Click "AUTHORIZE ACCESS" when prompted by the 
+   add-on.__
+
+   ![Confirmer add-on authorization](./media/usage/step1.png)
 
 
 ## For Developers
